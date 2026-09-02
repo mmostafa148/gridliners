@@ -31,6 +31,7 @@ export default async function ForgotPasswordPage({
       title={t("forgotTitle")}
       lead={t("forgotLead")}
       aside={t("tierNote")}
+      formPanelClassName="bg-[#f3f3f9]"
     >
       <div className="flex flex-col gap-8">
       <ForgotForm />

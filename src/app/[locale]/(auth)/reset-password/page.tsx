@@ -35,6 +35,7 @@ export default async function ResetPasswordPage({
       title={t("resetTitle")}
       lead={t("resetLead")}
       aside={t("tierNote")}
+      formPanelClassName="bg-[#f3f3f9]"
     >
       <div className="flex flex-col gap-8">
       <ResetForm token={token} />
