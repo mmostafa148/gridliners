@@ -1,0 +1,1209 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================================
+   Gridliners design tokens — Brand Guidelines V3.0
+   Ramps are generated in OKLCH around the exact brand hex, which is always
+   kept verbatim at its anchor step (navy-900, blue-700, cream-200).
+   ========================================================================== */
+
+@theme static {
+  /* --- Primary: Dark Navy (anchor #0a1a3c at 900) ------------------------ */
+  --color-navy-50: oklch(0.9732 0.0069 263.09);
+  --color-navy-100: oklch(0.941 0.0074 263.09);
+  --color-navy-200: oklch(0.8873 0.0121 263.09);
+  --color-navy-300: oklch(0.8121 0.0186 263.09);
+  --color-navy-400: oklch(0.7155 0.0269 263.09);
+  --color-navy-500: oklch(0.6135 0.0357 263.09);
+  --color-navy-600: oklch(0.5169 0.044 263.09);
+  --color-navy-700: oklch(0.4202 0.0524 263.09);
+  --color-navy-800: oklch(0.3236 0.0607 263.09);
+  --color-navy-900: #0a1a3c;
+  --color-navy-950: oklch(0.154 0.0628 263.09);
+
+  /* --- Primary: Blue (anchor #2123bc at 700) — the canonical UI blue ------ */
+  --color-blue-50: oklch(0.972 0.0628 269.37);
+  --color-blue-100: oklch(0.9384 0.0722 269.37);
+  --color-blue-200: oklch(0.8823 0.088 269.37);
+  --color-blue-300: oklch(0.8039 0.1101 269.37);
+  --color-blue-400: oklch(0.703 0.1385 269.37);
+  --color-blue-500: oklch(0.5966 0.1685 269.37);
+  --color-blue-600: oklch(0.4957 0.1969 269.37);
+  --color-blue-700: #2123bc;
+  --color-blue-800: oklch(0.3176 0.2035 269.37);
+  --color-blue-900: oklch(0.2403 0.1818 269.37);
+  --color-blue-950: oklch(0.1631 0.16 269.37);
+
+  /* --- Primary: Cream (anchor #fbeecc at 200) ---------------------------- */
+  --color-cream-50: oklch(0.9883 0.0443 89.57);
+  --color-cream-100: oklch(0.9742 0.0452 89.57);
+  --color-cream-200: #fbeecc;
+  --color-cream-300: oklch(0.8764 0.0422 89.57);
+  --color-cream-400: oklch(0.7808 0.0366 89.57);
+  --color-cream-500: oklch(0.6799 0.0308 89.57);
+  --color-cream-600: oklch(0.5843 0.0252 89.57);
+  --color-cream-700: oklch(0.4887 0.0197 89.57);
+  --color-cream-800: oklch(0.393 0.0141 89.57);
+  --color-cream-900: oklch(0.2974 0.0085 89.57);
+  --color-cream-950: oklch(0.2018 0.0047 89.57);
+
+  /* --- Neutral section ground ---------------------------------------------
+     A cool near-white the client specified by hex for a section that wanted a
+     quieter surface than cream. Kept as the exact value rather than folded
+     into the navy ramp: it resolves to oklch(0.9657 0.0082 285.6), which is a
+     lighter and markedly more lilac tone than `navy-50`'s 263.09 hue, so
+     substituting that token would visibly change it. Not a ramp — one ground,
+     one value. */
+  --color-mist: #f3f3f9;
+
+  /* --- Award metals (sampled from resources/brand badge + frame files) ----
+     Contrast note: gold and silver fail AA as text on white — use them as
+     fills with navy text on top. Bronze passes AA as text on white (4.6:1). */
+  --color-gold: #d4a64a;
+  --color-gold-soft: oklch(0.955 0.0425 82.22);
+  --color-gold-deep: oklch(0.4651 0.1094 82.22);
+  /* The adverse red, as INK. `--destructive` is a fill colour and measures
+     4.32:1 on white, which fails AA for text; this is the same hue held to
+     6.1:1 so a disqualified state and a required marker are readable.
+     Logged in build-state 49. */
+  --color-destructive-ink: oklch(0.505 0.208 27.325);
+  --color-silver: #9ea2ab;
+  --color-silver-soft: oklch(0.9481 0.0048 266.66);
+  --color-silver-deep: oklch(0.4413 0.0124 266.66);
+  --color-bronze: #a06842;
+  --color-bronze-soft: oklch(0.9224 0.0313 54.09);
+  --color-bronze-deep: oklch(0.3528 0.0805 54.09);
+  /* Finalist/Shortlist badge = blue colorway; Honorary = black colorway. */
+  --color-finalist: #2123bc;
+  --color-honorary: #161616;
+
+  /* --- Secondary campaign palette — campaign accents ONLY, never base UI
+     (Consolidated Decisions §3). ------------------------------------------ */
+  --color-campaign-purple: #950298;
+  --color-campaign-lime: #ccff00;
+  --color-campaign-orange: #ff6a00;
+  --color-campaign-yellow: #ffd600;
+  /* PLACEHOLDER — the deck labels this swatch #5a0038, which is dark maroon.
+     Value below is sampled from the rendered swatch on p.15 of the deck
+     (resources/assets/15_colors-secondary.svg). Awaiting the corrected hex
+     from the design team; see docs/build-state.md conflict log. */
+  --color-campaign-teal: #2fd3c5;
+
+  /* --- Documentation token: never apply this to UI ------------------------
+     Logo artwork exports at #0932c6 while the Colors page declares #2123bc.
+     Both are correct in their own context; logo SVGs are never recolored. */
+  --color-logo-blue: #0932c6;
+
+  /* --- Pixel-grid motif -------------------------------------------------- */
+  --pixel-unit: 0.5rem;
+
+  /* --- Containers ---------------------------------------------------------
+     Deliberately wider than a conventional app shell. This is a gallery: the
+     winners and finalists pages are grids of project work, and a 1280px column
+     with empty margins either side undersells it on the large displays this
+     audience actually uses. Text does not follow the grid out — long measures
+     hurt reading — so prose keeps its own container.
+
+       page   1920px  default shell: headers, footers, every section
+       wide   2560px  full-bleed galleries only
+       prose    74ch  anything read as continuous text (legal, about, rules)
+
+     Gutters scale with the viewport rather than stepping at breakpoints, so
+     the shell stays proportionate from phone to ultrawide.
+
+     One measure for the whole page. Running the hero at a wider shell than the
+     sections below it put a visible step in the left edge all the way down the
+     page; `wide` is now reserved for genuinely full-bleed grids, never for a
+     section sitting directly above or below a `page` one. */
+  --container-page: 120rem; /* 1920 */
+  --container-wide: 160rem; /* 2560 — full-bleed galleries only */
+  --container-prose: 74ch;
+  --gutter: clamp(1.25rem, 4vw, 5rem);
+
+  /* The band of air above and below a section, in one place.
+     Every section had been carrying its own py-24 lg:py-28 — 96px on a phone
+     and 112 from lg — which stacked to 192px of nothing between one section
+     and the next, a fifth of a phone screen spent twice over. Fluid rather
+     than two steps, so the rhythm follows the viewport instead of jumping at a
+     breakpoint, and floored at 56 so a phone still separates its sections
+     rather than running them together. */
+  --section-y: clamp(3.5rem, 6vw, 6rem);
+  --account-y: clamp(2.25rem, 3.2vw, 3rem);
+
+  /* --- Type scale — Brand hierarchy: Heavy title / Bold subtitle / Regular
+     text, extended into a web scale. Presicav display sizes carry tighter
+     tracking; Arabic gets looser leading via the base layer below. -------- */
+  --text-display-xl: clamp(2.5rem, 4.2vw, 5.25rem);
+  --text-display-xl--line-height: 1.02;
+  --text-display-xl--letter-spacing: -0.03em;
+  --text-display-xl--font-weight: 900;
+  --text-display-lg: clamp(2.25rem, 3.8vw, 4.75rem);
+  --text-display-lg--line-height: 1.04;
+  --text-display-lg--letter-spacing: -0.025em;
+  --text-display-lg--font-weight: 900;
+  --text-display-md: clamp(1.875rem, 2.7vw, 3.5rem);
+  --text-display-md--line-height: 1.08;
+  --text-display-md--letter-spacing: -0.02em;
+  --text-display-md--font-weight: 900;
+
+  --text-h1: clamp(1.75rem, 2.1vw, 2.75rem); /* deck: Title, Heavy 36 */
+  --text-h1--line-height: 1.15;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h1--font-weight: 900;
+  --text-h2: clamp(1.5rem, 1.6vw, 2.125rem);
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h2--font-weight: 700;
+  --text-h3: clamp(1.25rem, 1.15vw, 1.625rem);
+  --text-h3--line-height: 1.28;
+  --text-h3--letter-spacing: -0.01em;
+  --text-h3--font-weight: 700;
+  --text-h4: clamp(1.125rem, 0.95vw, 1.375rem); /* deck: Subtitle, Bold 20 */
+  --text-h4--line-height: 1.35;
+  --text-h4--font-weight: 700;
+
+  --text-body-lg: clamp(1.0625rem, 0.95vw, 1.375rem);
+  --text-body-lg--line-height: 1.65;
+  --text-body-md: clamp(1rem, 0.72vw, 1.125rem); /* deck: Text, Regular */
+  --text-body-md--line-height: 1.65;
+  --text-body-sm: clamp(0.875rem, 0.6vw, 1rem);
+  --text-body-sm--line-height: 1.6;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.5;
+  --text-overline: 0.75rem;
+  --text-overline--line-height: 1.35;
+  --text-overline--letter-spacing: 0.14em;
+  --text-overline--font-weight: 700;
+
+  /* --- Data type ---------------------------------------------------------
+     Presicav is an engineered, orthogonal face, so it carries the platform's
+     figures as well as its headlines: group coordinates, vote counts, prices,
+     countdowns. Wide tracking small, tight large — how the face is drawn to
+     be set. Always tabular so columns of figures align. */
+  --text-data-lg: clamp(1.75rem, 2.2vw, 3rem);
+  --text-data-lg--line-height: 1;
+  --text-data-lg--letter-spacing: -0.01em;
+  --text-data-lg--font-weight: 700;
+  --text-data-md: clamp(1rem, 0.8vw, 1.25rem);
+  --text-data-md--line-height: 1.2;
+  --text-data-md--letter-spacing: 0.02em;
+  --text-data-md--font-weight: 700;
+  --text-data-sm: clamp(0.75rem, 0.62vw, 0.9375rem);
+  --text-data-sm--line-height: 1.2;
+  --text-data-sm--letter-spacing: 0.1em;
+  --text-data-sm--font-weight: 700;
+  /* Navigation and compact controls. Smaller and less tracked than the
+     coordinate label: seven tracked uppercase nav items at coordinate size
+     eat the whole header. */
+  --text-nav: 0.6875rem;
+  --text-nav--line-height: 1;
+  --text-nav--letter-spacing: 0.1em;
+  --text-nav--font-weight: 700;
+
+  /* --- Account type ------------------------------------------------------
+     The participant area's three headings. They exist because the account
+     titles sit between `text-h1` (30.2px at 1440) and `display-md` (38.9px)
+     and nothing in the scale lands there — and because an operational page
+     carrying fifteen entries needs a title with more authority than an inner
+     marketing page does, on the same canvas.
+
+     Measured against the approved site rather than guessed: see
+     `docs/participant-visual-plan.md` for the audit these are derived from.
+     Sentence case, Presicav, tightened the way the rest of the scale is. */
+  /* The account's own scale — a management area, not an editorial page.
+     The public pages keep their display sizes; these are deliberately two
+     steps quieter, because a participant reads this screen to do something
+     rather than to be impressed by it. Retuned 2026-09-01: the first pass
+     borrowed the website's editorial sizes and read as bulky. */
+  --text-account-title: clamp(1.625rem, 1.75vw, 1.75rem); /* 26px → 25.2/28 */
+  --text-account-title--line-height: 1.2;
+  --text-account-title--letter-spacing: -0.015em;
+  --text-account-title--font-weight: 700;
+  --text-account-section: clamp(1.0625rem, 1.15vw, 1.1875rem); /* 17px → 19 */
+  --text-account-section--line-height: 1.35;
+  --text-account-section--letter-spacing: -0.005em;
+  --text-account-section--font-weight: 700;
+  --text-account-card: clamp(0.9375rem, 1.05vw, 1rem); /* 15px → 16 */
+  --text-account-card--line-height: 1.4;
+  --text-account-card--letter-spacing: 0;
+  --text-account-card--font-weight: 600;
+
+  /* Group coordinate, e.g. VI·02 / CORP — the key of a result record. */
+  --text-coord: clamp(0.6875rem, 0.52vw, 0.8125rem);
+  --text-coord--line-height: 1.2;
+  --text-coord--letter-spacing: 0.16em;
+  --text-coord--font-weight: 700;
+}
+
+/* Semantic tokens consumed by every shadcn primitive. `inline` keeps the
+   utilities pointing at the runtime vars below, so theme and locale can
+   re-map them without regenerating utilities. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-display: var(--font-display);
+  --font-heading: var(--font-display);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  /* Zero radius on structural containers. The G is constructed on an
+     orthogonal grid and the motif is square; rounded corners fight both.
+     Shape interest comes from the pennant notch, not from radius. */
+  --radius: 0rem;
+
+  /* Pennant notch — measured from badge-gold.svg, whose outline cuts a V up
+     into the bottom edge with its apex at the exact midpoint. Centred, so it
+     mirrors for free under RTL. */
+  --notch-width: 2.5rem;
+  --notch-depth: 0.75rem;
+
+  /* Font stacks. --font-inter / --font-noto-arabic are injected by next/font;
+     "presicav" comes from the Adobe Fonts kit loaded in the locale layout. */
+  --font-presicav: "presicav";
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-display:
+    var(--font-presicav), var(--font-inter), ui-sans-serif, system-ui,
+    sans-serif;
+  --font-arabic: var(--font-noto-arabic), "Noto Sans Arabic", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --background: #ffffff;
+  --foreground: var(--color-navy-900);
+  --card: #ffffff;
+  --card-foreground: var(--color-navy-900);
+  --popover: #ffffff;
+  --popover-foreground: var(--color-navy-900);
+  --primary: var(--color-blue-700);
+  --primary-foreground: #ffffff;
+  --secondary: var(--color-cream-200);
+  --secondary-foreground: var(--color-navy-900);
+  --muted: var(--color-navy-50);
+  --muted-foreground: var(--color-navy-600); /* 5.6:1 on white */
+  --accent: var(--color-cream-100);
+  --accent-foreground: var(--color-navy-900);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: var(--color-navy-100);
+  --input: var(--color-navy-200);
+  --ring: var(--color-blue-700);
+  --chart-1: var(--color-blue-700);
+  --chart-2: var(--color-gold);
+  --chart-3: var(--color-navy-500);
+  --chart-4: var(--color-bronze);
+  --chart-5: var(--color-campaign-teal);
+
+  /* Dashboard / jury / admin sidebars read as navy panels in both themes. */
+  --sidebar: var(--color-navy-900);
+  --sidebar-foreground: var(--color-cream-100);
+  --sidebar-primary: var(--color-blue-500);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--color-navy-800);
+  --sidebar-accent-foreground: var(--color-cream-50);
+  --sidebar-border: var(--color-navy-800);
+  --sidebar-ring: var(--color-blue-400);
+}
+
+.dark {
+  --background: var(--color-navy-950);
+  --foreground: var(--color-cream-100);
+  --card: var(--color-navy-900);
+  --card-foreground: var(--color-cream-100);
+  --popover: var(--color-navy-900);
+  --popover-foreground: var(--color-cream-100);
+  --primary: var(--color-blue-400);
+  --primary-foreground: var(--color-navy-950);
+  --secondary: var(--color-navy-800);
+  --secondary-foreground: var(--color-cream-100);
+  --muted: var(--color-navy-800);
+  --muted-foreground: var(--color-navy-300);
+  --accent: var(--color-navy-800);
+  --accent-foreground: var(--color-cream-50);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: var(--color-blue-400);
+  --chart-1: var(--color-blue-400);
+  --chart-2: var(--color-gold);
+  --chart-3: var(--color-navy-300);
+  --chart-4: var(--color-bronze);
+  --chart-5: var(--color-campaign-teal);
+
+  --sidebar: var(--color-navy-950);
+  --sidebar-foreground: var(--color-cream-100);
+  --sidebar-primary: var(--color-blue-400);
+  --sidebar-primary-foreground: var(--color-navy-950);
+  --sidebar-accent: var(--color-navy-900);
+  --sidebar-accent-foreground: var(--color-cream-50);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: var(--color-blue-400);
+}
+
+/* Arabic: Presicav is Latin-only, so Noto Sans Arabic carries both display
+   and body. Looser leading keeps the AR hierarchy readable at the same
+   optical sizes as the EN scale. */
+html[lang="ar"] {
+  --font-sans: var(--font-arabic);
+  --font-display: var(--font-arabic);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+
+  html[lang="ar"] :is(h1, h2, h3, h4, h5, h6) {
+    line-height: 1.4;
+    letter-spacing: normal;
+  }
+
+  html[lang="ar"] body {
+    line-height: 1.85;
+  }
+}
+
+/* ============================================================================
+   Pixel-grid motif utilities. The <PixelGrid> component composes mosaics;
+   these cover the flat, repeating cases.
+   ========================================================================== */
+
+/* A stepped-square rule, used as a divider or an underline accent. */
+@utility pixel-rule {
+  background-image: repeating-linear-gradient(
+    to right,
+    currentColor 0 var(--pixel-unit),
+    transparent var(--pixel-unit) calc(var(--pixel-unit) * 2)
+  );
+  block-size: var(--pixel-unit);
+  inline-size: 100%;
+}
+
+/* A tiled pixel field, sized in whole --pixel-unit cells. */
+@utility pixel-field {
+  background-image:
+    linear-gradient(to right, currentColor 1px, transparent 1px),
+    linear-gradient(to bottom, currentColor 1px, transparent 1px);
+  background-size: var(--pixel-unit) var(--pixel-unit);
+  opacity: 0.12;
+}
+
+/* ============================================================================
+   The pennant notch — this system's signature.
+
+   Taken from the award badge's own outline, which cuts a V up into its bottom
+   edge with the apex at the midpoint. Reserved for FILLED award artifacts:
+   surfaces where something is being conferred (a medal, a finalist standing,
+   a cycle phase). It is not a general-purpose card shape — using it anywhere
+   else spends the one thing this design is meant to be remembered by.
+
+   Centred on the edge, so RTL needs no mirrored variant.
+   ========================================================================== */
+@utility notch-pennant {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    calc(50% + var(--notch-width) / 2) 100%,
+    50% calc(100% - var(--notch-depth)),
+    calc(50% - var(--notch-width) / 2) 100%,
+    0 100%
+  );
+}
+
+/* Data figures: Presicav, tabular, so columns of numerals line up. */
+@utility font-data {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================================
+   Page shells. One utility instead of repeating
+   `mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8` at every call site, so the
+   measure is changed in one place. All logical properties, so gutters mirror.
+   ========================================================================== */
+@utility page-shell {
+  margin-inline: auto;
+  inline-size: 100%;
+  max-inline-size: var(--container-page);
+  padding-inline: var(--gutter);
+}
+
+/* One section's worth of air, top and bottom. Paired with `page-shell` on a
+   section's inner container: that one owns the horizontal measure, this one the
+   vertical rhythm. */
+@utility section-y {
+  padding-block: var(--section-y);
+}
+
+/* The account's measure — the website's own.
+   An earlier pass narrowed the account to 68rem, which centred it inside the
+   header's gutters and made every account page look inset from the site around
+   it. It is `page-shell` again, so the masthead, the panels and the header's
+   own logo all start on the same vertical line at every width. Long text
+   inside a panel is held to a reading measure by the panel, not by the canvas. */
+@utility account-shell {
+  margin-inline: auto;
+  inline-size: 100%;
+  max-inline-size: var(--container-page);
+  padding-inline: var(--gutter);
+}
+
+/* The account's vertical rhythm: about half the site's. A management screen is
+   scanned in one pass, not scrolled through as a sequence of sections. */
+@utility account-y {
+  padding-block: var(--account-y);
+}
+
+@utility account-y-sm {
+  padding-block: calc(var(--account-y) * 0.6);
+}
+
+/* Galleries and results matrices — the widest surface. */
+@utility page-shell-wide {
+  margin-inline: auto;
+  inline-size: 100%;
+  max-inline-size: var(--container-wide);
+  padding-inline: var(--gutter);
+}
+
+/* Continuous text. Independent of the page shell on purpose: a 1600px measure
+   is unreadable, so prose never inherits the gallery's width. */
+@utility page-shell-prose {
+  margin-inline: auto;
+  inline-size: 100%;
+  max-inline-size: var(--container-prose);
+  padding-inline: var(--gutter);
+}
+
+
+/* ============================================================================
+   ART DIRECTION
+   The awards site is the audition: every visitor is a designer deciding
+   whether this programme deserves to judge them. These are the devices that
+   carry that, all built from the brand's own material.
+   ========================================================================== */
+
+/* --- Duotone -----------------------------------------------------------------
+   Event photography arrives in mixed white balance under stage lighting. Left
+   raw it reads as a press gallery pasted into a brand. Graded to navy shadows
+   and cream highlights it becomes part of the palette, and any future photo
+   drops into the same world without art direction on the shoot. */
+@utility duotone {
+  position: relative;
+  isolation: isolate;
+}
+@utility duotone-img {
+  filter: grayscale(1) contrast(1.18) brightness(0.86);
+}
+@utility duotone-wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    140deg,
+    var(--color-navy-950) 0%,
+    var(--color-blue-800) 55%,
+    var(--color-blue-600) 100%
+  );
+  mix-blend-mode: color;
+  pointer-events: none;
+}
+@utility duotone-lift {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(200deg, var(--color-cream-200) 0%, transparent 55%);
+  mix-blend-mode: soft-light;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* --- Grain -------------------------------------------------------------------
+   Flat #0a1a3c across a 1920px field bands on gradients and reads as plastic.
+   Three percent of noise removes both. This is not the paper texture: at this
+   opacity it is never seen as texture, only as depth. */
+@utility grain {
+  position: relative;
+}
+@utility grain-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0.038;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --- The award button's pixel fill -------------------------------------------
+   The fill is not a wipe with squares drawn on it. It IS squares: a grid of
+   them, each growing from nothing until their edges meet and the button is
+   solid. Same move as the hero's copy field assembling, at button scale.
+
+   Built from two crossed repeating gradients intersected as a mask, which is
+   what gives a lattice of squares rather than bars — one gradient alone is
+   stripes, and the intersection is the only way to get a sub-tile square out of
+   linear gradients.
+
+   The growing edge is a registered custom property, because a plain custom
+   property is not animatable: without @property the transition is a jump from
+   0 to full and the whole idea disappears. */
+@property --award-sq {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@utility award-pixel-fill {
+  --award-tile: 0.75rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--color-gold);
+    --award-sq: 0px;
+    -webkit-mask-image:
+      repeating-linear-gradient(to right, #000 0 var(--award-sq), transparent var(--award-sq) var(--award-tile)),
+      repeating-linear-gradient(to bottom, #000 0 var(--award-sq), transparent var(--award-sq) var(--award-tile));
+    mask-image:
+      repeating-linear-gradient(to right, #000 0 var(--award-sq), transparent var(--award-sq) var(--award-tile)),
+      repeating-linear-gradient(to bottom, #000 0 var(--award-sq), transparent var(--award-sq) var(--award-tile));
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+    transition: --award-sq 450ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  &:hover::before {
+    --award-sq: var(--award-tile);
+  }
+
+  /* Nothing grows for anyone who has asked for stillness; the fill is simply
+     there on hover. */
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      transition: none;
+    }
+  }
+
+  /* The tail block: the square, moved to the end of the button and grown to its
+     full height less 8px, carrying the chevron.
+
+     A flex item rather than an absolute box, so the label simply sits before it
+     and no call site has to reserve room. The chevron is a background image
+     because a pseudo-element cannot hold an icon, and it lives here rather than
+     in an arbitrary Tailwind class because the escaping of a data URI through
+     the class parser produced a stylesheet that would not parse. rtl-ok: the
+     chevron points along the reading direction, so it mirrors with the page. */
+  &::after {
+    content: "";
+    align-self: stretch;
+    aspect-ratio: 1;
+    margin-block: 0.5rem;
+    /* On top of the size variant's own gap, so the block reads as a separate
+       object rather than a cap stuck to the end of the label. Logical, so it
+       stays on the label's side when the page mirrors. */
+    margin-inline-start: 0.75rem;
+    background-color: var(--color-gold);
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%230a1a3c%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27square%27%3E%3Cpath%20d%3D%27M9%206l6%206-6%206%27%2F%3E%3C%2Fsvg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 44%;
+    transition:
+      background-color 200ms ease 150ms,
+      background-image 200ms ease 150ms;
+  }
+
+  [dir="rtl"] &::after {
+    scale: -1 1;
+  }
+
+  &:hover::after {
+    background-color: var(--color-navy-900);
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23d4a64a%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27square%27%3E%3Cpath%20d%3D%27M9%206l6%206-6%206%27%2F%3E%3C%2Fsvg%3E");
+  }
+}
+
+/** The light-surface twin: navy lattice, navy block, gold chevron. */
+@utility award-pixel-fill-invert {
+  &::before {
+    background-color: var(--color-navy-900);
+  }
+
+  &::after {
+    background-color: var(--color-navy-900);
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23d4a64a%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27square%27%3E%3Cpath%20d%3D%27M9%206l6%206-6%206%27%2F%3E%3C%2Fsvg%3E");
+  }
+
+  &:hover::after {
+    background-color: var(--color-gold);
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%230a1a3c%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27square%27%3E%3Cpath%20d%3D%27M9%206l6%206-6%206%27%2F%3E%3C%2Fsvg%3E");
+  }
+}
+
+/* --- The G as an aperture ----------------------------------------------------
+   The mark is a square with a bite taken out of it, which makes it a viewport
+   rather than a letter, so the work can be shown through it.
+
+   The source is logo-icon-mask.svg, not logo-icon.svg. The production mark
+   carries an offset viewBox (165.08 472), and an offset origin is resolved
+   inconsistently by browsers when used as a mask — the earlier attempt rendered
+   as a rectangle with a notch instead of a letterform. The mask copy is the
+   same path with its origin normalised to 0 0. */
+@utility g-aperture {
+  -webkit-mask-image: url("/brand/logo-icon-mask.svg");
+  mask-image: url("/brand/logo-icon-mask.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* --- Copy scrim --------------------------------------------------------------
+   Weights the start edge, where the hero copy comes to rest once the scroll
+   sequence has run. A flat scrim heavy enough to carry body text over
+   photography has to be dark enough to flatten the photograph with it; this
+   spends the darkness only where the words actually are and leaves the far side
+   of the frame legible as an image.
+
+   Gradients have no logical direction, so the mirror is written out. rtl-ok */
+/* --------------------------------------------------------------------------
+   The tile field: a block's pixel wash over a photograph.
+
+   Named tile-, not pixel-. `pixel-cell` and `pixel-breathe` already belong to
+   the hero's PixelField further down this file, and reusing them put two
+   definitions of each in one stylesheet: the hero's sets position: absolute and
+   forces opacity: var(--lo) !important under reduced motion, which is undefined
+   here, so every cell fell back to full strength and the field went flat for
+   exactly the readers who cannot see it move.
+
+   Fixed keyframe stops, not var(): a custom property inside @keyframes is not
+   substituted per element, so a keyframe reading var(--tile-a) resolves to its
+   fallback and the animation then holds every cell at full strength. The
+   resting strength lives on the cell and the motion on its child, so the two
+   multiply instead of replacing one another.
+   -------------------------------------------------------------------------- */
+@keyframes tile-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.62;
+  }
+}
+
+@utility tile-breathe {
+  animation: tile-breathe var(--tile-dur, 7s) ease-in-out var(--tile-delay, 0s) infinite;
+
+  /* Reduced motion keeps the composition and drops only the movement. */
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/* A tile cell's resting strength. */
+@utility tile-cell {
+  opacity: var(--tile-a, 1);
+}
+
+@utility scrim-tile {
+  /* Vertical, so it needs no RTL twin: the tile's type sits at the top corner
+     and the bottom corner, and the picture is left alone through the middle
+     where its subject actually is. */
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--color-navy-950) 62%, transparent) 0%,
+    color-mix(in oklab, var(--color-navy-950) 30%, transparent) 24%,
+    color-mix(in oklab, var(--color-navy-950) 14%, transparent) 42%,
+    color-mix(in oklab, var(--color-navy-950) 20%, transparent) 58%,
+    color-mix(in oklab, var(--color-navy-950) 78%, transparent) 74%,
+    color-mix(in oklab, var(--color-navy-950) 96%, transparent) 100%
+  );
+}
+
+@utility scrim-copy {
+  /* One list, two directions. Written out twice, the stops drift the moment
+     either side is retuned and only one locale shows it. */
+  --scrim-stops:
+    var(--color-navy-950) 0%,
+    color-mix(in oklab, var(--color-navy-950) 88%, transparent) 38%,
+    color-mix(in oklab, var(--color-navy-950) 45%, transparent) 58%,
+    transparent 76%;
+
+  background-image: linear-gradient(to right, var(--scrim-stops));
+
+  [dir="rtl"] & {
+    background-image: linear-gradient(to left, var(--scrim-stops));
+  }
+}
+
+/* --- Hero copy field ---------------------------------------------------------
+   Arrives with the slides, not before them. Rendered from first paint it put
+   solid brand-blue squares on the opening screen, over the ambient field the
+   dotted mark sits on, which is a different piece of design entirely. */
+.hero-copy-ground {
+  visibility: hidden;
+}
+
+[data-hero-live] .hero-copy-ground {
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-copy-ground {
+    visibility: visible;
+  }
+}
+
+/* --- Hero copy, per slide ----------------------------------------------------
+   The cycle's own headline belongs to the first frame only. On the others it
+   steps aside for that slide's copy, in CSS rather than by unmounting: the
+   scroll sequence holds split lines inside it, and tearing those out of the DOM
+   would leave the timeline animating elements that are gone. */
+[data-hero-slide]:not([data-hero-slide="1"]) [data-hero-headline] {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 350ms ease,
+    visibility 0s linear 350ms;
+}
+
+/* --- Hero slider controls ----------------------------------------------------
+   They belong to a picture that does not exist until the scroll sequence has
+   handed the screen over to it, so they stay out of the way until the stage
+   says otherwise. visibility, not just opacity: an invisible button is still
+   in the tab order, and this one would be the first thing a keyboard reaches
+   on the page. */
+.hero-controls {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 500ms ease,
+    visibility 0s linear 500ms;
+}
+
+[data-hero-live] .hero-controls {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity 500ms ease,
+    visibility 0s;
+}
+
+/* Nothing plays under reduced motion, so the picture is simply there and so
+   are its controls. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-controls {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+}
+
+/* --- Inline-start edge fade --------------------------------------------------
+   Dissolves a panel's inner edge into the ground beside it, so an image held to
+   one side of a layout joins the page instead of being a rectangle cut out of
+   it. Masks have no logical direction, so the mirror is written out — from one
+   stop list, because two would drift the moment either side is retuned and only
+   one locale would show it. rtl-ok */
+@utility fade-start {
+  --fade-stops: transparent 0%, black 20%;
+
+  mask-image: linear-gradient(to right, var(--fade-stops));
+
+  [dir="rtl"] & {
+    mask-image: linear-gradient(to left, var(--fade-stops));
+  }
+}
+
+/* --- Stage light -------------------------------------------------------------
+   A ceremony is lit from above. The glow is a spotlight, not a decorative
+   gradient blob, and it sits in brand blue rather than the AI-purple default. */
+@utility stage-light {
+  background:
+    radial-gradient(
+      70% 55% at 50% -10%,
+      color-mix(in oklab, var(--color-blue-600) 55%, transparent) 0%,
+      transparent 70%
+    ),
+    var(--color-navy-950);
+}
+
+/* --- Motion ------------------------------------------------------------------
+   Entrance stagger, scroll reveal, and one marquee. Everything here is
+   transform and opacity only, and everything stops under reduced-motion. */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.75rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@utility rise {
+  animation: rise-in 0.9s cubic-bezier(0.16, 0.84, 0.44, 1) both;
+  will-change: transform, opacity;
+}
+
+/* The same idea at a menu's tempo. `rise` is a section arriving as you scroll
+   to it and can take most of a second; a menu row is answering a tap, and a
+   tap wants an answer inside a third of one. Shorter travel too, because the
+   rows are stacked and a long one reads as the list falling apart. */
+@keyframes menu-row-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.75rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@utility menu-row {
+  animation: menu-row-in 0.34s cubic-bezier(0.16, 0.84, 0.44, 1) both;
+}
+
+@utility reveal {
+  opacity: 0;
+  transform: translate3d(0, 2rem, 0);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 0.84, 0.44, 1),
+    transform 0.8s cubic-bezier(0.16, 0.84, 0.44, 1);
+}
+@utility reveal-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes marquee-track {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    /* Half, because the track renders its content twice for a seamless loop. */
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+/* RTL needs mirrored keyframes, not a reversed direction. An over-wide track is
+   laid out from its inline-start edge — the right, under rtl — so it overflows
+   leftward, and a negative translate walks it clean out of view. Reversing the
+   direction only changes which end it starts from, and under rtl both ends of
+   the negative range are off-screen. */
+@keyframes marquee-track-rtl {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(50%, 0, 0);
+  }
+}
+@utility marquee {
+  animation: marquee-track 46s linear infinite;
+  will-change: transform;
+}
+/* Pair with `marquee`; the two are never useful apart. */
+@utility marquee-rtl {
+  animation-name: marquee-track;
+  &:dir(rtl) {
+    animation-name: marquee-track-rtl;
+  }
+}
+
+/* Restrained dimensionality: the badges are physical objects, so they get a
+   little perspective. Nothing else on the page tilts. */
+@utility scene {
+  perspective: 1200px;
+}
+@utility tilt {
+  transform: rotateY(-14deg) rotateX(6deg);
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.16, 0.84, 0.44, 1);
+}
+@utility tilt-flat {
+  transform: rotateY(0deg) rotateX(0deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .marquee {
+    animation: none !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .tilt {
+    transform: none !important;
+  }
+}
+
+/* Marquee edge fade. A mask rather than two positioned gradient panels: the
+   effect is symmetric, so it needs no RTL mirror, and gradients have no
+   logical direction keywords to mirror with. */
+@utility marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 7%,
+    #000 93%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 7%,
+    #000 93%,
+    transparent 100%
+  );
+}
+
+/* A full-bleed panel whose inner content still lines up with the page shell
+   below it. Without this the hero's type starts at the viewport edge + gutter
+   while every section under it starts at the centred container's edge, and the
+   two disagree by half the leftover width. */
+@utility page-edge-pad {
+  padding-inline-start: max(
+    var(--gutter),
+    calc((100vw - var(--container-page)) / 2 + var(--gutter))
+  );
+}
+/* The same measurement off the other edge, for a full-bleed panel whose content
+   sits on the end side — a half-width column beside an image that bleeds. */
+@utility page-edge-pad-end {
+  padding-inline-end: max(
+    var(--gutter),
+    calc((100vw - var(--container-page)) / 2 + var(--gutter))
+  );
+}
+
+
+/* ----------------------------------------------------------------------------
+   The lockup as a dot field.
+
+   The dotted SVG is generated by scripts/build-dotted-logo.mjs, which emits a
+   whole dot per covered cell. It is applied as a mask rather than an <img>
+   because an image cannot inherit colour, and masking a field of whole dots
+   clips nothing: the dots were already resolved at generation time.
+   -------------------------------------------------------------------------- */
+@utility dotted-logo {
+  -webkit-mask-image: url("/brand/logo-horizontal-dotted.svg");
+  mask-image: url("/brand/logo-horizontal-dotted.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  background-color: currentColor;
+}
+
+/* The wordmark without the icon, for the footer: the G is already in the header
+   and in the lockup above this, and dropping it lets the type run the full width
+   of the viewport instead of giving a third of that width back to a repeat. */
+@utility dotted-logotype {
+  -webkit-mask-image: url("/brand/logo-logotype-dotted.svg");
+  mask-image: url("/brand/logo-logotype-dotted.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  background-color: currentColor;
+}
+
+/* ----------------------------------------------------------------------------
+   Pixel field.
+
+   The guidelines' stepped squares, breathing. Each cell fades between two
+   opacities on its own duration and delay, so the field never pulses in
+   unison and never repeats on a visible cycle. Opacity only, so it composites
+   on the GPU and costs nothing to animate.
+
+   The timings come from a deterministic hash rather than Math.random, so the
+   server and the client agree and a given field is always the same field.
+   -------------------------------------------------------------------------- */
+@keyframes pixel-breathe {
+  0%,
+  100% {
+    opacity: var(--lo);
+  }
+  50% {
+    opacity: var(--hi);
+  }
+}
+
+@utility pixel-cell {
+  position: absolute;
+  animation-name: pixel-breathe;
+  animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1);
+  animation-iteration-count: infinite;
+  will-change: opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-cell {
+    animation: none !important;
+    opacity: var(--lo) !important;
+  }
+}
+
+/* A slow drift on the hero's backdrop. A still image behind a hero reads as a
+   poster; the same frame moving reads as footage. Paired with `motion-safe:`
+   at the call site, so a reader who asked for stillness gets it. */
+@keyframes hero-drift {
+  from {
+    transform: scale(1.06) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.16) translate3d(0, -2%, 0);
+  }
+}
+
+/*
+ * The participant drawer's entrance.
+ *
+ * Written here rather than reached for from an animation library because it
+ * has to mirror: the panel slides in from the inline-start edge, which is the
+ * left in English and the right in Arabic. A physical `translateX(-100%)`
+ * would slide it in from behind the content in one of the two.
+ *
+ * Held to `motion-safe` at the call site, and to `prefers-reduced-motion` here
+ * as well, so a reduced-motion reader gets the panel with no travel at all
+ * rather than a shorter version of the same movement.
+ */
+@keyframes drawer-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(-100% * var(--drawer-dir, 1)));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@utility drawer-panel {
+  --drawer-dir: 1;
+  animation: drawer-in 200ms ease-out both;
+
+  &:dir(rtl) {
+    --drawer-dir: -1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/*
+ * Arabic is never letter-spaced.
+ *
+ * The tracking in this scale is authored for Presicav's Latin drawing. Applied
+ * to Arabic it pushes the glyphs apart at the joins, which is not a stylistic
+ * preference — it breaks the script. The public pages were approved as they
+ * are and are deliberately not touched here; this is scoped to the account
+ * area, where the whole type system is being set now.
+ *
+ * `letter-spacing: normal` rather than `0`, so an inherited value cannot leak
+ * back in through a utility further down the cascade.
+ */
+[data-account]:where([dir="rtl"], [dir="rtl"] *),
+[dir="rtl"] [data-account],
+[dir="rtl"] [data-account] * {
+  letter-spacing: normal;
+}
+
+/* ---------------------------------------------------------------------------
+   The participant module is set in one face.
+
+   Presicav is the identity's display type and it stays on every public page.
+   Inside the account it does two things that do not help: it is a wide
+   geometric face, so a 28px title occupies the width of a 34px one, and it
+   sets up a second voice on a screen whose job is to be read quickly rather
+   than to announce itself. The account therefore uses the body stack
+   throughout - titles, figures and labels alike.
+
+   **"All Inter" resolves per locale, because it has to.** Inter carries no
+   Arabic, so `--font-sans` is Inter under `lang="en"` and Noto Sans Arabic
+   under `lang="ar"`; an Arabic account set in Inter would render in a fallback
+   face chosen by the browser. One family per locale is the honest reading of
+   one family.
+
+   `font-data` keeps its `font-variant-numeric: tabular-nums` - only the family
+   is overridden - so figures still align down a column.
+
+   Scoped to `[data-account]`, so no public page is touched.
+   --------------------------------------------------------------------------- */
+[data-account],
+[data-account] * {
+  font-family: var(--font-sans);
+}

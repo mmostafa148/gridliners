@@ -1,0 +1,10 @@
+.next
+.next-*
+node_modules
+coverage
+playwright-report
+test-results
+*.tar.gz
+*.zip
+npm-debug.log*
+pnpm-debug.log*

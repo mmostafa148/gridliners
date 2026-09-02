@@ -1,0 +1,1877 @@
+{
+  "common": {
+    "siteName": "Gridliners Awards",
+    "siteShortName": "Gridliners",
+    "tagline": "Celebrating the region's best design work.",
+    "loading": "Loading…",
+    "retry": "Try again",
+    "cancel": "Cancel",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "save": "Save",
+    "submit": "Submit",
+    "viewAll": "View all",
+    "viewDetails": "View details",
+    "search": "Search",
+    "filter": "Filter",
+    "clearFilters": "Clear filters",
+    "all": "All",
+    "language": "Language",
+    "switchLanguage": "Switch language",
+    "currencyNote": "All prices in USD",
+    "announcement": "Announcement"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "categories": "Categories",
+    "howToEnter": "How to Enter",
+    "jury": "Jury",
+    "finalists": "Finalists",
+    "winners": "Winners",
+    "contact": "Contact Us",
+    "partner": "Partner with us",
+    "login": "Log in",
+    "register": "Create account",
+    "dashboard": "Dashboard",
+    "logout": "Log out",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "menu": "Menu",
+    "account": "Account",
+    "awards": "Awards",
+    "awardsOverview": "Overview",
+    "awardsFees": "Fees & Deadlines",
+    "awardsBenefits": "Benefits",
+    "awardsMenu": "Awards menu",
+    "news": "News & Insights",
+    "partners": "Partners"
+  },
+  "footer": {
+    "awards": "Awards",
+    "participate": "Participate",
+    "legal": "Legal",
+    "terms": "Terms & Conditions",
+    "privacy": "Privacy Policy",
+    "rights": "© {year} Gridliners Awards. All rights reserved.",
+    "followUs": "Follow us",
+    "discover": "Discover",
+    "newsletterTitle": "The cycle, in your inbox",
+    "newsletterLead": "Entry windows, jury announcements and results. A few times a year, nothing else.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@studio.com",
+    "subscribe": "Subscribe",
+    "subscribeDone": "You are on the list.",
+    "subscribeInvalid": "That address does not look right.",
+    "subscribeFailed": "Something went wrong. Try again.",
+    "followUsOn": "Follow Gridliners on {network}"
+  },
+  "shell": {
+    "participantArea": "Participant",
+    "juryArea": "Jury Panel",
+    "adminArea": "Administration",
+    "skipToContent": "Skip to content",
+    "toggleSidebar": "Toggle sidebar",
+    "signedInAs": "Signed in as {name}",
+    "dashboard": {
+      "overview": "Dashboard",
+      "entries": "My Entries",
+      "newEntry": "New Entry",
+      "awards": "My Awards",
+      "billing": "Billing",
+      "profile": "Profile"
+    },
+    "jury": {
+      "overview": "Jury Dashboard",
+      "queue": "Scoring Queue",
+      "guidelines": "Scoring Guidelines"
+    },
+    "admin": {
+      "overview": "Overview",
+      "cycle": "Cycle Config",
+      "pricing": "Pricing",
+      "categories": "Taxonomy & Criteria",
+      "entries": "Entries",
+      "settlements": "Settlements",
+      "juryManager": "Jury",
+      "voting": "Voting Monitor",
+      "results": "Results",
+      "notifications": "Notifications",
+      "content": "Site Content",
+      "participants": "Participants",
+      "audit": "Audit Log"
+    }
+  },
+  "entryState": {
+    "draft": "Draft",
+    "pending_payment": "Awaiting payment",
+    "submitted": "Submitted",
+    "verified": "Verified",
+    "shortlisted": "Shortlisted",
+    "not_shortlisted": "Not shortlisted",
+    "excluded": "Excluded",
+    "cancelled": "Cancelled",
+    "disqualified": "Disqualified",
+    "winner": "Winner",
+    "description": {
+      "draft": "Not submitted yet. Finish and pay before submissions close.",
+      "pending_payment": "Awaiting cash payment confirmation.",
+      "submitted": "Paid and locked, awaiting tier verification.",
+      "verified": "Tier verified and visible to the jury.",
+      "shortlisted": "Shortlisted as a Cadet and eligible for public voting.",
+      "not_shortlisted": "Did not pass the jury score threshold.",
+      "excluded": "Tier settlement was not resolved before judging opened.",
+      "cancelled": "Cash payment was not received within the pending window.",
+      "disqualified": "Removed following a rules violation review.",
+      "winner": "Holds at least one winning group result."
+    }
+  },
+  "tier": {
+    "students": "Students",
+    "freelancers": "Freelancers",
+    "corporate": "Companies / Agencies",
+    "short": {
+      "students": "Students",
+      "freelancers": "Freelancers",
+      "corporate": "Corporate"
+    },
+    "eligibility": {
+      "students": "Student ID and university required.",
+      "freelancers": "Portfolio or freelance licence required.",
+      "corporate": "Company name and trade licence required."
+    }
+  },
+  "awardLevel": {
+    "gold": "Gold",
+    "silver": "Silver",
+    "bronze": "Bronze",
+    "did_not_place": "Did not place",
+    "finalist": "Finalist",
+    "honorary": "Honorary"
+  },
+  "pricingWindow": {
+    "early_bird": "Early Bird",
+    "normal": "Normal",
+    "late": "Late"
+  },
+  "cyclePhase": {
+    "configuration": "In configuration",
+    "submissions": "Submissions Open",
+    "verification": "Verification",
+    "jury_scoring": "Jury Scoring",
+    "voting": "Public Voting",
+    "results": "Results Announced",
+    "closed": "Closed"
+  },
+  "pricing": {
+    "summary": "Pricing summary",
+    "basePrice": "Base entry ({tier}, {window})",
+    "additionalSubCategories": "Additional sub-categories",
+    "subtotal": "Subtotal",
+    "loyaltyDiscount": "Loyalty discount",
+    "promoDiscount": "Promo code",
+    "credit": "Next-cycle credit",
+    "total": "Total",
+    "quotedAt": "Quoted {date}",
+    "snapshotNote": "This quote was locked at checkout and does not change.",
+    "promoPlaceholder": "Enter promo code",
+    "applyPromo": "Apply",
+    "loyaltyHint": "Entry #{count} this cycle, {percent}% off"
+  },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds",
+    "ended": "Closed",
+    "endsIn": "Ends in",
+    "opensIn": "Opens in",
+    "windowElapsed": "Share of the current window already elapsed"
+  },
+  "vote": {
+    "voteNow": "Vote for this project",
+    "votes": "{count, plural, =0 {No votes} one {# vote} other {# votes}}",
+    "votingClosed": "Voting has closed",
+    "votingNotOpen": "Voting has not opened yet",
+    "alreadyVoted": "You have already voted for this project",
+    "unit": "Votes"
+  },
+  "otp": {
+    "title": "Verify your email to vote",
+    "description": "We'll send a 6-digit code to confirm your vote for “{project}”. No account is created.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "sendCode": "Send code",
+    "codeLabel": "Verification code",
+    "codeHint": "Enter the 6-digit code sent to {email}.",
+    "verify": "Confirm vote",
+    "resend": "Resend code",
+    "resendIn": "Resend in {seconds}s",
+    "expired": "That code has expired. Request a new one.",
+    "invalid": "That code isn't right. Check it and try again.",
+    "success": "Your vote has been recorded.",
+    "successDescription": "Thank you! Your vote for “{project}” is counted.",
+    "selfVoteBlocked": "You can't vote for your own entry.",
+    "alreadyVoted": "You have already voted for this project."
+  },
+  "field": {
+    "english": "English",
+    "arabic": "Arabic",
+    "bilingualHint": "Both languages are required for platform content.",
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "filters": {
+    "allCategories": "All categories",
+    "allSubCategories": "All sub-categories",
+    "allTiers": "All tiers",
+    "subCategory": "Sub-category",
+    "category": "Category",
+    "tier": "Tier",
+    "resultsCount": "{count, plural, =0 {No results} one {# result} other {# results}}"
+  },
+  "project": {
+    "by": "by {name}",
+    "country": "Country",
+    "categories": "Categories",
+    "credits": "Credits",
+    "description": "About the project",
+    "viewProject": "View project",
+    "shareProject": "Share project",
+    "meta": {
+      "title": "{project} - Gridliners Awards",
+      "description": "{project} by {maker}, a Gridliners {year} finalist in {group}."
+    },
+    "breadcrumb": "Finalists {year}",
+    "breadcrumbLabel": "Back to the finalists",
+    "frames": {
+      "awaiting": "Project imagery has not been published yet.",
+      "galleryLabel": "Project gallery",
+      "figure": "Image {index} of {total}"
+    },
+    "record": {
+      "title": "Project details",
+      "video": "Watch the film",
+      "owner": "Project owner",
+      "country": "Country",
+      "categories": "Categories",
+      "cycle": "Edition",
+      "client": "Client"
+    },
+    "standing": {
+      "title": "Where it stands",
+      "groupLabel": "Group",
+      "votes": "{count, plural, =0 {No votes yet} one {# vote} other {# votes}}",
+      "votesUnit": "Votes",
+      "vote": "Vote for this project",
+      "voted": "Your vote is counted",
+      "preVotingTitle": "Voting has not opened",
+      "preVotingDescription": "Public voting opens when the jury has finished shortlisting. Share the project in the meantime.",
+      "openDescription": "One vote per project, confirmed by a code sent to your email. No account is created.",
+      "closedTitle": "Voting is closed",
+      "closedDescription": "The count is final for this edition. Results for this group have not been announced yet.",
+      "resultsDescription": "The count is final. Each group this project entered was ranked on the same votes.",
+      "noMedal": "Ranked in this group"
+    },
+    "share": {
+      "title": "Share this project",
+      "description": "Every finalist is judged on public votes. Passing the page on is the most useful thing you can do for it.",
+      "action": "Share",
+      "copy": "Copy link",
+      "copied": "Link copied"
+    },
+    "narrative": {
+      "brief": "The brief",
+      "concept": "The concept",
+      "execution": "Execution",
+      "outcome": "Outcome"
+    },
+    "gallery": {
+      "label": "Project gallery",
+      "open": "Open image {index} of {total}",
+      "close": "Close",
+      "next": "Next image",
+      "prev": "Previous image",
+      "counter": "{index} of {total}"
+    },
+    "provisional": "Imagery and project copy on this page are temporary stand-ins awaiting the entrant's own material."
+  },
+  "status": {
+    "emptyTitle": "No projects match these filters",
+    "emptyDescription": "Widen the tier or clear the sub-category to see more.",
+    "errorTitle": "This didn't load",
+    "errorDescription": "The connection dropped before the data arrived. Try again.",
+    "loadingLabel": "Loading content",
+    "notFoundTitle": "Page not found",
+    "notFoundDescription": "The page you're looking for doesn't exist or has moved.",
+    "backHome": "Back to home"
+  },
+  "dev": {
+    "kitchenSinkTitle": "Kitchen Sink",
+    "kitchenSinkDescription": "Every token, component and fixture state, rendered in both locales.",
+    "colors": "Colors",
+    "typography": "Typography",
+    "pixelMotif": "Pixel-grid motif",
+    "brandAssets": "Brand assets",
+    "entryStates": "Entry states",
+    "tiers": "Tiers",
+    "awardLevels": "Award levels",
+    "components": "Shared components",
+    "primitives": "UI primitives",
+    "fixtures": "Fixture coverage",
+    "mirroredLocale": "Mirrored locale preview"
+  },
+  "home": {
+    "hero": {
+      "configuration": {
+        "title": "The 2026 edition is being set up",
+        "body": "Categories, fees and dates are being finalised. Entries open in November, and the early-bird window carries the lowest fee of the cycle."
+      },
+      "submissions": {
+        "title": "Entries are open",
+        "body": "One entry enters one sub-category, judged against that category's criteria and your tier. Add more sub-categories from the same parent for a fee."
+      },
+      "verification": {
+        "title": "Entries are closed",
+        "body": "Every entry's tier is being verified before judging starts, so each project is scored against work at its own level."
+      },
+      "jury_scoring": {
+        "title": "The jury is scoring",
+        "body": "Each verified entry is scored 0 to 100 against its category's criteria. Entries that pass the threshold become Cadets and go to public voting."
+      },
+      "voting": {
+        "title": "Public voting is open",
+        "body": "Cadets are ranked by public vote inside their own sub-category and tier. One vote per project per email, confirmed by a code."
+      },
+      "results": {
+        "title": "The 2026 winners are in",
+        "body": "Gold, Silver and Bronze in every sub-category and tier, plus this edition's honorary designations."
+      },
+      "closed": {
+        "title": "The 2026 edition has closed",
+        "body": "Results are published in the archive. The next cycle opens in November."
+      }
+    },
+    "stats": {
+      "cadets": "Cadets",
+      "groups": "Groups",
+      "subCategories": "Sub-categories",
+      "categories": "Categories",
+      "jurors": "Jurors",
+      "entries": "Entries",
+      "gold": "Gold award",
+      "silver": "Silver award",
+      "bronze": "Bronze award",
+      "votes": "Votes",
+      "country": "Country",
+      "heading": "This cycle"
+    },
+    "slider": {
+      "previous": "Previous slide",
+      "next": "Next slide",
+      "goTo": "Show slide {n}"
+    },
+    "slides": {
+      "jury": {
+        "title": "Meet the jury",
+        "body": "A diverse panel brought together by one shared standard: work that is considered, resolved, and worth holding up.",
+        "cta": "See the panel"
+      },
+      "community": {
+        "title": "Creative community",
+        "body": "Built for the people who value intention and clarity. Your vote shapes what the region sees, and what the next class of cadets aims at.",
+        "cta": "How it works"
+      }
+    },
+    "categories": {
+      "eyebrow": "Categories",
+      "title": "Seven categories, twenty-three sub-categories",
+      "description": "Your sub-category sets the criteria you're judged against and the jury that scores you.",
+      "link": "All categories and fees",
+      "subCount": "{count, plural, one {# sub-category} other {# sub-categories}}",
+      "allTitle": "All categories and fees",
+      "allBody": "Per-sub-category fees, eligibility per tier, and the honorary awards the jury designates."
+    },
+    "jury": {
+      "eyebrow": "The jury",
+      "title": "Who scores your work",
+      "description": "Jurors are assigned by category and score every verified entry against published criteria.",
+      "link": "Meet the full panel"
+    },
+    "winners": {
+      "eyebrow": "Winners",
+      "title": "{year} winners",
+      "description": "Gold, Silver and Bronze are awarded inside each sub-category and tier, so a project can win more than once.",
+      "link": "All winners",
+      "empty": "Results are published once every group has been reviewed.",
+      "gold": "Gold Winner",
+      "silver": "Silver Winner",
+      "bronze": "Bronze Winner",
+      "category": "Category",
+      "honorary": "Honorary Winner",
+      "designation": "Designation",
+      "prev": "Previous winners",
+      "next": "More winners"
+    },
+    "awards": {
+      "title": "Three levels of award",
+      "description": "Every sub-category awards its own gold, silver and bronze, and it awards them inside each tier. A student is ranked against students, an agency against agencies.",
+      "groupLabel": "One group",
+      "groupKey": "Sub-category / Tier",
+      "matrix": "{groups} groups this cycle: {subs} sub-categories across {tiers} tiers. Each one awards its own gold, silver and bronze.",
+      "gold": {
+        "name": "Gold",
+        "body": "The highest scoring project in its group."
+      },
+      "silver": {
+        "name": "Silver",
+        "body": "Second in its group."
+      },
+      "bronze": {
+        "name": "Bronze",
+        "body": "Third in its group."
+      }
+    },
+    "aperture": {
+      "title": "Judged through the same frame as everyone else",
+      "body": "Your work is scored against the criteria for its category and ranked inside its own tier. No cross-category comparisons, no lumping students in with agencies.",
+      "bodyMore": "Assigned jurors score every entry from 0 to 100 against the same published criteria, and the tier you enter is verified against your proof before scoring opens. The group you are ranked in is the one you actually belong to, and the ranking never leaves it.",
+      "action": "How judging works"
+    },
+    "cta": {
+      "enter": "Enter your work",
+      "howToEnter": "How to enter",
+      "categories": "See the categories",
+      "jury": "Meet the jury",
+      "vote": "Vote now",
+      "finalists": "See the finalists",
+      "winners": "See the winners"
+    },
+    "closing": {
+      "title": "Put your work in front of the region",
+      "body": "One cycle a year, judged inside your own tier and ranked by the people who turn up to vote."
+    },
+    "countdown": {
+      "submissionsOpen": "Entries open in",
+      "submissionsClose": "Entries close in",
+      "judgingOpens": "Judging opens in",
+      "votingOpens": "Voting opens in",
+      "votingCloses": "Voting closes in"
+    },
+    "quick": {
+      "title": "Three ways in",
+      "howToEnter": {
+        "label": "How to Enter",
+        "body": "Tiers, categories, fees and every date you need."
+      },
+      "categories": {
+        "label": "Awards Categories",
+        "body": "Seven disciplines and the sub-categories inside each."
+      },
+      "winners": {
+        "label": "Winners & Finalists",
+        "body": "Every result, by category and by tier."
+      }
+    },
+    "news": {
+      "title": "News & Insights",
+      "description": "Interviews with the people doing the judging, and what is coming next.",
+      "interview": "Interview",
+      "event": "Event",
+      "upcoming": "Upcoming",
+      "link": "All news",
+      "read": "Read",
+      "interviews": "Interviews",
+      "whatsOn": "What's on",
+      "venueTba": "Venue to be announced",
+      "prev": "Previous stories",
+      "next": "More stories"
+    },
+    "juryHighlights": {
+      "title": "Who judges what",
+      "description": "Jurors are assigned by category and score every verified entry against published criteria.",
+      "link": "The full panel",
+      "prev": "Previous jurors",
+      "next": "More jurors"
+    },
+    "partners": {
+      "title": "Partners & Sponsors",
+      "description": "The programme runs with the people and institutions who back it.",
+      "principal": "Principal partners",
+      "partner": "Partners",
+      "supporter": "Supporters"
+    },
+    "testimonials": {
+      "title": "The parts that mattered",
+      "lead": "Each of these is about a different piece of how the programme works.",
+      "prev": "Previous testimonial",
+      "next": "Next testimonial",
+      "show": "Show {name}'s testimonial"
+    },
+    "becomePartner": {
+      "title": "Become a partner",
+      "description": "Partnership puts your name inside the programme rather than beside it: on the winner materials, in the ceremony, and next to the work itself.",
+      "howTitle": "How it works",
+      "step1Title": "Tell us who you want to reach",
+      "step1": "Which discipline, which market, and what the sponsorship is meant to do.",
+      "step2Title": "We come back with a plan",
+      "step2": "A tier, a category to attach your name to, and a price for this cycle.",
+      "step3Title": "You run with the cycle",
+      "step3": "From the entry announcement through judging to the ceremony and the winner pack.",
+      "tiersTitle": "What each tier includes",
+      "principal": "Principal partner",
+      "partner": "Partner",
+      "supporter": "Supporter",
+      "note": "Pricing is set per cycle and depends on the tier and the category. Nothing is sold off a rate card.",
+      "cta": "Start a conversation",
+      "contact": "Talk to the team",
+      "benefit1": "Your mark on the partners wall and the winner materials",
+      "benefit2": "Seats at the ceremony",
+      "benefit3": "Named in the results announcement",
+      "benefit4": "Billing at the ceremony",
+      "benefit5": "Named support for one category",
+      "benefit6": "An interview in News & Insights",
+      "benefit7": "Naming rights on one category",
+      "benefit8": "A seat at the jury dinner",
+      "benefit9": "Your name on the 2026 awards lockup",
+      "tiersLead": "Each tier carries everything in the one below it.",
+      "supporterSummary": "Your mark on the wall and in the winner materials, seats at the ceremony, and your name in the results.",
+      "partnerSummary": "Everything a supporter gets, plus billing at the ceremony, a category to put your name to, and an interview.",
+      "principalSummary": "Everything a partner gets, plus naming rights, a seat at the jury dinner, and your name on the 2026 lockup.",
+      "tiersNote": "Three tiers, from supporter to principal partner. Pricing is set per cycle, never off a rate card."
+    }
+  },
+  "enter": {
+    "meta": {
+      "title": "How to Enter",
+      "description": "Entry tiers and the proofs each one needs, what an entry costs in each window, and the six phases of a Gridliners cycle."
+    },
+    "header": {
+      "eyebrow": "Participate",
+      "title": "How to enter",
+      "lead": "One entry, one category, judged inside your own tier. Here is what it costs, what you need to have ready, and when each stage happens."
+    },
+    "eligibility": {
+      "title": "Which tier are you?",
+      "description": "You declare a tier when you enter and it is verified before judging opens. Entries are only ever ranked against others in the same tier.",
+      "proofsLabel": "What you provide",
+      "priceLabel": "Entry from",
+      "note": "Proofs reach the awards team and nobody else. They are never shown to the jury, never published, and they are deleted after the retention period."
+    },
+    "pricing": {
+      "title": "What an entry costs",
+      "description": "One price per entry, set by your tier and the window you submit in. The price is per entry, not per person, and it is fixed at checkout.",
+      "tierColumn": "Tier",
+      "now": "Open now",
+      "closedNote": "Submissions for this cycle have closed. These are the windows it ran on.",
+      "addOnsTitle": "Additional sub-categories",
+      "addOnsBody": "The price above covers one sub-category. The same project can be entered in more sub-categories under the same parent category, each with its own fee.",
+      "addOnsRange": "Fees run from {min} to {max} per sub-category."
+    },
+    "fees": {
+      "title": "Discounts, and what is not refundable",
+      "loyaltyTitle": "Loyalty",
+      "loyaltyBody": "The more you enter in one cycle, the less each entry costs. The discount is worked out at checkout and counts entries that reached Submitted.",
+      "promoTitle": "Promo codes",
+      "promoBody": "A code is entered at checkout and reserved when you pay. One that is out of date, fully used, or issued to somebody else is refused with the reason.",
+      "refundTitle": "Refunds",
+      "refund1": "Entry fees are final once an entry is submitted and paid.",
+      "refund2": "Drafts cost nothing. Abandon one at any point.",
+      "refund3": "Refunds are issued for duplicate charges, payment errors, or a cycle we cancel.",
+      "refund4": "Not being shortlisted, having an entry moved to another category, and tier corrections do not qualify.",
+      "termsLink": "Read the full terms"
+    },
+    "prepare": {
+      "title": "What to have ready",
+      "description": "Uploads happen in one step near the end. Having these to hand makes it a few minutes rather than an evening.",
+      "cover": {
+        "title": "A square cover",
+        "body": "The one image your project is represented by, everywhere on the site."
+      },
+      "gallery": {
+        "title": "Gallery images",
+        "body": "The work itself, in the order you want it read."
+      },
+      "documents": {
+        "title": "Supporting documents",
+        "body": "PDFs, where the work needs context the images cannot carry."
+      },
+      "video": {
+        "title": "A video link",
+        "body": "For film and motion work, and anything else that moves."
+      },
+      "benefitsTitle": "Why enter",
+      "benefit1": {
+        "title": "Judged in your own tier",
+        "body": "Students are ranked against students. A studio's budget never competes with a final-year project."
+      },
+      "benefit2": {
+        "title": "Scores with criteria attached",
+        "body": "Every entry is scored against published criteria by an assigned jury, not ranked on taste."
+      },
+      "benefit3": {
+        "title": "Published as submitted",
+        "body": "Your description runs in the language you wrote it in, Arabic or English, and is never translated for you."
+      },
+      "benefit4": {
+        "title": "Assets you can use",
+        "body": "Finalists and winners get badges, a hosted award page, and a certificate."
+      }
+    },
+    "closing": {
+      "title": "Where the cycle stands",
+      "body": "Every phase has a deadline. This is the one that matters today."
+    },
+    "cycle": {
+      "eyebrow": "How it works",
+      "title": "Six phases, one cycle",
+      "description": "From entry to award, this is the route every project takes, and when each part of it opens.",
+      "note": "Gridliners administers these dates. Any of them can change before its window closes.",
+      "now": "Now",
+      "opens": "Opens",
+      "body": {
+        "configuration": "Categories, criteria and fees are set and published before anything opens.",
+        "submissions": "Pick your tier and one sub-category. Add more from the same parent category if you want them, each with its own fee.",
+        "verification": "Admin checks your tier against your proof before judging opens, so you compete at the right level.",
+        "jury_scoring": "Assigned jurors score your project 0 to 100 against the criteria for its category. Pass the threshold and it becomes a Cadet, with a public page and a finalist badge.",
+        "voting": "Votes decide the ranking inside each sub-category and tier.",
+        "results": "Gold, Silver and Bronze per group. Winners collect a badge, an award page and a certificate."
+      }
+    }
+  },
+  "about": {
+    "meta": {
+      "title": "About",
+      "description": "What the Gridliners Awards are, who runs them, the cycle's timetable and the editions behind it."
+    },
+    "header": {
+      "eyebrow": "About",
+      "title": "A regional award with its workings on the outside",
+      "lead": "Gridliners exists to put design work from this region in front of the people who should see it, and to say plainly how it is judged."
+    },
+    "story": {
+      "title": "The awards, and who stands behind them",
+      "body1": "One cycle a year. Work is entered in a category, verified against the tier it was entered in, scored by an assigned jury against published criteria, and then ranked by public vote inside its own group.",
+      "body2": "The programme is run by the association that convenes the jury and holds the criteria. It is not a magazine list and not a paid placement: every entry goes through the same six phases, and every rule that decides a result is written down before entries open.",
+      "associationNote": "Association membership and the academy programme sit outside this site."
+    },
+    "purpose": {
+      "title": "What we are for",
+      "missionTitle": "Mission",
+      "missionBody": "To judge design work in this region against stated criteria, in the entrant's own tier, and to publish the result with the reasoning attached.",
+      "visionTitle": "Vision",
+      "visionBody": "An archive the region's designers use as a reference: who was working, on what, and what was held up as good in any given year."
+    },
+    "timetable": {
+      "title": "The cycle, year on year",
+      "description": "The programme runs on the same rhythm every year. These are this edition's dates and the editions behind it.",
+      "windowsTitle": "This edition",
+      "editionsTitle": "Previous editions",
+      "currentTag": "Current",
+      "archivedTag": "Archived",
+      "entriesLabel": "Entries",
+      "juryLabel": "Jury scoring",
+      "votingLabel": "Public voting",
+      "resultsLabel": "Results"
+    },
+    "team": {
+      "title": "Who runs it",
+      "description": "A small team runs the cycle, briefs the jury and produces the ceremony.",
+      "empty": "The team list is being updated.",
+      "socialLabel": "{name} on {network}"
+    },
+    "ceremony": {
+      "title": "The ceremony",
+      "description": "Every cycle closes with a ceremony, held in a different city in the region. Winners collect their award in person and the work goes up on the wall.",
+      "photoAlt": "The {year} Gridliners ceremony in {city}",
+      "venueTba": "Venue to be announced"
+    },
+    "faq": {
+      "title": "Questions people ask",
+      "description": "The short answers. How to Enter carries the detail, and the terms carry the rest."
+    },
+    "closing": {
+      "title": "Enter, or ask us something",
+      "body": "Entries open once a year. Anything the answers above did not cover, put to us directly.",
+      "contact": "Contact us"
+    }
+  },
+  "honoraryType": {
+    "student_of_the_year": "Student of the Year",
+    "designer_of_the_year": "Designer of the Year",
+    "best_agency": "Best Agency",
+    "best_project": "Best Project",
+    "best_university": "Best University",
+    "audience_award": "Audience Award",
+    "sustainability_innovation": "Sustainability & Innovation"
+  },
+  "categories": {
+    "meta": {
+      "title": "Categories",
+      "description": "The frozen Gridliners taxonomy: seven parent categories, twenty three sub-categories, and the fee to add each one to an entry."
+    },
+    "header": {
+      "eyebrow": "Awards",
+      "title": "Categories and fees",
+      "lead": "Every entry belongs to one sub-category. That choice sets the criteria you are scored against and the jury that scores you."
+    },
+    "rules": {
+      "title": "How an entry is composed",
+      "base": "One base sub-category. The entry fee covers it, and it decides your parent category, your criteria and your jury.",
+      "additional": "Additional sub-categories are optional. Add as many or as few as you want.",
+      "sameParent": "Additions must sit in the same parent category as your base. The code says which: everything sharing your two letters is open to you.",
+      "fee": "Each additional sub-category carries its own fee, listed against it below."
+    },
+    "index": {
+      "label": "Jump to a category",
+      "legend": "Two letters per parent, a number per sub-category. The same code appears on finalist and winner listings."
+    },
+    "group": {
+      "count": "{count, plural, one {# sub-category} other {# sub-categories}}",
+      "apply": "Apply in this category"
+    },
+    "honorary": {
+      "title": "Honorary designations",
+      "body": "Seven awards that no one enters. The jury and the awards team choose them, and they carry no fee and no submission.",
+      "notEnterable": "Not enterable",
+      "notPaid": "Never paid",
+      "chosen": "Chosen by the jury and the awards team",
+      "scope": "A designation is attached to a person or an organisation, not to a single entry, so it sits outside the ranking every category above runs on."
+    },
+    "closing": {
+      "title": "Know where you belong?",
+      "body": "The next page has the windows, the prices and what you need ready before you start."
+    },
+    "empty": {
+      "title": "The taxonomy is not published yet",
+      "description": "Categories and fees appear here as soon as the cycle taxonomy is released."
+    }
+  },
+  "jury": {
+    "meta": {
+      "title": "Jury Panel",
+      "description": "Who scores Gridliners entries, what they are responsible for, and the published framework every entry is judged through."
+    },
+    "header": {
+      "eyebrow": "Judging",
+      "title": "The jury panel",
+      "lead": "Every entry is scored by the jurors assigned to its category, against criteria published before the cycle opens."
+    },
+    "judging": {
+      "title": "How judging works",
+      "scaleTitle": "Scored 0 to 100",
+      "scaleBody": "Each assigned juror scores an entry from 0 to 100 against every criterion in its parent category.",
+      "criteriaTitle": "Against published criteria",
+      "criteriaBody": "Each parent category has its own criteria and its own weights. They are published here before the cycle opens, and they do not change inside a cycle.",
+      "thresholdTitle": "A threshold per tier",
+      "thresholdBody": "An entry that reaches its tier threshold becomes Shortlisted, and its maker becomes a Cadet.",
+      "rankTitle": "The public decides the rank",
+      "rankBody": "Jury scoring decides who is shortlisted. Final placing inside a group is decided by public vote, with the jury score used only to break a tie.",
+      "weightLabel": "Weight",
+      "criteriaCount": "{count, plural, one {# criterion} other {# criteria}}",
+      "frameworkTitle": "The sheet a juror fills in",
+      "frameworkBody": "One of these for every entry, completed by each juror assigned to its category. They mark each line, the marks are added up, and that total is the score.",
+      "totalLabel": "Total",
+      "sheetLabel": "Jury scorecard"
+    },
+    "fairness": {
+      "title": "Judged through the same frame",
+      "body": "Students, freelancers and companies are kept fully separate. An entry is only ever compared with entries in its own tier, so no one is measured against a studio with a different budget or a different decade of practice.",
+      "note": "The three are equal in every way but the pool they sit in. Each has its own shortlist threshold because each is measured inside itself, not against the others.",
+      "thresholdLabel": "Shortlist threshold",
+      "reasoning": "Criteria and the reasoning behind a score stay attached to the entry and are published with the result."
+    },
+    "panel": {
+      "title": "Who judges what",
+      "description": "A juror is assigned at parent-category level and inherits every sub-category under it. These are the parents each of them scores.",
+      "scopeLabel": "Judges",
+      "languagesLabel": "Reads",
+      "socialLabel": "{name} on {platform}"
+    },
+    "process": {
+      "title": "How the panel is run",
+      "assignmentTitle": "Assigned by category",
+      "assignmentBody": "Jurors are assigned at parent-category level and inherit all of its sub-categories. Nobody scores a category they are not assigned to.",
+      "completeTitle": "Every assigned juror scores",
+      "completeBody": "A result stays pending until every juror assigned to that category has scored it. If a juror never does, the awards team enters the missing score on their behalf and the entry records that it was entered that way.",
+      "ndaTitle": "Under a non-disclosure agreement",
+      "ndaBody": "Jurors sign one before they see any entry. Entries, scores and reasoning stay inside the panel until results are announced.",
+      "recatTitle": "Moving an entry",
+      "recatBody": "A juror or the awards team may move an entry to a more suitable category, but only during Tier Verification and only before jury scoring opens. The participant is notified when it happens. Once scoring has opened, nothing moves."
+    },
+    "closing": {
+      "title": "Judged by people who do this work",
+      "body": "The framework is published, the panel is named, and the criteria are the same for everyone in your tier."
+    },
+    "empty": {
+      "title": "The panel is not announced yet",
+      "description": "Jurors appear here once the awards team publishes the panel for this cycle."
+    }
+  },
+  "finalists": {
+    "meta": {
+      "title": "Finalists {year}",
+      "description": "The {year} shortlist, group by group, across all three tiers."
+    },
+    "header": {
+      "title": "Finalists",
+      "lead": "Every project here cleared its own tier's jury threshold and stands in a group, which is what the public votes inside. Vote counts are shown, but nothing is sorted by them: no standing exists until voting closes and the results are reviewed."
+    },
+    "event": {
+      "title": "The ceremony",
+      "lead": "The cycle closes with a ceremony in an Arab city, where the medals are conferred and the winners' materials are handed over.",
+      "filmLabel": "Ceremony film",
+      "upcomingLabel": "Still to come",
+      "openFrame": "Open photograph {n} of {total} full size",
+      "viewerTitle": "Ceremony photographs, {city}",
+      "closeViewer": "Close",
+      "previousFrame": "Previous photograph",
+      "nextFrame": "Next photograph",
+      "counter": "{n} of {total}"
+    },
+    "voting": {
+      "eyebrow": "Voting is open",
+      "title": "The public decides the order",
+      "body": "The jury decided who is here. Which project takes gold, silver and bronze inside each group is decided by public vote.",
+      "how": "Open a project to vote for it. One vote per project per email address, confirmed by a code we send you.",
+      "juryLink": "Meet the full panel"
+    },
+    "index": {
+      "slates": "{count, plural, =0 {No groups} one {# group} other {# groups}}",
+      "finalists": "{count, plural, =0 {No finalists} one {# finalist} other {# finalists}}"
+    },
+    "filter": {
+      "label": "Filter by category",
+      "all": "All categories",
+      "allOf": "All {category}"
+    },
+    "tier": {
+      "empty": {
+        "title": "No finalists in this tier",
+        "description": "No entry in this tier cleared the jury threshold this year. Tiers are judged separately, so an empty tier says nothing about the other two."
+      },
+      "noMatch": {
+        "title": "No finalists in this category",
+        "description": "No {category} entry in this tier cleared the jury threshold this year."
+      },
+      "label": "Tier"
+    },
+    "slate": {
+      "contenders": "{count, plural, one {# finalist} other {# finalists}}",
+      "showAll": "Show all {count}",
+      "showFewer": "Show fewer"
+    },
+    "closing": {
+      "title": "The next shortlist is still open",
+      "body": "Every project on this page started as an entry."
+    },
+    "archive": {
+      "meta": {
+        "title": "Finalists",
+        "description": "Every Gridliners shortlist, year by year."
+      },
+      "title": "Finalists",
+      "lead": "Each year's shortlist stays online after the ceremony, with the same groups and the same three tiers it was judged in.",
+      "otherYears": "Other years",
+      "open": "Voting open",
+      "empty": {
+        "title": "No shortlist has been published yet",
+        "description": "Finalists appear here once a cycle's jury scoring is complete."
+      }
+    }
+  },
+  "winners": {
+    "title": "Winners",
+    "lead": "Gold, Silver and Bronze are decided inside each group - one sub-category judged in one tier. Honorary designations are chosen by the jury and sit outside that count.",
+    "tierCount": "{medals, plural, =0 {No medals} one {# medal} other {# medals}} · {groups, plural, =0 {no groups} one {# group} other {# groups}}",
+    "by": "By {name}",
+    "votes": "{count, plural, =0 {No votes} one {# vote} other {# votes}}",
+    "level": {
+      "gold": "Gold",
+      "silver": "Silver",
+      "bronze": "Bronze"
+    },
+    "tierEmpty": {
+      "title": "No medals in this tier",
+      "description": "No group in this tier awarded a medal this edition."
+    },
+    "unpublished": {
+      "title": "The {year} results are not out yet",
+      "description": "Voting is still open, and nothing is ranked until it closes and the results are reviewed. The shortlist is public in the meantime.",
+      "action": "See the finalists"
+    },
+    "noneEver": {
+      "title": "No results have been published",
+      "description": "The first edition's winners will appear here once its results are final."
+    },
+    "years": {
+      "otherYears": "Other years",
+      "medals": "{count, plural, =0 {No medals} one {# medal} other {# medals}}"
+    },
+    "honorary": {
+      "title": "Honorary designations",
+      "lead": "Chosen by the jury and by Admin rather than by public vote. They are not entered, not paid for and not ranked inside a tier.",
+      "subject": {
+        "person": "Person",
+        "entity": "Organisation"
+      },
+      "suffix": "Designation",
+      "label": "Honorary"
+    },
+    "closing": {
+      "title": "The next edition is open",
+      "body": "Every project on this page started as an entry."
+    },
+    "meta": {
+      "title": "Winners {year} - Gridliners Awards",
+      "titleFallback": "Winners - Gridliners Awards",
+      "description": "Gold, Silver and Bronze by sub-category and tier, with the honorary designations for each edition."
+    },
+    "category": "Category",
+    "designation": "Designation",
+    "votesUnit": "Votes"
+  },
+  "news": {
+    "title": "News & Insights",
+    "eyebrow": "Media centre",
+    "lead": "What the programme is doing, what the jury is thinking, and what the winners actually did.",
+    "latest": "Latest news",
+    "archiveTitle": "Our blogs",
+    "readMore": "Read the story",
+    "filterCategory": "Category",
+    "all": "All",
+    "results": "{count} posts",
+    "resultsOne": "1 post",
+    "empty": "Nothing matches that combination yet.",
+    "emptyAction": "Clear the filters",
+    "interviewsTitle": "Winner interviews",
+    "watch": "Watch the interview",
+    "pagination": "Pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page}",
+    "pageOf": "Page {page} of {pages}",
+    "newsletterTitle": "The cycle, in your inbox",
+    "newsletterLead": "Entry windows, jury announcements and results. A few times a year, nothing else."
+  },
+  "post": {
+    "backToNews": "Back to News & Insights",
+    "published": "Published",
+    "readTime": "{minutes} min read",
+    "interviewWith": "In conversation with",
+    "transcript": "Transcript",
+    "transcriptNote": "The film is edited for length. This is what was said.",
+    "watchTitle": "Watch the interview",
+    "related": "Read next",
+    "share": "Share this story",
+    "kind": {
+      "news": "News",
+      "article": "Article",
+      "interview": "Interview",
+      "event": "Event"
+    }
+  },
+  "partners": {
+    "title": "Partners",
+    "eyebrow": "Who backs the programme",
+    "lead": "Institutions, studios, schools and platforms that make the cycle possible. Every partner is listed at the same weight, because a logo wall that scales by spend is a medal table wearing a different hat.",
+    "all": "All partners",
+    "count": "{count} partners",
+    "visit": "Visit {name}",
+    "noneInCategory": "No partners are listed in that category yet.",
+    "becomeTitle": "Partner with Gridliners",
+    "becomeLead": "Support a cycle, host a clinic, or sponsor a category.",
+    "becomeCta": "Become a partner",
+    "independence": "No partner sees an entry before results, and no partner sits on a jury."
+  },
+  "partnerForm": {
+    "title": "Become a partner",
+    "eyebrow": "Partnership",
+    "lead": "Tell us what you would like to support and we will come back with what is available in the current cycle.",
+    "benefitsTitle": "What a partnership includes",
+    "benefits": {
+      "reach": {
+        "title": "Reach the region's studios",
+        "body": "Your mark sits on the partners wall, in the cycle's announcements and at the ceremony, in front of the studios and schools that enter."
+      },
+      "category": {
+        "title": "Sponsor a category",
+        "body": "Attach your organisation to a discipline it actually works in - typography, packaging, digital - across the cycle and its archive."
+      },
+      "clinic": {
+        "title": "Host a clinic or a talk",
+        "body": "Portfolio clinics and talks run through the year, in the region and online. Partners host them with us."
+      },
+      "independence": {
+        "title": "Judging stays independent",
+        "body": "No partner sees an entry before results and no partner sits on a jury. That is the condition of every partnership, and it is not negotiable."
+      }
+    },
+    "organisation": "Organisation",
+    "organisationPlaceholder": "Studio, school, institution or brand",
+    "contactPerson": "Contact person",
+    "contactPersonPlaceholder": "Who we should reply to",
+    "email": "Email",
+    "phone": "Phone",
+    "phonePlaceholder": "Including country code",
+    "message": "What would you like to support?",
+    "messagePlaceholder": "A category, a clinic, the ceremony, or something we have not thought of.",
+    "submit": "Send enquiry",
+    "sending": "Sending",
+    "successTitle": "Enquiry received",
+    "successBody": "We reply to partnership enquiries within five working days. Nothing is committed by sending this.",
+    "successAgain": "Send another enquiry",
+    "errorTitle": "That did not send",
+    "errorBody": "Something went wrong on our side. Try again, or write to partners@gridliners.example.",
+    "retry": "Try again"
+  },
+  "contact": {
+    "title": "Contact us",
+    "eyebrow": "Get in touch",
+    "lead": "Questions about an entry, a result, a partnership or the press. Pick the route that fits and we will answer on it.",
+    "detailsTitle": "Where to find us",
+    "generalLabel": "General enquiries",
+    "entriesLabel": "Entries and verification",
+    "pressLabel": "Press",
+    "partnersLabel": "Partnerships",
+    "phoneLabel": "Phone",
+    "addressLabel": "Address",
+    "address": "Dubai Design District, Building 6, Dubai, United Arab Emirates",
+    "hoursLabel": "Working hours",
+    "hours": "Sunday to Thursday, 09:00 to 18:00 Gulf Standard Time",
+    "hoursNote": "Entry-window questions are answered outside these hours in the last week before a deadline.",
+    "socialLabel": "Follow the programme",
+    "formTitle": "Send a message",
+    "name": "Your name",
+    "email": "Email",
+    "subject": "Subject",
+    "subjectPlaceholder": "What is this about?",
+    "message": "Message",
+    "messagePlaceholder": "Tell us what you need. If it is about an entry, include the entry ID.",
+    "submit": "Send message",
+    "sending": "Sending",
+    "successTitle": "Message sent",
+    "successBody": "We answer within two working days. If it is about a deadline this week, call instead.",
+    "successAgain": "Send another message",
+    "errorTitle": "That did not send",
+    "errorBody": "Something went wrong on our side. Try again, or write to hello@gridliners.example.",
+    "retry": "Try again"
+  },
+  "legal": {
+    "contents": "On this page",
+    "provisionalTitle": "Provisional text",
+    "provisionalBody": "This document is written for the build and has not been through legal review. It describes how the programme intends to operate; it is not yet the binding version.",
+    "updated": "Last updated {date}",
+    "backToTop": "Back to top",
+    "terms": {
+      "title": "Terms & Conditions",
+      "eyebrow": "Legal",
+      "lead": "The rules that govern entering, judging, voting and publication."
+    },
+    "privacy": {
+      "title": "Privacy",
+      "eyebrow": "Legal",
+      "lead": "What the programme collects, why it holds it, how long it keeps it and what you can ask it to do."
+    }
+  },
+  "system": {
+    "notFound": {
+      "code": "404",
+      "title": "That page is not here",
+      "body": "The link may be old, or the entry it pointed at was never published. Only shortlisted projects have public pages.",
+      "home": "Go to the home page",
+      "browse": "Browse the finalists"
+    },
+    "error": {
+      "code": "Error",
+      "title": "Something went wrong at our end",
+      "body": "The page failed to load. Nothing you did caused it, and nothing you submitted was lost.",
+      "retry": "Try again",
+      "home": "Go to the home page"
+    },
+    "closed": {
+      "eyebrow": "Cycle closed",
+      "title": "This cycle is closed",
+      "body": "Entries and voting for this edition are over. The results stay published, and the next cycle opens on the date below.",
+      "nextTitle": "Next cycle",
+      "opensLabel": "Entries open",
+      "resultsLabel": "Results announced",
+      "browseWinners": "See the winners",
+      "browseFinalists": "Browse the finalists",
+      "followTitle": "Follow the programme",
+      "followBody": "Entry windows and results are announced by email and on the programme's channels."
+    }
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Enter a valid email address"
+  },
+  "auth": {
+    "signInTitle": "Sign in",
+    "signInLead": "Your entries, payments and awards.",
+    "registerTitle": "Create an account",
+    "registerLead": "One account, any number of entries. The tier is chosen per entry, never at signup.",
+    "forgotTitle": "Reset your password",
+    "forgotLead": "Give us the address on your account and we will send a reset link.",
+    "resetTitle": "Choose a new password",
+    "resetLead": "Eight characters or more. Paste from a password manager if you use one.",
+    "name": "Full name",
+    "email": "Email address",
+    "password": "Password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "language": "Interface language",
+    "acceptTerms": "I accept the Terms & Conditions and the Privacy Policy",
+    "acceptTermsLink": "Read them first",
+    "signIn": "Sign in",
+    "signingIn": "Signing in",
+    "register": "Create account",
+    "registering": "Creating account",
+    "sendLink": "Send reset link",
+    "sending": "Sending",
+    "setPassword": "Set new password",
+    "setting": "Saving",
+    "forgotLink": "Forgotten your password?",
+    "noAccount": "No account yet?",
+    "haveAccount": "Already have an account?",
+    "backToSignIn": "Back to sign in",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "passwordHint": "At least 8 characters.",
+    "forgotDone": "If that address has an account, a reset link is on its way. Check your inbox and your spam folder.",
+    "resetDone": "Your password is set. Sign in with it.",
+    "summaryTitle": "Check the form",
+    "devLinkTitle": "Development only",
+    "devLinkBody": "There is no mail service in this build, so the reset link is printed here instead of sent.",
+    "devLinkAction": "Open the reset link",
+    "tierNote": "Entering is priced per entry, by tier and window. Creating an account costs nothing.",
+    "errors": {
+      "invalid_credentials": "That email and password do not match an account.",
+      "email_taken": "An account already uses that address.",
+      "terms_required": "You have to accept the Terms and the Privacy Policy.",
+      "server_error": "Something failed at our end. Try again.",
+      "invalid_token": "That reset link is not valid. Ask for a new one.",
+      "expired_token": "That reset link has expired. Ask for a new one.",
+      "emailInvalid": "Enter a valid email address.",
+      "passwordRequired": "Enter your password.",
+      "passwordShort": "Use at least 8 characters.",
+      "passwordMismatch": "The two passwords do not match.",
+      "nameRequired": "Enter your full name."
+    },
+    "eyebrow": "My account"
+  },
+  "account": {
+    "area": "Participant",
+    "skipToContent": "Skip to content",
+    "openNav": "Open navigation",
+    "closeNav": "Close navigation",
+    "nav": {
+      "overview": "Overview",
+      "entries": "My Entries",
+      "newEntry": "New Entry",
+      "awards": "My Awards",
+      "billing": "Billing",
+      "votes": "My Votes",
+      "profile": "Profile",
+      "logout": "Sign out"
+    },
+    "eyebrow": "My account",
+    "navLabel": "Account sections",
+    "openSections": "Account sections",
+    "currentSection": "You are on",
+    "signedInAs": "Signed in as"
+  },
+  "dashboard": {
+    "title": "Overview",
+    "leadNamed": "Where every entry stands, and what each one is waiting for.",
+    "cycleTitle": "Current cycle",
+    "phase": "Phase",
+    "closes": "Entries close",
+    "votingCloses": "Voting closes",
+    "resultsAt": "Results announced",
+    "queueTitle": "Waiting on you",
+    "queueEmpty": "Nothing is waiting on you.",
+    "queueEmptyBody": "Every entry is with us. We will write when something changes.",
+    "docketTitle": "The docket",
+    "docketLead": "Entries in the running cycle, by what they are waiting for.",
+    "loyaltyTitle": "Loyalty",
+    "submissionsThisCycle": "Entries this cycle",
+    "lifetime": "Entries all-time",
+    "nextDiscount": "Discount on your next entry",
+    "noDiscount": "No discount yet",
+    "discountFrom": "From your {n}th entry this cycle",
+    "activityTitle": "Recent payments",
+    "activityEmpty": "No payments yet.",
+    "newEntry": "Start a new entry",
+    "viewAll": "See all",
+    "emptyTitle": "No entries yet",
+    "emptyBody": "Your first entry takes about ten minutes once the work is ready. The tier is chosen inside it, not here.",
+    "totalsTitle": "Entries by state",
+    "action": {
+      "cash_expiring": "Cash reference expires",
+      "settlement_due": "Tier settlement due",
+      "resume_draft": "Draft not finished",
+      "share_shortlisted": "Shortlisted, share it",
+      "review_results": "Results are published"
+    },
+    "actionDo": {
+      "cash_expiring": "View payment instructions",
+      "settlement_due": "Resolve settlement",
+      "resume_draft": "Continue editing",
+      "share_shortlisted": "View and share",
+      "review_results": "Review results"
+    },
+    "due": "Due",
+    "amount": "Amount",
+    "noDeadline": "No deadline",
+    "acrossEntries": "{n} projects",
+    "cycleOpen": "Entries close",
+    "cycleVoting": "Voting closes",
+    "cycleResults": "Results announced",
+    "urgentTitle": "Needs you now",
+    "waitingTitle": "Waiting on you",
+    "goodTitle": "Good news",
+    "indexTitle": "Your entries",
+    "loyaltyLead": "Every entry you submit in a cycle earns more off the next one.",
+    "byWhen": "by",
+    "amountDue": "due",
+    "shortlistedOne": "One project is shortlisted",
+    "shortlistedMany": "{n} projects are shortlisted",
+    "shortlistedBody": "Public voting decides the ranking inside each group. Share them while the window is open.",
+    "awardsOne": "One award is published",
+    "awardsMany": "{n} awards are published",
+    "awardsBody": "Your certificates, badges and winners packages are ready to download.",
+    "ofEntries": "of {total}",
+    "currentDiscount": "Current discount",
+    "nextThreshold": "Next threshold",
+    "atEntry": "at entry {n}",
+    "maxReached": "You are at the highest rate.",
+    "why": {
+      "cash_expiring": "Your entry is reserved but is not judged until we confirm this payment. The reference lapses on the date below.",
+      "settlement_due": "Verification put this entry in a higher tier. Pay the difference to keep it in judging.",
+      "resume_draft": "This entry has not been submitted yet.",
+      "share_shortlisted": "",
+      "review_results": ""
+    },
+    "attentionTitle": "Needs your attention",
+    "attentionNone": "Nothing needs you right now.",
+    "attentionNoneBody": "Your entries are with the awards office. We will email you when something changes.",
+    "recordTitle": "In public voting",
+    "recordLead": "Public voting decides the ranking inside each group. Share them while the window is open.",
+    "awardedTitle": "Awarded",
+    "accountTitle": "Your account",
+    "viewAwards": "My awards",
+    "shareAll": "View and share",
+    "cycleLine": "{year} · {phase}"
+  },
+  "paymentStatus": {
+    "paid": "Paid",
+    "pending": "Pending",
+    "expired": "Expired",
+    "refunded": "Refunded",
+    "failed": "Failed"
+  },
+  "paymentKind": {
+    "entry_fee": "Entry fee",
+    "tier_supplement": "Tier supplement"
+  },
+  "paymentMethod": {
+    "stripe": "Card",
+    "cash": "Cash"
+  },
+  "entries": {
+    "title": "My Entries",
+    "lead": "Every entry you have made, across every cycle.",
+    "search": "Search",
+    "searchPlaceholder": "Title or entry ID",
+    "filterState": "State",
+    "filterCycle": "Cycle",
+    "all": "All",
+    "apply": "Apply",
+    "clear": "Clear filters",
+    "results": "{count} entries",
+    "resultsOne": "1 entry",
+    "emptyTitle": "No entries match",
+    "emptyBody": "Nothing here matches those filters. Clear them to see everything.",
+    "noneTitle": "No entries yet",
+    "noneBody": "Your first entry takes about ten minutes once the work is ready.",
+    "newEntry": "Start a new entry",
+    "colEntry": "Entry",
+    "colId": "Entry ID",
+    "colCycle": "Cycle",
+    "colTier": "Tier",
+    "colCategories": "Categories",
+    "colState": "State",
+    "colPaid": "Paid",
+    "colUpdated": "Last update",
+    "declaredAs": "Declared {tier}",
+    "verifiedAs": "Judged as {tier}",
+    "unpaid": "Unpaid",
+    "addOns": "+{n} add-on",
+    "addOnsPlural": "+{n} add-ons",
+    "pagination": "Pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page}",
+    "pageOf": "Page {page} of {pages}",
+    "act": {
+      "draft": "Continue editing",
+      "pending_payment": "View payment instructions",
+      "submitted": "View entry",
+      "verified": "View entry",
+      "shortlisted": "View and share",
+      "not_shortlisted": "View entry",
+      "excluded": "View entry",
+      "cancelled": "View entry",
+      "disqualified": "View entry",
+      "settlement": "Resolve settlement",
+      "results": "View results"
+    },
+    "calendarLabel": "Awards calendar {year}",
+    "inCalendar": "{count} in this calendar",
+    "inCalendarOne": "1 in this calendar"
+  },
+  "entry": {
+    "back": "Back to my entries",
+    "recordTitle": "The record",
+    "assetsTitle": "Assets",
+    "timelineTitle": "Timeline",
+    "paymentsTitle": "Payments",
+    "resultsTitle": "Results",
+    "groupsTitle": "Category groups",
+    "shareTitle": "Share it",
+    "settlementTitle": "Tier settlement",
+    "correctionTitle": "Tier correction",
+    "cycle": "Cycle",
+    "entryId": "Entry ID",
+    "client": "Client",
+    "country": "Country",
+    "language": "Authored in",
+    "declaredTier": "Declared tier",
+    "judgedTier": "Judged tier",
+    "projectUrl": "Project link",
+    "portfolioUrl": "Your portfolio",
+    "credits": "Credits",
+    "description": "Description",
+    "noCredits": "None given",
+    "cover": "Cover",
+    "gallery": "Gallery",
+    "documents": "Documents",
+    "video": "Video",
+    "imageCount": "{n} images",
+    "docCount": "{n} documents",
+    "none": "None",
+    "tl": {
+      "created": "Created",
+      "checkout": "Checkout completed",
+      "submitted": "Submitted",
+      "verified": "Tier verified",
+      "scored": "Jury scoring complete",
+      "shortlisted": "Shortlisted",
+      "not_shortlisted": "Not shortlisted",
+      "voting": "Public voting",
+      "result": "Result published"
+    },
+    "tlPending": "Not yet",
+    "cashTitle": "Cash payment pending",
+    "cashRef": "Reference",
+    "cashExpires": "Pay before",
+    "cashBody": "Your entry is reserved but is not judged until we confirm this payment.",
+    "cashAmount": "Amount due",
+    "upgradeBody": "Verification put this entry in a higher tier. Pay the difference to keep it in judging.",
+    "upgradeAmount": "Difference",
+    "upgradeDeadline": "Pay before",
+    "upgradePay": "Pay the difference",
+    "downgradeBody": "Verification put this entry in a lower tier. The difference is issued as a credit against your next cycle.",
+    "downgradeAmount": "Credit",
+    "downgradeCode": "Credit code",
+    "downgradeCycle": "Valid for",
+    "correctionFrom": "Declared",
+    "correctionTo": "Verified",
+    "correctionNote": "Reason",
+    "correctionAt": "Recorded",
+    "shareBody": "This project has a public page. Share it while voting is open.",
+    "publicLink": "Open the public page",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "finalistBadge": "Finalist badge",
+    "excludedTitle": "Excluded from judging",
+    "excludedBody": "The tier settlement was not resolved before its deadline, so this entry was taken out of judging. Its payment record stays in Billing.",
+    "cancelledTitle": "Cancelled",
+    "cancelledBody": "The cash reference lapsed before it was paid, so this entry was cancelled. You can enter the work again in an open cycle.",
+    "disqualifiedTitle": "Disqualified",
+    "disqualifiedBody": "This entry was disqualified. Write to us if you believe that is wrong.",
+    "notShortlistedTitle": "Not shortlisted",
+    "notShortlistedBody": "This entry did not reach the shortlist threshold for its group. Its score is not published.",
+    "draftTitle": "Draft",
+    "draftBody": "This entry has not been submitted. Finish it before the window closes.",
+    "continueEditing": "Continue editing",
+    "discard": "Discard draft",
+    "resGroup": "Group",
+    "resVotes": "Votes",
+    "resRank": "Rank",
+    "resMedal": "Medal",
+    "noMedal": "No medal",
+    "seeAwards": "Go to My Awards",
+    "seeBilling": "See it in Billing",
+    "noPayments": "No payments on this entry yet.",
+    "mockNote": "Payments in this build are a mock. No card is charged and no card details are stored.",
+    "cycleEyebrow": "Cycle {year}"
+  },
+  "wizard": {
+    "title": "New entry",
+    "editTitle": "Edit entry",
+    "stepOf": "Step {step} of {total}",
+    "next": "Continue",
+    "back": "Back",
+    "save": "Save draft",
+    "saving": "Saving",
+    "saved": "Draft saved",
+    "savedAt": "Draft saved {time}",
+    "summaryTitle": "Check this step",
+    "leaveWarning": "You have unsaved changes on this step.",
+    "step": {
+      "1": "Tier and proofs",
+      "2": "Categories",
+      "3": "Submission",
+      "4": "Assets",
+      "5": "Review",
+      "6": "Payment"
+    },
+    "s1": {
+      "lead": "Choose the tier this work is entered in. We verify it before judging, and a correction can change what you pay.",
+      "priceFrom": "From",
+      "priceRange": "{low} to {high} depending on the window",
+      "currentWindow": "Current window",
+      "windowPrice": "Your price now",
+      "proofsTitle": "Eligibility proof",
+      "studentId": "Student ID number",
+      "university": "University",
+      "portfolioUrl": "Portfolio URL",
+      "freelanceLicence": "Freelance licence number",
+      "companyName": "Company name",
+      "tradeLicence": "Trade licence number",
+      "privacyTitle": "What happens to these",
+      "privacyBody": "Proofs are seen by the awards administrators only. They are never shown publicly, never sent to the jury, and are deleted six months after the cycle closes.",
+      "fullRange": "Across the window",
+      "proofNeeded": "Proof required",
+      "selected": "Selected",
+      "chooseThis": "Choose this tier",
+      "verifyNote": "We verify this before judging. A correction changes what you pay.",
+      "who": {
+        "students": "Enrolled students entering their own coursework or personal projects.",
+        "freelancers": "Independent practitioners and sole traders.",
+        "corporate": "Studios, agencies and in-house teams."
+      },
+      "proofFor": {
+        "students": "Student ID number and university.",
+        "freelancers": "A portfolio URL, and a freelance licence where your country requires one.",
+        "corporate": "Company name and trade licence number."
+      }
+    },
+    "s2": {
+      "lead": "One base sub-category, and any add-ons from the same parent category. Each add-on is judged as its own group.",
+      "parent": "Parent category",
+      "base": "Base sub-category",
+      "addOns": "Add-ons",
+      "sameParentNote": "Add-ons must come from the same parent category as the base.",
+      "included": "Included in the base price",
+      "fee": "+{amount}",
+      "runningTotal": "Running total",
+      "baseFee": "Base entry",
+      "addOnFees": "Add-ons",
+      "chooseParent": "Choose a parent category first."
+    },
+    "s3": {
+      "lead": "This is what the jury reads and what a public page would show. Write it in the language the work is in.",
+      "entryTitle": "Entry title",
+      "client": "Client",
+      "clientHint": "Leave empty for self-initiated work.",
+      "country": "Country",
+      "contentLanguage": "Language of this entry",
+      "contentLanguageHint": "Your description is shown as written, never translated.",
+      "description": "Description",
+      "descriptionHint": "The brief, what you did, and what happened. Up to 1200 characters.",
+      "projectUrl": "Project link",
+      "projectUrlHint": "Where the work lives, if it is published anywhere.",
+      "portfolioUrl": "Your portfolio",
+      "credits": "Credits",
+      "creditsHint": "One per line: name, and what they did.",
+      "charsLeft": "{n} characters left"
+    },
+    "s4": {
+      "lead": "A square cover, the gallery in the order you want it read, and anything the images cannot carry.",
+      "cover": "Square cover",
+      "coverHint": "One image, square. This represents the project everywhere on the site.",
+      "gallery": "Gallery",
+      "galleryHint": "Up to 8 images, JPEG or PNG, 8 MB each.",
+      "documents": "Documents",
+      "documentsHint": "Up to 4 PDFs, 12 MB each.",
+      "video": "Video URL",
+      "videoHint": "A link to the film. We do not host video.",
+      "add": "Add files",
+      "addCover": "Choose a cover",
+      "remove": "Remove",
+      "moveUp": "Move earlier",
+      "moveDown": "Move later",
+      "uploading": "Uploading",
+      "failed": "Upload failed",
+      "retry": "Retry",
+      "mockTitle": "Uploads are a mock",
+      "mockBody": "Files are held in this browser session and are not sent anywhere. Nothing here claims a file was stored when it was not.",
+      "tooBig": "That file is larger than {mb} MB.",
+      "wrongType": "That file type is not accepted.",
+      "tooMany": "That is more than {n} files.",
+      "noCover": "No cover chosen yet.",
+      "empty": "Nothing added yet."
+    },
+    "s5": {
+      "lead": "Everything you have entered, and what it costs. Nothing is charged until the next step.",
+      "content": "Content",
+      "media": "Assets",
+      "pricing": "Pricing",
+      "edit": "Edit",
+      "promo": "Promo code",
+      "promoApply": "Apply",
+      "promoInvalid": "That code is not valid.",
+      "promoApplied": "Applied",
+      "credits": "Credit",
+      "useCredit": "Use credit {code} ({amount})",
+      "basePrice": "Base entry",
+      "addOn": "Add-on",
+      "loyalty": "Loyalty discount",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "window": "Pricing window",
+      "acceptTerms": "I accept the Terms & Conditions and confirm this work is mine to enter.",
+      "acceptRequired": "You have to accept the terms before paying.",
+      "quoteNote": "This quote is frozen at checkout. A later window change never re-prices it."
+    },
+    "s6": {
+      "lead": "How you would like to pay.",
+      "card": "Card",
+      "cash": "Cash",
+      "cardBody": "Pay now and your entry is submitted immediately.",
+      "cashBody": "We issue a reference. Your entry is reserved but is not judged until we confirm the payment.",
+      "mockTitle": "This payment is a mock",
+      "mockBody": "No card form is shown and no card details are collected or stored. Choosing Card completes as if a hosted checkout had succeeded.",
+      "payNow": "Pay {amount} and submit",
+      "paying": "Submitting",
+      "cashNow": "Reserve with a cash reference",
+      "reserving": "Reserving",
+      "expiryNote": "A cash reference expires after {days} days."
+    },
+    "errors": {
+      "tierRequired": "Choose a tier.",
+      "proofRequired": "This proof is required for the tier you chose.",
+      "parentRequired": "Choose a parent category.",
+      "baseRequired": "Choose a base sub-category.",
+      "titleRequired": "Give the entry a title.",
+      "descriptionRequired": "Write a description.",
+      "descriptionLong": "That is longer than 1200 characters.",
+      "countryRequired": "Choose a country.",
+      "urlInvalid": "That does not look like a web address.",
+      "coverRequired": "A square cover is required.",
+      "termsRequired": "You have to accept the terms.",
+      "notDraft": "This entry has been submitted and can no longer be edited.",
+      "saveFailed": "That did not save. Try again."
+    },
+    "lockedTitle": "This entry is no longer editable",
+    "lockedBody": "It has been submitted, so it is a record now. Open it to see where it stands.",
+    "openEntry": "Open the entry",
+    "newLead": "Six steps. Your draft saves as you go, so you can leave and come back.",
+    "soFar": {
+      "tier": "Tier",
+      "category": "Category",
+      "addOns": "Add-ons",
+      "total": "Running total",
+      "notYet": "Not chosen yet"
+    }
+  },
+  "checkout": {
+    "successTitle": "Entry submitted",
+    "pendingTitle": "Reserved, awaiting payment",
+    "failedTitle": "Payment did not complete",
+    "expiredTitle": "Reference expired",
+    "successLead": "That is it. Your entry is in the cycle.",
+    "pendingLead": "Your entry is reserved. It enters judging when we confirm the payment.",
+    "failedLead": "Nothing was charged. You can try again from the entry.",
+    "expiredLead": "The cash reference lapsed before it was paid, so the entry was cancelled.",
+    "entry": "Entry",
+    "entryId": "Entry ID",
+    "amount": "Amount",
+    "reference": "Payment reference",
+    "invoice": "Invoice",
+    "method": "Method",
+    "paidAt": "Paid",
+    "cashRef": "Cash reference",
+    "payBefore": "Pay before",
+    "timeLeft": "Time left",
+    "nextTitle": "What happens next",
+    "nextSubmitted": "We verify your tier against the proofs you gave. Assigned jurors then score the work against its category's criteria. You will hear from us at each step.",
+    "nextCash": "Take the reference to the awards office or transfer against it. Your entry is not judged until we confirm receipt, and the reference expires on the date above.",
+    "viewEntry": "View the entry",
+    "myEntries": "My entries",
+    "dashboard": "Overview",
+    "billing": "Billing",
+    "mockNote": "This payment is a mock. No card was charged and no card details were collected or stored.",
+    "alreadyTitle": "Already submitted",
+    "alreadyBody": "This entry was submitted earlier. Refreshing this page does not submit or charge again."
+  },
+  "awards": {
+    "title": "My Awards",
+    "lead": "Everything you have been given, and the files that come with it.",
+    "finalistTitle": "Finalist",
+    "finalistLead": "Shortlisted projects carry the blue finalist badge.",
+    "winsTitle": "Awards",
+    "honoraryTitle": "Honorary",
+    "emptyTitle": "No awards yet",
+    "emptyBody": "Awards appear here once a cycle's results are published. Shortlisted projects get their finalist badge as soon as the shortlist is announced.",
+    "entryId": "Entry ID",
+    "category": "Category",
+    "tier": "Tier",
+    "award": "Award",
+    "year": "Year",
+    "certificate": "Certificate (PDF)",
+    "badge": "Badge (SVG)",
+    "package": "Winners package (ZIP)",
+    "embed": "Embed snippet",
+    "copyEmbed": "Copy snippet",
+    "copied": "Copied",
+    "publicPage": "Public award page",
+    "viewProject": "View the project",
+    "viewEntry": "View the entry",
+    "provisionalTitle": "These files are provisional",
+    "provisionalBody": "The certificate, the badge and the package are generated for review from your own record. The final printed certificate is issued by the awards office.",
+    "collect": "Collect my award",
+    "collectAll": "Collect all my awards",
+    "collectHint": "Certificate, badge and winners package.",
+    "collectClose": "Hide files",
+    "recognitionTitle": "Finalist recognition",
+    "viewWork": "View the work",
+    "fileCertificate": "Certificate",
+    "fileBadge": "Badge",
+    "filePackage": "Winners package",
+    "fileCertificateWhat": "The provisional certificate for this award.",
+    "fileBadgeWhat": "The award badge, for your own site.",
+    "filePackageWhat": "The certificate, the badge, the snippet and a readme.",
+    "filesTitle": "Files"
+  },
+  "awardsHub": {
+    "meta": {
+      "title": "Awards",
+      "description": "The Gridliners Awards: the story, the timetable, the categories, the fees and how to enter."
+    },
+    "eyebrow": "The awards",
+    "title": "Everything the awards are",
+    "lead": "One cycle a year, judged by a jury and decided in public voting. Start here, then follow whichever part you came for.",
+    "overview": {
+      "title": "Overview",
+      "body": "Gridliners celebrates the region's best design work. Entries are judged by an independent jury, shortlisted per group, and the medals are decided by public vote.",
+      "link": "The full story"
+    },
+    "categories": {
+      "title": "Categories",
+      "body": "Every category, and the groups inside it. A project can be entered in more than one, and can hold a medal in each.",
+      "link": "All categories",
+      "count": "{count} groups"
+    },
+    "fees": {
+      "title": "Fees and deadlines",
+      "body": "One fee per entry, set by tier and by how early you enter. Students pay the lowest of the three.",
+      "link": "Fees in full",
+      "window": "Open window",
+      "from": "Entries from",
+      "closes": "Closes",
+      "windowName": {
+        "early_bird": "Early bird",
+        "normal": "Standard",
+        "late": "Late"
+      },
+      "closedNow": "Closed",
+      "nextOpens": "Next window",
+      "nextCycle": "Next cycle",
+      "submissions": "Submissions"
+    },
+    "enter": {
+      "title": "How to enter",
+      "body": "Create an account, describe the work, choose its groups and pay. Six steps, and a draft you can leave and come back to.",
+      "link": "How to enter"
+    },
+    "benefits": {
+      "title": "Why enter",
+      "body": "A jury read of your work, a public page for the project, and a hosted record of any award it wins.",
+      "link": "What you get"
+    },
+    "record": "Every medal and honorary designation gets a page of its own, which the winner can link to.",
+    "recordLink": "See this year's winners",
+    "closing": {
+      "title": "The next edition is open",
+      "body": "Entries are judged in the group you choose, so pick carefully and enter early."
+    },
+    "previous": "Previous awards",
+    "figures": {
+      "categories": "Categories",
+      "groups": "Groups",
+      "tiers": "Tiers",
+      "medals": "Medals awarded"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "lead": "Your account, and how the interface behaves.",
+    "accountTitle": "Account",
+    "photoTitle": "Photo or logo",
+    "passwordTitle": "Password",
+    "loyaltyTitle": "Loyalty",
+    "name": "Full name",
+    "email": "Email address",
+    "jobTitle": "Job title",
+    "nationality": "Nationality",
+    "country": "Country of residence",
+    "companyName": "Company name",
+    "language": "Interface language",
+    "photoHint": "A portrait or a company logo. Square works best.",
+    "choosePhoto": "Choose an image",
+    "removePhoto": "Remove",
+    "noPhoto": "No image yet.",
+    "save": "Save changes",
+    "saving": "Saving",
+    "saved": "Your profile is saved.",
+    "emailChanged": "Your sign-in address is changed too.",
+    "changePassword": "Change password",
+    "changing": "Saving",
+    "passwordChanged": "Your password is changed.",
+    "lifetime": "Entries all-time",
+    "memberSince": "Member since",
+    "unsaved": "You have unsaved changes.",
+    "errors": {
+      "nameRequired": "Enter your full name.",
+      "emailInvalid": "Enter a valid email address.",
+      "email_taken": "An account already uses that address.",
+      "server_error": "Something failed at our end. Try again."
+    },
+    "unset": "Not set",
+    "identityTitle": "Who you are",
+    "identityLead": "How you are named on entries, certificates and your public project pages.",
+    "placeTitle": "Where you are",
+    "prefsTitle": "Interface",
+    "factsTitle": "Account",
+    "securityLead": "Changing your password signs you out of nothing else. It is a separate submission from the details above.",
+    "accountEmail": "Sign-in address"
+  },
+  "billing": {
+    "title": "Billing",
+    "lead": "Every payment on your account, with the pricing that was frozen at the time.",
+    "search": "Search",
+    "searchPlaceholder": "Payment ID, invoice or entry",
+    "filterStatus": "Status",
+    "filterKind": "Type",
+    "all": "All",
+    "apply": "Apply",
+    "clear": "Clear filters",
+    "results": "{count} payments",
+    "resultsOne": "1 payment",
+    "colId": "Payment ID",
+    "colDate": "Date",
+    "colEntry": "Entry",
+    "colKind": "Type",
+    "colMethod": "Method",
+    "colStatus": "Status",
+    "colAmount": "Amount",
+    "colInvoice": "Invoice",
+    "invoice": "Invoice (PDF)",
+    "snapshot": "Pricing snapshot",
+    "showSnapshot": "Show the pricing",
+    "hideSnapshot": "Hide the pricing",
+    "basePrice": "Base entry",
+    "addOn": "Add-on",
+    "loyalty": "Loyalty",
+    "promo": "Promo",
+    "credit": "Credit",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "window": "Window",
+    "submissionNumber": "Entry number this cycle",
+    "quotedAt": "Quoted",
+    "noSnapshot": "No pricing snapshot on this payment.",
+    "snapshotNote": "This is what was quoted at checkout. It is never recalculated.",
+    "creditsTitle": "Next-cycle credits",
+    "creditCode": "Code",
+    "creditAmount": "Amount",
+    "creditFor": "Issued for",
+    "creditCycle": "Valid for",
+    "creditIssued": "Issued",
+    "creditRedeemed": "Redeemed",
+    "creditOpen": "Not used yet",
+    "noCredits": "No credits.",
+    "emptyTitle": "No payments match",
+    "emptyBody": "Nothing here matches those filters.",
+    "noneTitle": "No payments yet",
+    "noneBody": "Payments appear here when you check out an entry.",
+    "pagination": "Pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page}",
+    "pageOf": "Page {page} of {pages}",
+    "totalPaid": "Total paid",
+    "creditsAvailable": "Credits available",
+    "paymentsCount": "Payments",
+    "colDescription": "Description",
+    "tableLabel": "Payments",
+    "creditsHint": "{n} in total"
+  },
+  "votes": {
+    "title": "My Votes",
+    "lead": "Projects you have voted for with this account's email address.",
+    "project": "Project",
+    "entity": "Entered by",
+    "category": "Category",
+    "castAt": "Voted",
+    "viewProject": "View the project",
+    "results": "{count} votes",
+    "resultsOne": "1 vote",
+    "noneTitle": "No votes yet",
+    "noneBody": "When you vote for a project during the public voting window, it appears here.",
+    "pagination": "Pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page}",
+    "pageOf": "Page {page} of {pages}"
+  },
+  "accountStanding": {
+    "entries": "Entries",
+    "awards": "Awards",
+    "discount": "Loyalty discount",
+    "memberSince": "Member since",
+    "inVoting": "In public voting"
+  },
+  "accountFilters": {
+    "filters": "Filters",
+    "clearThis": "Clear",
+    "clearAll": "Clear all",
+    "clearSearch": "Clear search",
+    "anyOf": "{n} selected",
+    "allOf": "All",
+    "apply": "Apply",
+    "closeMenu": "Close"
+  },
+  "award": {
+    "title": "{level} · {year}",
+    "official": "Official award",
+    "officialNote": "Awarded by Gridliners Awards {year}. This page is the record of the award.",
+    "inGroup": "Awarded in",
+    "tier": "Tier",
+    "holder": "Awarded to",
+    "votes": "Public votes",
+    "viewProject": "View the project",
+    "honoraryNote": "An honorary designation is given by the awards office. It is not decided by public voting.",
+    "citation": "Citation",
+    "shareTitle": "Share this award",
+    "metaTitle": "{holder}, {level}, Gridliners Awards {year}",
+    "metaDescription": "{project} was awarded {level} in {group} at the Gridliners Awards {year}.",
+    "metaHonorary": "{holder} was named {type} at the Gridliners Awards {year}."
+  }
+}
