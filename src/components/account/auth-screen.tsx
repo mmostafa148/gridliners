@@ -10,10 +10,10 @@ import { cycles } from "@/lib/fixtures/cycles";
  * the language control and the site's identity are all still there; this is one
  * section of a page, the way every other section on this site is.
  *
- * On desktop the participant's place in the current cycle sits between a slim
- * identity rail and the form sheet. On smaller screens that context collapses
- * into one concise navy band above the form. The form itself stays focused and
- * unchanged across sign-in, registration and password recovery.
+ * On desktop the participant's place in the current cycle is composed as an
+ * editorial poster beside the form sheet. On smaller screens that context
+ * collapses into one concise navy band above the form. The form itself stays
+ * focused and unchanged across sign-in, registration and password recovery.
  */
 export async function AuthScreen({
   eyebrow,
@@ -51,29 +51,12 @@ export async function AuthScreen({
     // the module's single type face and its Arabic letter-spacing reset.
     <div
       data-account
-      className={`grid md:pt-[4.5rem] lg:grid-cols-[clamp(4.5rem,6vw,6rem)_minmax(18rem,4fr)_minmax(34rem,7fr)] ${
+      className={`grid md:pt-[4.5rem] lg:grid-cols-[minmax(30rem,5fr)_minmax(34rem,7fr)] ${
         fullDesktopHeight ? "lg:min-h-[calc(100dvh-var(--announce-h))]" : ""
       } ${formPanelClassName}`}
     >
-      {/* The brand gets a rail, not half a page held open by decoration. */}
-      <aside aria-hidden className="relative hidden overflow-hidden bg-navy-950 lg:block">
-        <div className="absolute start-0 top-0 opacity-85">
-          <PixelGrid
-            direction="end"
-            seed={11}
-            cols={3}
-            rows={13}
-            density={0.42}
-            cellSize="clamp(1.25rem, 1.8vw, 1.8rem)"
-            cellClassName="bg-cream-200/16"
-          />
-        </div>
-        <span className="absolute bottom-0 end-0 h-24 w-1 bg-gold" />
-      </aside>
-
-      {/* The space beside the form now explains where the participant is in
-          the live cycle. On small screens it becomes one compact navy band. */}
-      <section className="relative isolate flex flex-col justify-center overflow-hidden border-b border-cream-50/15 bg-navy-950 px-6 py-8 text-cream-50 sm:px-8 lg:border-b-0 lg:border-e lg:border-navy-900/10 lg:bg-transparent lg:px-10 lg:py-16 lg:text-navy-900 xl:px-14">
+      {/* A cycle poster on desktop; one compact context band on small screens. */}
+      <section className="relative isolate overflow-hidden border-b border-cream-50/15 bg-navy-950 px-6 py-8 text-cream-50 sm:px-8 lg:flex lg:min-h-full lg:flex-col lg:border-b-0 lg:border-e lg:border-navy-900/10 lg:bg-navy-50 lg:px-0 lg:py-0 lg:text-navy-900">
         <div aria-hidden className="pointer-events-none absolute end-0 top-0 -z-10 opacity-70 lg:hidden">
           <PixelGrid
             direction="start"
@@ -86,51 +69,71 @@ export async function AuthScreen({
           />
         </div>
 
-        <p className="font-display text-overline uppercase text-cream-200/70 lg:text-blue-700">
-          {eyebrow}
-        </p>
-        <p className="mt-4 max-w-[27ch] font-display text-account-section leading-tight text-cream-100 lg:text-navy-900">
-          {aside}
-        </p>
-
-        <div className="mt-6 flex items-end gap-4 border-t border-cream-50/20 pt-4 lg:hidden">
-          <span className="font-data text-[2.25rem] leading-none text-cream-100">{cycle.year}</span>
-          <span className="pb-0.5 text-body-sm text-cream-200/70">{tPhase(cycle.phase)}</span>
+        <div aria-hidden className="absolute inset-y-0 start-0 hidden w-[clamp(4.75rem,6vw,6rem)] overflow-hidden bg-navy-950 lg:block">
+          <div className="absolute start-0 top-0 opacity-90">
+            <PixelGrid
+              direction="end"
+              seed={11}
+              cols={3}
+              rows={8}
+              density={0.46}
+              cellSize="clamp(1.3rem,1.9vw,1.85rem)"
+              cellClassName="bg-cream-200/16"
+            />
+          </div>
+          <span className="absolute inset-y-0 end-0 w-px bg-cream-50/14" />
+          <span className="absolute bottom-[18%] end-0 h-24 w-1 bg-gold" />
+          <span className="absolute bottom-9 start-1/2 -translate-x-1/2 font-data text-data-sm text-cream-100/55 [writing-mode:vertical-rl]">
+            {cycle.year}
+          </span>
         </div>
 
-        <div className="mt-12 hidden border-y border-navy-900/12 lg:block">
-          <div className="flex items-end justify-between gap-5 py-5">
-            <span className="pb-1 font-display text-overline uppercase text-navy-600">
-              {tDashboard("cycleTitle")}
-            </span>
-            <span className="font-data text-[clamp(3.25rem,5vw,5rem)] leading-[0.82] text-navy-900">
+        <div className="relative lg:flex lg:min-h-full lg:flex-1 lg:flex-col lg:justify-between lg:py-14 lg:pe-10 lg:ps-[calc(clamp(4.75rem,6vw,6rem)+3rem)] xl:py-16 xl:pe-14 xl:ps-[calc(clamp(4.75rem,6vw,6rem)+3.5rem)]">
+          <div>
+            <p className="font-display text-overline uppercase text-cream-200/70 lg:text-blue-700">
+              {eyebrow}
+            </p>
+            <p className="mt-4 max-w-[27ch] font-display text-account-section leading-tight text-cream-100 lg:text-navy-900">
+              {aside}
+            </p>
+          </div>
+
+          <div className="mt-6 flex items-end gap-4 border-t border-cream-50/20 pt-4 lg:hidden">
+            <span className="font-data text-[2.25rem] leading-none text-cream-100">{cycle.year}</span>
+            <span className="pb-0.5 text-body-sm text-cream-200/70">{tPhase(cycle.phase)}</span>
+          </div>
+
+          <div className="relative my-12 hidden lg:block">
+            <span aria-hidden className="pointer-events-none absolute -end-3 top-1/2 -z-10 -translate-y-1/2 font-data text-[clamp(8rem,13vw,13rem)] leading-none text-navy-900/[0.035]">
               {cycle.year}
             </span>
+            <p className="font-display text-overline uppercase text-navy-500">
+              {tDashboard("cycleTitle")} · {cycle.year}
+            </p>
+            <p className="mt-4 max-w-[8ch] font-display text-[clamp(2.8rem,4vw,4.75rem)] font-semibold leading-[0.9] tracking-[-0.045em] text-navy-950">
+              {tPhase(cycle.phase)}
+            </p>
+            <span aria-hidden className="mt-7 block h-1 w-14 bg-gold" />
           </div>
-          <dl className="border-t border-navy-900/12">
-            <div className="grid grid-cols-[6.5rem_1fr] gap-4 py-4">
-              <dt className="font-display text-overline uppercase text-navy-600">
-                {tDashboard("phase")}
+
+          <dl className="relative hidden grid-cols-2 gap-8 border-t border-navy-900/20 pt-6 lg:grid">
+            <span aria-hidden className="absolute -top-1 start-0 size-2 bg-gold" />
+            <span aria-hidden className="absolute -top-1 end-0 size-2 border border-navy-900/35 bg-navy-50" />
+            <div>
+              <dt className="font-display text-overline uppercase text-navy-500">
+                {tDashboard("votingCloses")}
               </dt>
-              <dd className="text-body-sm font-semibold text-navy-900">{tPhase(cycle.phase)}</dd>
+              <dd className="mt-2 font-data text-data-sm text-navy-900">
+                {date(cycle.votingWindow.end)}
+              </dd>
             </div>
-            <div className="grid grid-cols-2 gap-5 border-t border-navy-900/12 py-4">
-              <div>
-                <dt className="font-display text-overline uppercase text-navy-600">
-                  {tDashboard("votingCloses")}
-                </dt>
-                <dd className="mt-1 font-data text-data-sm text-navy-900">
-                  {date(cycle.votingWindow.end)}
-                </dd>
-              </div>
-              <div>
-                <dt className="font-display text-overline uppercase text-navy-600">
-                  {tDashboard("resultsAt")}
-                </dt>
-                <dd className="mt-1 font-data text-data-sm text-navy-900">
-                  {date(cycle.resultsAnnouncementAt)}
-                </dd>
-              </div>
+            <div className="text-end">
+              <dt className="font-display text-overline uppercase text-navy-500">
+                {tDashboard("resultsAt")}
+              </dt>
+              <dd className="mt-2 font-data text-data-sm text-navy-900">
+                {date(cycle.resultsAnnouncementAt)}
+              </dd>
             </div>
           </dl>
         </div>
