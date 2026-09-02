@@ -36,29 +36,62 @@ export async function BecomePartner() {
 
   return (
     <section className="bg-cream-100 text-navy-900">
-      <div className="page-shell section-y">
-        <div className="flex flex-col gap-x-16 gap-y-8 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-2xl">
-            <h2 className="text-h1">{t("title")}</h2>
-            <p className="mt-5 text-body-md text-navy-600">{t("description")}</p>
-            <p className="mt-4 flex items-start gap-3 text-body-sm text-navy-600">
-              {/* The identity's square, the same device the footer and the
-                  partner wall use. */}
-              <span className="mt-[0.5em] size-1.5 shrink-0 bg-blue-700" aria-hidden />
-              <span>{t("tiersNote")}</span>
-            </p>
+      <div className="page-shell py-14 sm:py-18 lg:py-24">
+        <div className="grid overflow-hidden border-y border-navy-900/15 lg:grid-cols-[minmax(0,1.08fr)_minmax(25rem,0.92fr)]">
+          <div className="relative py-12 sm:py-16 lg:pe-20 lg:py-20">
+            <div className="flex items-center gap-3 font-display text-coord uppercase tracking-[0.16em] text-blue-700">
+              <span className="size-1.5 bg-blue-700" aria-hidden />
+              <span>{t("cycleLabel")}</span>
+            </div>
+
+            <h2 className="mt-7 max-w-2xl text-h1 text-balance">{t("title")}</h2>
+            <p className="mt-5 max-w-2xl text-body-md text-navy-600">{t("description")}</p>
+
+            <div className="mt-12 grid items-end gap-7 border-t border-navy-900/15 pt-7 2xl:grid-cols-[auto_1fr] 2xl:gap-10">
+              <p className="font-data text-[clamp(4.75rem,9vw,7.5rem)] leading-[0.78] tracking-[-0.08em] text-navy-900">
+                2026
+              </p>
+
+              <div className="2xl:border-s 2xl:border-navy-900/15 2xl:ps-8">
+                <p className="max-w-md text-body-sm text-navy-600">{t("tiersNote")}</p>
+                <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 font-display text-coord uppercase tracking-[0.12em] text-navy-900">
+                  <span>{t("principal")}</span>
+                  <span className="text-gold-600" aria-hidden>/</span>
+                  <span>{t("partner")}</span>
+                  <span className="text-gold-600" aria-hidden>/</span>
+                  <span>{t("supporter")}</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-4">
-            <Button asChild variant="award" size="cta">
-              <Link href="/partner">{t("cta")}</Link>
-            </Button>
-            <Link
-              href="/contact"
-              className="font-display text-coord uppercase text-navy-600 underline-offset-4 transition-colors hover:text-navy-900 hover:underline"
-            >
-              {t("contact")}
-            </Link>
+          <div className="relative -mx-5 bg-navy-900 px-5 py-12 text-cream-100 sm:-mx-8 sm:px-8 sm:py-16 lg:mx-0 lg:px-12 lg:py-20 xl:px-16">
+            <span className="absolute end-5 top-5 size-2 border border-cream-100/40 sm:end-8 sm:top-8" aria-hidden />
+
+            <p className="font-display text-coord uppercase tracking-[0.16em] text-gold-500">
+              {t("tiersTitle")}
+            </p>
+
+            <ul className="mt-8 divide-y divide-cream-100/15 border-y border-cream-100/15">
+              {["benefit1", "benefit2", "benefit3"].map((key) => (
+                <li key={key} className="flex items-start gap-4 py-5 text-body-md text-cream-100">
+                  <span className="mt-[0.55em] size-1.5 shrink-0 bg-gold-500" aria-hidden />
+                  <span>{t(key)}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-10 flex flex-col items-start gap-5">
+              <Button asChild variant="award-invert" size="cta">
+                <Link href="/partner">{t("cta")}</Link>
+              </Button>
+              <Link
+                href="/contact"
+                className="font-display text-coord uppercase tracking-[0.12em] text-cream-100/75 underline-offset-4 transition-colors hover:text-cream-100 hover:underline focus-visible:text-cream-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500"
+              >
+                {t("contact")}
+              </Link>
+            </div>
           </div>
         </div>
       </div>

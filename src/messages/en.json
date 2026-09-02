@@ -511,6 +511,7 @@
     },
     "becomePartner": {
       "title": "Become a partner",
+      "cycleLabel": "Partnership cycle",
       "description": "Partnership puts your name inside the programme rather than beside it: on the winner materials, in the ceremony, and next to the work itself.",
       "howTitle": "How it works",
       "step1Title": "Tell us who you want to reach",
