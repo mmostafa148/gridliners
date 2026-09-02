@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
+import { PartnerMark } from "@/components/brand/drawn-marks";
 import type { Partner, PartnerTier } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 
@@ -63,15 +64,16 @@ function Mark({ partner }: { partner: Partner }) {
 
   if (!partner.logoUrl) {
     return (
-      <span
-        style={{ fontSize: Math.round(height * 0.62) }}
+      <PartnerMark
+        name={partner.name}
+        seed={partner.id.length * 977 + partner.name.charCodeAt(0)}
         className={cn(
-          "block max-w-full break-words px-1 text-balance text-center font-display uppercase leading-[1.15]",
-          "text-navy-900/80 transition-colors duration-300 group-hover:text-navy-900",
+          "h-auto w-full max-w-[11rem] grayscale",
+          "opacity-75 transition-[filter,opacity] duration-300",
+          "group-hover:grayscale-0 group-hover:opacity-100",
+          "group-focus-visible:grayscale-0 group-focus-visible:opacity-100",
         )}
-      >
-        {partner.name}
-      </span>
+      />
     );
   }
 
