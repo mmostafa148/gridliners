@@ -37,6 +37,7 @@ export default async function RegisterPage({
       title={t("registerTitle")}
       lead={t("registerLead")}
       aside={t("tierNote")}
+      formPanelClassName="bg-[#f3f3f9]"
     >
       <div className="flex flex-col gap-8">
       <RegisterForm locale={locale} />

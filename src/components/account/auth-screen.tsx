@@ -18,6 +18,7 @@ export function AuthScreen({
   title,
   lead,
   aside,
+  formPanelClassName = "bg-cream-50",
   children,
 }: {
   eyebrow: string;
@@ -25,6 +26,7 @@ export function AuthScreen({
   lead: string;
   /** One sentence on the navy side — what the account is for. */
   aside: string;
+  formPanelClassName?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -59,7 +61,9 @@ export function AuthScreen({
 
       {/* Cream, not white: it is the ground the account itself opens on, so
           signing in leads onto the same paper rather than onto a new one. */}
-      <div className="flex items-start justify-center bg-cream-50 px-6 py-14 lg:items-center lg:py-20">
+      <div
+        className={`flex items-start justify-center px-6 py-14 lg:items-center lg:py-20 ${formPanelClassName}`}
+      >
         {/* Not a floating card. It is one column of the page, and the page is
             the site's own - the frame around it is doing the framing. */}
         <div className="w-full max-w-[30rem]">
