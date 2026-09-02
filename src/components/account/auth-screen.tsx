@@ -66,17 +66,24 @@ export function AuthScreen({
         </div>
       </aside>
 
-      {/* Cream, not white: it is the ground the account itself opens on, so
-          signing in leads onto the same paper rather than onto a new one. */}
+      {/* The cool paper is the quiet ground; the white sheet is the task. */}
       <div
-        className={`flex items-start justify-center px-6 py-14 lg:items-center lg:py-20 ${formPanelClassName}`}
+        className={`flex items-start justify-center px-5 py-10 sm:px-8 sm:py-14 lg:items-center lg:px-12 lg:py-20 ${formPanelClassName}`}
       >
-        {/* Not a floating card. It is one column of the page, and the page is
-            the site's own - the frame around it is doing the framing. */}
-        <div className="w-full max-w-[30rem]">
-          <h1 className="font-display text-account-title text-navy-900">{title}</h1>
-          <p className="mt-4 text-body-lg text-navy-700">{lead}</p>
-          <div className="mt-10">{children}</div>
+        <div className="relative isolate w-full max-w-[34rem] overflow-hidden border border-navy-900/10 bg-white/90 px-6 py-8 shadow-[0_24px_80px_rgba(8,24,55,0.09)] sm:px-9 sm:py-10">
+          <div aria-hidden className="absolute inset-x-0 top-0 flex h-1">
+            <span className="w-20 bg-blue-700" />
+            <span className="w-6 bg-gold" />
+            <span className="flex-1 bg-navy-900/8" />
+          </div>
+          <span
+            aria-hidden
+            className="absolute end-5 top-5 size-2 border border-navy-900/20 bg-[#f3f3f9]"
+          />
+
+          <h1 className="max-w-[15ch] font-display text-account-title text-navy-900">{title}</h1>
+          <p className="mt-3 max-w-[36ch] text-body-lg leading-relaxed text-navy-700">{lead}</p>
+          <div className="mt-8">{children}</div>
         </div>
       </div>
     </div>

@@ -47,14 +47,14 @@ export default async function LoginPage({
       formPanelClassName="bg-[#f3f3f9]"
       fullDesktopHeight
     >
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-7">
       <LoginForm returnTo={returnTo} />
 
-      <p className="text-body-sm text-navy-600">
+      <p className="border-t border-navy-900/10 pt-6 text-body-sm text-navy-600">
         {t("noAccount")}{" "}
         <Link
           href={`/register${returnTo !== "/dashboard" ? `?returnTo=${encodeURIComponent(returnTo)}` : ""}`}
-          className="underline underline-offset-4 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+          className="font-medium text-blue-700 underline decoration-blue-700/35 underline-offset-4 hover:text-navy-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
         >
           {t("register")}
         </Link>

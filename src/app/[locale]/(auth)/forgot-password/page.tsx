@@ -34,13 +34,13 @@ export default async function ForgotPasswordPage({
       formPanelClassName="bg-[#f3f3f9]"
       fullDesktopHeight
     >
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-7">
       <ForgotForm />
 
-      <p className="text-body-sm text-navy-600">
+      <p className="border-t border-navy-900/10 pt-6 text-body-sm text-navy-600">
         <Link
           href="/login"
-          className="underline underline-offset-4 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+          className="font-medium text-blue-700 underline decoration-blue-700/35 underline-offset-4 hover:text-navy-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
         >
           {t("backToSignIn")}
         </Link>

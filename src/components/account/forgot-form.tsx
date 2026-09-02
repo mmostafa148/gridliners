@@ -20,7 +20,7 @@ export function ForgotForm() {
   const t = useTranslations("auth");
 
   return (
-    <AuthForm action={forgotAction} className="flex flex-col gap-6">
+    <AuthForm action={forgotAction} className="flex flex-col gap-5">
       {(state) =>
         state.done ? (
           <div className="flex flex-col gap-4">

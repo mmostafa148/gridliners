@@ -11,7 +11,7 @@ export function LoginForm({ returnTo }: { returnTo: string }) {
   const t = useTranslations("auth");
 
   return (
-    <AuthForm action={signInAction} className="flex flex-col gap-6">
+    <AuthForm action={signInAction} className="flex flex-col gap-5">
       {(state) => (
         <>
           {/* Carried on the form rather than kept in the URL alone, so it
@@ -40,7 +40,7 @@ export function LoginForm({ returnTo }: { returnTo: string }) {
             />
             <Link
               href="/forgot-password"
-              className="w-fit text-body-sm text-navy-600 underline underline-offset-4 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+              className="w-fit text-body-sm font-medium text-blue-700 underline decoration-blue-700/35 underline-offset-4 hover:text-navy-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
             >
               {t("forgotLink")}
             </Link>

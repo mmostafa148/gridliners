@@ -39,14 +39,14 @@ export default async function RegisterPage({
       aside={t("tierNote")}
       formPanelClassName="bg-[#f3f3f9]"
     >
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-7">
       <RegisterForm locale={locale} />
 
-      <p className="text-body-sm text-navy-600">
+      <p className="border-t border-navy-900/10 pt-6 text-body-sm text-navy-600">
         {t("haveAccount")}{" "}
         <Link
           href="/login"
-          className="underline underline-offset-4 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+          className="font-medium text-blue-700 underline decoration-blue-700/35 underline-offset-4 hover:text-navy-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
         >
           {t("signIn")}
         </Link>

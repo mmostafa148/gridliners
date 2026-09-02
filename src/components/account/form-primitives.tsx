@@ -26,14 +26,12 @@ import { cn } from "@/lib/utils";
  * which is the voice this system reserves for eyebrows. A label somebody has to
  * read before typing is body-sized and sentence case (build-state §49).
  */
-const LABEL = "block text-body-sm font-medium text-navy-800";
+const LABEL = "block text-[0.8125rem] font-semibold leading-5 text-navy-800";
 const CONTROL = cn(
-  // 48px, the height of the module's own buttons, and 17px type: a control
-  // somebody types into should not be smaller than the text around it.
-  "h-11 w-full border bg-white px-3 text-body-md text-navy-900",
-  "placeholder:text-navy-600",
-  "transition-colors hover:border-navy-900/45",
-  "focus-visible:border-blue-700 focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-blue-700",
+  "h-13 w-full border bg-[#fbfbfd] px-4 text-body-md text-navy-900 shadow-[inset_0_-1px_0_rgba(8,24,55,0.04)]",
+  "placeholder:text-navy-500",
+  "transition-[border-color,background-color,box-shadow] duration-200 hover:border-navy-900/40 hover:bg-white",
+  "focus-visible:border-blue-700 focus-visible:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-700/10",
   "disabled:cursor-not-allowed disabled:border-navy-900/12 disabled:bg-mist disabled:text-navy-600",
 );
 
@@ -94,7 +92,7 @@ export function Field({
   const invalid = Boolean(error);
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-2">
       <label htmlFor={id} className={LABEL}>
         {label}
         {required ? (
@@ -167,7 +165,7 @@ export function PasswordField({
   const invalid = Boolean(error);
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-2">
       <label htmlFor={id} className={LABEL}>
         {label}
         {required ? (
@@ -195,8 +193,8 @@ export function PasswordField({
           // The name says what pressing it does, not what state it is in.
           aria-label={shown ? t("hidePassword") : t("showPassword")}
           className={cn(
-            "absolute inset-y-0 end-0 grid w-12 place-items-center text-navy-600",
-            "transition-colors hover:text-navy-900",
+            "absolute inset-y-px end-px grid w-12 place-items-center border-s border-navy-900/8 bg-mist/55 text-navy-600",
+            "transition-colors hover:bg-blue-700/8 hover:text-blue-700",
             "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-700",
           )}
         >
@@ -310,6 +308,7 @@ export function SubmitButton({
       aria-busy={pending || undefined}
       className={cn(
         variant === "primary" ? accountAction.primary : accountAction.secondary,
+        variant === "primary" && "relative h-12 overflow-hidden shadow-[0_8px_20px_rgba(8,24,55,0.14)] after:absolute after:end-0 after:top-0 after:size-2 after:bg-gold",
         "disabled:opacity-80",
         className,
       )}

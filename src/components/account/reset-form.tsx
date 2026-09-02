@@ -20,7 +20,7 @@ export function ResetForm({ token }: { token: string }) {
   const t = useTranslations("auth");
 
   return (
-    <AuthForm action={resetAction} className="flex flex-col gap-6">
+    <AuthForm action={resetAction} className="flex flex-col gap-5">
       {(state) =>
         state.done ? (
           <div className="flex flex-col gap-6">
