@@ -45,6 +45,7 @@ export default async function LoginPage({
       lead={t("signInLead")}
       aside={t("tierNote")}
       formPanelClassName="bg-[#f3f3f9]"
+      fullDesktopHeight
     >
       <div className="flex flex-col gap-8">
       <LoginForm returnTo={returnTo} />

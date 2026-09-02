@@ -19,6 +19,7 @@ export function AuthScreen({
   lead,
   aside,
   formPanelClassName = "bg-cream-50",
+  fullDesktopHeight = false,
   children,
 }: {
   eyebrow: string;
@@ -27,6 +28,7 @@ export function AuthScreen({
   /** One sentence on the navy side — what the account is for. */
   aside: string;
   formPanelClassName?: string;
+  fullDesktopHeight?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -36,7 +38,12 @@ export function AuthScreen({
     //
     // `data-account` marks these as part of the participant module: it carries
     // the module's single type face and its Arabic letter-spacing reset.
-    <div data-account className="grid md:pt-[4.5rem] lg:grid-cols-[5fr_7fr]">
+    <div
+      data-account
+      className={`grid md:pt-[4.5rem] lg:grid-cols-[5fr_7fr] ${
+        fullDesktopHeight ? "lg:min-h-[calc(100dvh-var(--announce-h))]" : ""
+      }`}
+    >
       {/* The navy side. Below lg it becomes a band above the form rather than
           disappearing, so the page still opens the way an inner page does. */}
       <aside className="relative isolate overflow-hidden bg-navy-950 text-cream-50">
