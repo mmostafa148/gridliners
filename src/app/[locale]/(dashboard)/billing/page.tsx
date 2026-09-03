@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { AccountShell } from "@/components/account/account-shell";
-import { AccountStatCards } from "@/components/account/account-stat-cards";
 import { CreditTable } from "@/components/account/credit-table";
 import { FilterBar } from "@/components/account/filter-bar";
 import { FilterMenu } from "@/components/account/filter-menu";
@@ -11,6 +10,8 @@ import {
   AccountEmptyState,
   AccountPanel,
   AccountStack,
+  Eyebrow,
+  Figure,
   PANEL_X,
   Meta,
   accountAction,
@@ -65,7 +66,7 @@ function billingHref(q: {
  * else.** The sitemap specifies a payments list with named columns, and
  * comparable numbers are compared down a column; decorative bands would make
  * that harder, so `PaymentTable` is a real table on desktop and a labelled
- * block per payment below `lg`. The account's own totals sit above it, which
+ * block per payment below `xl`. The account's own totals sit above it, which
  * is the one thing the identity direction genuinely adds: a participant should
  * see what they have spent before they read the rows.
  *
@@ -136,9 +137,12 @@ export default async function BillingPage({
   const totalPaid = all
     .filter((p) => p.status === "paid")
     .reduce((sum, p) => sum + p.amountUsd, 0);
-  const openCredit = credits
-    .filter((c) => !c.redeemedAt)
-    .reduce((sum, c) => sum + c.amountUsd, 0);
+  const paidCount = all.filter((p) => p.status === "paid").length;
+  const awaiting = all.filter((p) => p.status === "pending");
+  const awaitingPayment = awaiting.reduce((sum, p) => sum + p.amountUsd, 0);
+  const openCredits = credits.filter((c) => !c.redeemedAt);
+  const openCredit = openCredits.reduce((sum, c) => sum + c.amountUsd, 0);
+  const attentionPayments = all.filter((p) => p.status === "pending" || p.status === "failed");
 
   return (
     <AccountShell participantId={participant.id} locale={locale}>
@@ -149,63 +153,85 @@ export default async function BillingPage({
 
       <div className="account-shell pb-[var(--account-y)] pt-6">
         <AccountStack>
-          {/* What the account amounts to financially, before the rows.
-              The same stat cards Overview uses: three figures crammed into the
-              start edge of a full-width panel left two thirds of it empty and
-              made $750 look like a headline beside a 16px "7". */}
-          {all.length ? (
-            <AccountStatCards
-              stats={[
-                {
-                  key: "paid",
-                  label: t("totalPaid"),
-                  value: `$${totalPaid.toLocaleString("en-US")}`,
-                  href: billingHref({ statuses: ["paid"] }),
-                },
-                {
-                  key: "payments",
-                  label: t("paymentsCount"),
-                  value: String(all.length),
-                },
-                {
-                  key: "credits",
-                  label: t("creditsAvailable"),
-                  value: `$${openCredit.toLocaleString("en-US")}`,
-                  hint: credits.length ? t("creditsHint", { n: credits.length }) : undefined,
-                  href: "#account-credits",
-                },
-              ]}
-            />
+          {/* A statement, not three dashboard cards. The shared rail makes the
+              three figures one financial reading while their dividers keep
+              them comparable. */}
+          {all.length || credits.length ? (
+            <section aria-label={t("summaryLabel")} className="relative border border-navy-900/12 bg-white">
+              <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-navy-950" />
+              <dl className="grid md:grid-cols-3">
+                <div className="px-5 py-6 sm:px-7 md:border-e md:border-navy-900/10 md:py-7">
+                  <dt className="text-body-sm font-medium text-navy-700">{t("totalPaid")}</dt>
+                  <dd className="mt-3">
+                    <Figure size="lg" className="text-navy-950">${totalPaid.toLocaleString("en-US")}</Figure>
+                  </dd>
+                  <p className="mt-2 text-caption text-navy-600">{t("settledHint", { n: paidCount })}</p>
+                </div>
+                <div className="border-t border-navy-900/10 px-5 py-6 sm:px-7 md:border-e md:border-t-0 md:border-navy-900/10 md:py-7">
+                  <dt className="text-body-sm font-medium text-navy-700">{t("awaitingPayment")}</dt>
+                  <dd className="mt-3">
+                    <Figure size="lg" className={awaitingPayment ? "text-gold-deep" : "text-navy-950"}>
+                      ${awaitingPayment.toLocaleString("en-US")}
+                    </Figure>
+                  </dd>
+                  <p className="mt-2 text-caption text-navy-600">{t("awaitingHint", { n: awaiting.length })}</p>
+                </div>
+                <div className="border-t border-navy-900/10 px-5 py-6 sm:px-7 md:border-t-0 md:py-7">
+                  <dt className="text-body-sm font-medium text-navy-700">{t("creditsAvailable")}</dt>
+                  <dd className="mt-3">
+                    <Figure size="lg" className="text-blue-700">${openCredit.toLocaleString("en-US")}</Figure>
+                  </dd>
+                  <p className="mt-2 text-caption text-navy-600">{t("availableCreditsHint", { n: openCredits.length })}</p>
+                </div>
+              </dl>
+            </section>
+          ) : null}
+
+          {attentionPayments.length ? (
+            <section aria-labelledby="billing-attention-title" className="relative overflow-hidden bg-navy-950 text-cream-50">
+              <span aria-hidden className="absolute inset-y-0 start-0 w-1 bg-gold" />
+              <header className="border-b border-cream-100/15 px-6 py-5 sm:px-8">
+                <Eyebrow tone="goldOnNavy">{t("attentionEyebrow")}</Eyebrow>
+                <div className="mt-1.5 flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+                  <h2 id="billing-attention-title" className="font-display text-account-section text-cream-50">
+                    {t("attentionTitle")}
+                  </h2>
+                  <p className="max-w-[58ch] text-body-sm text-cream-200/80">{t("attentionLead")}</p>
+                </div>
+              </header>
+              <ul className="divide-y divide-cream-100/15">
+                {attentionPayments.map((payment) => (
+                  <li key={payment.id} className="grid gap-5 px-6 py-5 sm:px-8 lg:grid-cols-[minmax(0,1fr)_auto_auto] lg:items-center lg:gap-8">
+                    <div className="min-w-0">
+                      <p className={cn(
+                        "text-caption font-semibold uppercase tracking-[0.06em]",
+                        payment.status === "failed" ? "text-cream-100" : "text-gold",
+                      )}>
+                        {tStatus(payment.status)}
+                      </p>
+                      <h3 className="mt-1.5 text-body-lg font-semibold text-cream-50">
+                        {titleOf.get(payment.entryId) ?? payment.entryId}
+                      </h3>
+                      <p className="mt-1 text-caption text-cream-200/70">
+                        {payment.id} · {tKind(payment.kind)}
+                      </p>
+                    </div>
+                    <Figure size="md" className="text-[1.25rem] font-semibold text-cream-50">
+                      ${payment.amountUsd.toLocaleString("en-US")}
+                    </Figure>
+                    <Link href={`/entries/${payment.entryId}`} className={cn(accountAction.onNavySecondary, "min-h-11")}>
+                      {t("reviewPayment")}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
           ) : null}
 
           {all.length === 0 ? (
             <AccountEmptyState title={t("noneTitle")} body={t("noneBody")} />
           ) : (
             <>
-              {/* Search and both filters on one line. Each clears itself. */}
-              <AccountPanel>
-                <FilterBar
-                  action="/billing"
-                  placeholder={t("searchPlaceholder")}
-                  query={query ?? ""}
-                  hasAny={Boolean(query) || statuses.length > 0 || kinds.length > 0}
-                  clearAllHref={`/${locale}/billing`}
-                >
-                  <FilterMenu
-                    name="status"
-                    label={t("filterStatus")}
-                    selected={statuses}
-                    options={STATUSES.map((s) => ({ value: s, label: tStatus(s) }))}
-                  />
-                  <FilterMenu
-                    name="kind"
-                    label={t("filterKind")}
-                    selected={kinds}
-                    options={KINDS.map((k) => ({ value: k, label: tKind(k) }))}
-                  />
-                </FilterBar>
-              </AccountPanel>
-
               <AccountPanel
                 title={t("tableLabel")}
                 lead={t("snapshotNote")}
@@ -214,21 +240,43 @@ export default async function BillingPage({
                     {listing.total === 1 ? t("resultsOne") : t("results", { count: listing.total })}
                   </Meta>
                 }
-                padded={listing.items.length === 0}
+                padded={false}
               >
+                <div className={cn("border-b border-navy-900/10 bg-mist/45 py-4", PANEL_X)}>
+                  <FilterBar
+                    action="/billing"
+                    placeholder={t("searchPlaceholder")}
+                    query={query ?? ""}
+                    hasAny={Boolean(query) || statuses.length > 0 || kinds.length > 0}
+                    clearAllHref={`/${locale}/billing`}
+                  >
+                    <FilterMenu
+                      name="status"
+                      label={t("filterStatus")}
+                      selected={statuses}
+                      options={STATUSES.map((s) => ({ value: s, label: tStatus(s) }))}
+                    />
+                    <FilterMenu
+                      name="kind"
+                      label={t("filterKind")}
+                      selected={kinds}
+                      options={KINDS.map((k) => ({ value: k, label: tKind(k) }))}
+                    />
+                  </FilterBar>
+                </div>
                 {listing.items.length === 0 ? (
-                  <AccountEmptyState
-                    title={t("emptyTitle")}
-                    body={t("emptyBody")}
-                    action={
-                      <Link href={billingHref({})} className={accountAction.secondary}>
-                        {t("clear")}
-                      </Link>
-                    }
-                  />
-                ) : (
-                  <PaymentTable payments={listing.items} titleOf={titleOf} locale={locale} />
-                )}
+                  <div className={cn("py-6", PANEL_X)}>
+                    <AccountEmptyState
+                      title={t("emptyTitle")}
+                      body={t("emptyBody")}
+                      action={
+                        <Link href={billingHref({})} className={accountAction.secondary}>
+                          {t("clear")}
+                        </Link>
+                      }
+                    />
+                  </div>
+                ) : <PaymentTable payments={listing.items} titleOf={titleOf} locale={locale} />}
               </AccountPanel>
 
               {listing.pages > 1 ? (
@@ -289,7 +337,7 @@ export default async function BillingPage({
           )}
 
           {/* Credits: not payments, and not shown as if they were. */}
-          <AccountPanel id="account-credits" title={t("creditsTitle")} padded={false}>
+          <AccountPanel id="account-credits" title={t("creditsTitle")} lead={t("creditsLead")} padded={false}>
             {credits.length ? (
               <CreditTable credits={credits} titleOf={titleOf} yearOf={yearOf} />
             ) : (

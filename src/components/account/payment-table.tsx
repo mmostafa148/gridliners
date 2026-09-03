@@ -10,7 +10,7 @@ import {
   TABLE_CELL,
   TABLE_HEAD,
   TABLE_NUM,
-  accountAction,
+  accountRowAction,
 } from "@/components/account/system";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -76,7 +76,7 @@ export async function PaymentTable({
   const invoice = (id: string) => (
     <a
       href={`/${locale}/downloads/invoice/${id}`}
-      className={cn(accountAction.quiet, "gap-2 whitespace-nowrap")}
+      className={cn(accountRowAction.secondary, "min-h-11 gap-2 whitespace-nowrap")}
     >
       <Download aria-hidden className="size-4" />
       {t("invoice")}
@@ -98,7 +98,7 @@ export async function PaymentTable({
   return (
     <>
       {/* Desktop: a table, for comparison down a column. */}
-      <table className="hidden w-full border-collapse text-start lg:table">
+      <table className="hidden w-full border-collapse text-start xl:table">
         <caption className="sr-only">{t("tableLabel")}</caption>
         <thead>
           <tr className="border-b border-navy-900/15">
@@ -166,11 +166,11 @@ export async function PaymentTable({
       </table>
 
       {/* Phone and tablet: a block per payment. Every column survives. */}
-      <ul className="flex flex-col lg:hidden">
+      <ul className="grid gap-3 p-5 sm:p-7 xl:hidden">
         {payments.map((payment) => (
           <li
             key={payment.id}
-            className={cn("border-b border-navy-900/8 py-5 last:border-b-0", EDGE_START, EDGE_END)}
+            className="border border-navy-900/10 bg-white p-5 sm:p-6"
           >
             <div className="flex flex-wrap items-center justify-between gap-4">
               <span className={cn(TABLE_NUM, "text-data-md text-navy-900")}>
@@ -211,7 +211,7 @@ export async function PaymentTable({
               </div>
             </dl>
 
-            <div className="mt-5 flex flex-wrap items-center gap-x-7 gap-y-3">
+            <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-navy-900/10 pt-4">
               {invoice(payment.id)}
               {snapshot(payment)}
             </div>

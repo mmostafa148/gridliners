@@ -49,7 +49,7 @@ export function PaymentRow({
             aria-expanded={open}
             aria-controls={id}
             className={cn(
-              "inline-flex size-8 items-center justify-center border border-transparent text-navy-600",
+              "inline-flex size-11 items-center justify-center border border-transparent text-navy-600",
               "transition-colors hover:border-navy-900/20 hover:bg-white hover:text-navy-900",
               "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700",
             )}

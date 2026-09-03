@@ -3,33 +3,13 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { Money } from "@/components/account/docket";
 import {
   Figure,
-  Meta,
   StatusChip,
-  TABLE_CELL,
-  TABLE_HEAD,
-  TABLE_NUM,
-  TABLE_ROW,
 } from "@/components/account/system";
 import { Link } from "@/i18n/navigation";
 import type { Credit } from "@/lib/api/types";
 import { cn } from "@/lib/utils";
 
-/**
- * Next-cycle credits, as a table.
- *
- * **Because the payments table is directly above it.** Credits were a row list
- * that led with a right-aligned amount, so every figure sat 112px in from the
- * panel's own left edge while the heading, the payments table and everything
- * else started at the inset — the misalignment was structural, not a stray
- * class. Two lists stacked in the same column should not be built two ways.
- *
- * Same columns-then-blocks shape as `PaymentTable`: a real table from `lg` with
- * `scope` on every heading, and a labelled block per credit below it. The
- * amount is the last column and right-aligned, which is where a figure that is
- * compared down a column belongs.
- */
-const EDGE_START = "ps-5 sm:ps-7";
-const EDGE_END = "pe-5 sm:pe-7";
+/** Credits are future spending power, not another payment ledger. */
 
 export async function CreditTable({
   credits,
@@ -41,9 +21,6 @@ export async function CreditTable({
   yearOf: Map<string, number>;
 }) {
   const [t, format] = await Promise.all([getTranslations("billing"), getFormatter()]);
-
-  const head = TABLE_HEAD;
-  const cell = TABLE_CELL;
 
   const status = (credit: Credit) => (
     <StatusChip
@@ -68,97 +45,72 @@ export async function CreditTable({
     yearOf.get(credit.validForCycleId) ?? credit.validForCycleId.replace("cycle-", "");
 
   return (
-    <>
-      <table className="hidden w-full border-collapse text-start lg:table">
-        <caption className="sr-only">{t("creditsTitle")}</caption>
-        <thead>
-          <tr className="border-b border-navy-900/15">
-            <th scope="col" className={cn(head, "w-40 pe-4", EDGE_START)}>{t("creditCode")}</th>
-            <th scope="col" className={cn(head, "pe-6")}>{t("creditFor")}</th>
-            <th scope="col" className={cn(head, "w-36 pe-4")}>{t("colStatus")}</th>
-            <th scope="col" className={cn(head, "w-28 pe-4")}>{t("creditCycle")}</th>
-            <th scope="col" className={cn(head, "w-32 pe-4")}>{t("colDate")}</th>
-            <th scope="col" className={cn(head, "w-28 text-end", EDGE_END)}>
-              {t("creditAmount")}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {credits.map((credit) => (
-            <tr key={credit.code} className={TABLE_ROW}>
-              <td className={cn(cell, "pe-4", EDGE_START)}>
-                <Figure size="sm" className="whitespace-nowrap text-navy-600">
-                  {credit.code}
-                </Figure>
-              </td>
-              <td className={cn(cell, "pe-6")}>{entry(credit)}</td>
-              <td className={cn(cell, "pe-4")}>{status(credit)}</td>
-              <td className={cn(cell, "pe-4")}>
-                <Figure size="sm" className="text-navy-800">
-                  {validFor(credit)}
-                </Figure>
-              </td>
-              <td className={cn(cell, "pe-4")}>
-                <Figure size="sm" className="whitespace-nowrap text-navy-800">
-                  {when(credit)}
-                </Figure>
-              </td>
-              <td className={cn(cell, TABLE_NUM, "text-end", EDGE_END)}>
+    <ul className="grid gap-3 p-5 sm:grid-cols-2 sm:p-7">
+      {credits.map((credit) => {
+        const redeemed = Boolean(credit.redeemedAt);
+        return (
+          <li
+            key={credit.code}
+            className={cn(
+              "relative border p-5 sm:p-6",
+              redeemed
+                ? "border-navy-900/10 bg-mist/55"
+                : "border-gold/70 bg-cream-50",
+            )}
+          >
+            <span
+              aria-hidden
+              className={cn(
+                "absolute inset-x-0 top-0 h-1",
+                redeemed ? "bg-navy-300" : "bg-gold",
+              )}
+            />
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <p className="text-caption font-semibold uppercase tracking-[0.06em] text-navy-600">
+                  {t("creditAmount")}
+                </p>
                 <Money
                   amount={credit.amountUsd}
                   className={cn(
-                    "text-body-md font-semibold",
-                    credit.redeemedAt ? "text-navy-600" : "text-navy-900",
+                    "mt-2 block font-data text-data-lg tabular-nums",
+                    redeemed ? "text-navy-600" : "text-gold-deep",
                   )}
                 />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Phone and tablet: a block per credit. Every column survives. */}
-      <ul className="flex flex-col lg:hidden">
-        {credits.map((credit) => (
-          <li
-            key={credit.code}
-            className={cn("border-b border-navy-900/8 py-5 last:border-b-0", EDGE_START, EDGE_END)}
-          >
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <Money
-                amount={credit.amountUsd}
-                className={cn(
-                  "font-data text-data-md tabular-nums",
-                  credit.redeemedAt ? "text-navy-600" : "text-navy-900",
-                )}
-              />
+              </div>
               {status(credit)}
             </div>
-            <div className="mt-3">{entry(credit)}</div>
-            <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-3">
+
+            <div className="mt-6 border-t border-navy-900/10 pt-5">
+              <p className="text-caption text-navy-600">{t("creditFor")}</p>
+              <div className="mt-1">{entry(credit)}</div>
+            </div>
+
+            <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-4">
               <div>
                 <dt className="text-caption text-navy-600">{t("creditCycle")}</dt>
-                <dd className="mt-0.5">
-                  <Figure size="sm" className="text-navy-800">{validFor(credit)}</Figure>
+                <dd className="mt-1">
+                  <Figure size="sm" className="text-navy-900">{validFor(credit)}</Figure>
                 </dd>
               </div>
               <div>
-                <dt className="text-caption text-navy-600">{t("colDate")}</dt>
-                <dd className="mt-0.5">
-                  <Figure size="sm" className="text-navy-800">{when(credit)}</Figure>
+                <dt className="text-caption text-navy-600">
+                  {redeemed ? t("creditRedeemed") : t("creditIssued")}
+                </dt>
+                <dd className="mt-1">
+                  <Figure size="sm" className="text-navy-900">{when(credit)}</Figure>
                 </dd>
               </div>
-              <div className="col-span-2">
+              <div className="col-span-2 border-t border-navy-900/10 pt-4">
                 <dt className="text-caption text-navy-600">{t("creditCode")}</dt>
-                <dd className="mt-0.5">
-                  <Figure size="sm" className="text-navy-600">{credit.code}</Figure>
+                <dd className="mt-1">
+                  <Figure size="sm" className="break-all text-navy-700">{credit.code}</Figure>
                 </dd>
               </div>
             </dl>
           </li>
-        ))}
-      </ul>
-      <Meta className="sr-only">{t("creditsTitle")}</Meta>
-    </>
+        );
+      })}
+    </ul>
   );
 }
