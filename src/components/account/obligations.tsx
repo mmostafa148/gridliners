@@ -1,7 +1,7 @@
 import { getFormatter, getTranslations } from "next-intl/server";
 
 import { EntryCover } from "@/components/account/entry-cover";
-import { Figure, Meta, accountAction, accountRowAction } from "@/components/account/system";
+import { Figure, Meta, accountAction } from "@/components/account/system";
 import { Link } from "@/i18n/navigation";
 import type { Entry, SubCategory } from "@/lib/api/types";
 import type { NextAction } from "@/lib/account/next-actions";
@@ -17,8 +17,10 @@ import { cn } from "@/lib/utils";
  * *news* rather than *work* (a shortlisting to share, a result to read) are not
  * in this list at all: they belong to the record below, where the work is.
  *
- * A deadline gets the campaign edge and its date at figure scale, because in
- * this module a clock is the only thing that outranks the work.
+ * The first action is the desk's lead story: work, reason, clock and one clear
+ * next move. Anything else stays visible as a quieter queue underneath. This
+ * is deliberately not a set of equal rows — equal weight was the reason the
+ * old dashboard felt like an admin report instead of a participant's desk.
  */
 export async function Obligations({
   actions,
@@ -39,85 +41,111 @@ export async function Obligations({
 
   if (!open.length) {
     return (
-      <div className="border-s-2 border-blue-700 ps-6">
-        <p className="font-display text-account-card text-navy-900">{t("attentionNone")}</p>
-        <p className="mt-2.5 max-w-[54ch] text-body-md text-navy-700">{t("attentionNoneBody")}</p>
+      <div className="border-s-2 border-cream-100/45 py-2 ps-6">
+        <p className="font-display text-account-card text-cream-50">{t("attentionNone")}</p>
+        <p className="mt-2.5 max-w-[54ch] text-body-md text-cream-200/80">
+          {t("attentionNoneBody")}
+        </p>
       </div>
     );
   }
 
+  const [lead, ...remaining] = open;
+  const leadEntry = entryById.get(lead.entryId);
+
   return (
-    <ul className="flex flex-col">
-      {open.map((action) => {
-        const entry = entryById.get(action.entryId);
-        const urgent = action.kind !== "resume_draft";
-        return (
-          <li
-            key={`${action.kind}-${action.entryId}`}
-            className={cn(
-              "border-s-2 ps-6",
-              urgent ? "border-campaign-orange" : "border-navy-900/25",
-              "mb-5 last:mb-0",
-            )}
-          >
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
-              {entry ? (
-                <EntryCover
-                  entry={entry}
-                  parentId={parentOf.get(entry.baseSubCategoryId) ?? ""}
-                  className="hidden size-14 shrink-0 sm:block"
-                  sizes="56px"
-                />
-              ) : null}
+    <div>
+      <div className="grid gap-7 lg:grid-cols-[minmax(12rem,0.72fr)_minmax(18rem,1.15fr)_minmax(11rem,0.55fr)] lg:items-stretch">
+        {leadEntry ? (
+          <EntryCover
+            entry={leadEntry}
+            parentId={parentOf.get(leadEntry.baseSubCategoryId) ?? ""}
+            className="aspect-[4/3] w-full sm:aspect-[16/9] lg:h-full lg:min-h-56"
+            sizes="(max-width: 1024px) 90vw, 30vw"
+            priority
+          />
+        ) : null}
 
-              <div className="min-w-0 flex-1">
-                <p
-                  className={cn(
-                    "font-display text-overline uppercase",
-                    urgent ? "text-destructive-ink" : "text-navy-600",
-                  )}
+        <div className="flex min-w-0 flex-col justify-center">
+          <p className="font-display text-overline uppercase text-campaign-yellow">
+            {t(`action.${lead.kind}`)}
+          </p>
+          <h3 className="mt-3 font-display text-[clamp(1.65rem,3vw,2.65rem)] leading-[1.02] text-cream-50">
+            {lead.entryTitle}
+          </h3>
+          <p className="mt-4 max-w-[58ch] text-body-md leading-relaxed text-cream-200/80">
+            {t(`why.${lead.kind}`)}
+          </p>
+        </div>
+
+        <div className="flex flex-col justify-between border-t border-cream-50/18 pt-5 lg:border-s lg:border-t-0 lg:py-2 lg:ps-7">
+          <div className="space-y-5">
+            {lead.deadline ? (
+              <div>
+                <Meta className="text-cream-200/65">{t("byWhen")}</Meta>
+                <Figure
+                  size="lg"
+                  className="mt-1 block text-[clamp(1.35rem,2.2vw,2rem)] text-cream-50"
                 >
-                  {t(`action.${action.kind}`)}
-                </p>
-                <p className="mt-1 font-display text-account-card text-navy-900">
-                  {action.entryTitle}
-                </p>
-                <p className="mt-1 max-w-[64ch] text-body-sm text-navy-600">
-                  {t(`why.${action.kind}`)}
-                </p>
+                  {format.dateTime(new Date(lead.deadline), { dateStyle: "medium" })}
+                </Figure>
               </div>
+            ) : null}
+            {lead.amountUsd ? (
+              <div>
+                <Meta className="text-cream-200/65">{t("amountDue")}</Meta>
+                <Figure size="lg" className="mt-1 block text-cream-50">
+                  ${lead.amountUsd.toLocaleString("en-US")}
+                </Figure>
+              </div>
+            ) : null}
+          </div>
+          <Link href={lead.href} className={cn(accountAction.onNavy, "mt-7 w-full")}>
+            {t(`actionDo.${lead.kind}`)}
+          </Link>
+        </div>
+      </div>
 
-              {action.amountUsd || action.deadline ? (
-                <div className="flex shrink-0 flex-wrap items-baseline gap-x-7 gap-y-2 sm:w-44 sm:flex-col sm:items-end sm:gap-2">
-                  {action.amountUsd ? (
-                    <Figure size="md" className="text-navy-900">
-                      ${action.amountUsd.toLocaleString("en-US")}
-                    </Figure>
-                  ) : null}
-                  {action.deadline ? (
-                    <Meta className="whitespace-nowrap">
-                      {t("byWhen")}{" "}
-                      <span className="font-data text-navy-800">
-                        {format.dateTime(new Date(action.deadline), { dateStyle: "medium" })}
-                      </span>
-                    </Meta>
-                  ) : null}
-                </div>
-              ) : null}
-
-              <Link
-                href={action.href}
-                className={cn(
-                  urgent ? accountAction.primary : accountRowAction.secondary,
-                  "shrink-0",
-                )}
-              >
-                {t(`actionDo.${action.kind}`)}
-              </Link>
-            </div>
-          </li>
-        );
-      })}
-    </ul>
+      {remaining.length ? (
+        <div className="mt-7 border-t border-cream-50/18 pt-2">
+          <p className="py-4 font-display text-overline uppercase text-cream-200/60">
+            {t("alsoWaiting", { count: remaining.length })}
+          </p>
+          <ul>
+            {remaining.map((action) => {
+              const entry = entryById.get(action.entryId);
+              return (
+                <li
+                  key={`${action.kind}-${action.entryId}`}
+                  className="grid gap-4 border-t border-cream-50/12 py-4 sm:grid-cols-[3.5rem_minmax(0,1fr)_auto] sm:items-center"
+                >
+                  {entry ? (
+                    <EntryCover
+                      entry={entry}
+                      parentId={parentOf.get(entry.baseSubCategoryId) ?? ""}
+                      className="hidden size-14 sm:block"
+                      sizes="56px"
+                    />
+                  ) : (
+                    <span className="hidden sm:block" />
+                  )}
+                  <div className="min-w-0">
+                    <p className="text-caption text-cream-200/65">
+                      {t(`action.${action.kind}`)}
+                    </p>
+                    <p className="mt-0.5 font-display text-body-md text-cream-50">
+                      {action.entryTitle}
+                    </p>
+                  </div>
+                  <Link href={action.href} className={accountAction.onNavyQuiet}>
+                    {t(`actionDo.${action.kind}`)}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : null}
+    </div>
   );
 }

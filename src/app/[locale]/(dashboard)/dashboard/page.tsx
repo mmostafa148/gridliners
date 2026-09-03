@@ -4,7 +4,6 @@ import { getFormatter, getTranslations, setRequestLocale } from "next-intl/serve
 import { AccountShell } from "@/components/account/account-shell";
 import { AwardMark } from "@/components/account/award-mark";
 import { EntryCover } from "@/components/account/entry-cover";
-import { AccountStatCards } from "@/components/account/account-stat-cards";
 import { EntryStatus } from "@/components/account/entry-status";
 import { Obligations } from "@/components/account/obligations";
 import {
@@ -36,22 +35,13 @@ export async function generateMetadata({
 }
 
 /**
- * 2.2 — the account's landing page, in Direction C.
+ * The participant's desk: decision, work, then account detail.
  *
- * **Retuned 2026-09-01 from editorial to management weight.** The first pass
- * gave the account the website's devices — full-bleed navy and mist bands, a
- * 42px title, gallery-scale covers — and it read as a run of website sections
- * rather than a place to manage a profile. What changed: one surface instead of
- * four grounds, a 28px title, thumbnail-scale covers, and half the vertical
- * rhythm. Nothing was removed.
- *
- * **Identity establishes; work leads.** The masthead says whose account this
- * is and what it amounts to, and then the first functional thing on the page is
- * what needs doing — one section, not the three overlapping ones §51 rejected.
- *
- * Under it, the record: the work in public voting at gallery scale, what has
- * been awarded, and the account's own operational facts. That is the portfolio
- * reading — you, then your obligations, then your work.
+ * Counts are a quiet standing rail rather than four equal dashboard cards. The
+ * first open obligation owns the only dark stage on the page, while recognition
+ * sits on the work inside one portfolio instead of repeating it in a second
+ * gallery. State totals and payments remain available, but they are supporting
+ * records rather than the page's opening argument.
  */
 export default async function DashboardPage({
   params,
@@ -107,52 +97,83 @@ export default async function DashboardPage({
   // The count is every shortlisted entry; the strip shows the first six. A card
   // that counted the capped array would understate the account.
   const shortlisted = entries.filter((e) => e.state === "shortlisted");
-  const voting = shortlisted.slice(0, 6);
+  const awardedEntries = deliverables.flatMap((deliverable) => {
+    const entry = entryById.get(deliverable.entryId);
+    return entry ? [entry] : [];
+  });
+  const portfolioEntries = [
+    ...new Map([...shortlisted, ...awardedEntries].map((entry) => [entry.id, entry])).values(),
+  ].slice(0, 7);
+  const awardByEntry = new Map(deliverables.map((deliverable) => [deliverable.entryId, deliverable]));
 
   return (
     <AccountShell participantId={participant.id} locale={locale}>
-      {/* The masthead says whose account this is; the page still names itself,
-          and it is the page that owns the h1. */}
       <div className="account-shell pt-7 md:pt-9">
-        <h1 className="font-display text-account-title text-navy-900">{t("title")}</h1>
-        <p className="mt-1.5 max-w-[68ch] text-body-sm text-navy-600">{t("leadNamed")}</p>
+        <div className="flex flex-col gap-5 border-b border-navy-900/12 pb-6 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h1 className="font-display text-account-title text-navy-900">{t("title")}</h1>
+            <p className="mt-1.5 max-w-[68ch] text-body-sm text-navy-600">{t("leadNamed")}</p>
+          </div>
+          {cycle ? (
+            <Meta className="shrink-0 pb-0.5">
+              {t("cycleLine", { year: cycle.year, phase: tPhase(cycle.phase) })}
+            </Meta>
+          ) : null}
+        </div>
 
-        {/* The four facts this page is opened for, on one row. The full state
-            breakdown is further down, where a breakdown belongs. */}
-        <AccountStatCards
-          className="mt-6"
-          stats={[
-            {
-              key: "entries",
-              label: tStanding("entries"),
-              value: String(entries.length),
-              href: "/entries",
-            },
-            {
-              key: "shortlisted",
-              label: tStanding("inVoting"),
-              value: String(shortlisted.length),
-              href: "/entries?state=shortlisted",
-            },
-            {
-              key: "awards",
-              label: tStanding("awards"),
-              value: String(deliverables.length),
-              href: "/my-awards",
-            },
-            {
-              key: "discount",
-              label: tStanding("discount"),
-              value: earned ? `${earned.percentOff}%` : "0%",
-              hint: upcoming
-                ? `${upcoming.percentOff}% ${t("atEntry", { n: upcoming.fromSubmissionNumber })}`
-                : t("maxReached"),
-            },
-          ]}
-        />
+        {/* A standing rail, not four dashboard cards. The figures are context
+            for the work below rather than four competing destinations. */}
+        <dl className="grid grid-cols-2 border-b border-navy-900/12 md:grid-cols-4">
+          <Link
+            href="/entries"
+            className="group border-e border-navy-900/10 py-5 pe-5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-700 md:py-6"
+          >
+            <dt className="text-caption text-navy-600 group-hover:text-blue-700">
+              {tStanding("entries")}
+            </dt>
+            <dd className="mt-1 font-data text-[clamp(1.75rem,3vw,2.75rem)] leading-none text-navy-900">
+              {entries.length}
+            </dd>
+          </Link>
+          <Link
+            href="/entries?state=shortlisted"
+            className="group py-5 ps-5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-700 md:border-e md:border-navy-900/10 md:px-5 md:py-6"
+          >
+            <dt className="text-caption text-navy-600 group-hover:text-blue-700">
+              {tStanding("inVoting")}
+            </dt>
+            <dd className="mt-1 font-data text-[clamp(1.75rem,3vw,2.75rem)] leading-none text-navy-900">
+              {shortlisted.length}
+            </dd>
+          </Link>
+          <Link
+            href="/my-awards"
+            className="group border-e border-t border-navy-900/10 py-5 pe-5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-700 md:border-t-0 md:px-5 md:py-6"
+          >
+            <dt className="text-caption text-navy-600 group-hover:text-blue-700">
+              {tStanding("awards")}
+            </dt>
+            <dd className="mt-1 font-data text-[clamp(1.75rem,3vw,2.75rem)] leading-none text-gold-deep">
+              {deliverables.length}
+            </dd>
+          </Link>
+          <div className="border-t border-navy-900/10 py-5 ps-5 md:border-t-0 md:py-6">
+            <dt className="text-caption text-navy-600">{tStanding("discount")}</dt>
+            <dd className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <span className="font-data text-[clamp(1.75rem,3vw,2.75rem)] leading-none text-navy-900">
+                {earned ? `${earned.percentOff}%` : "0%"}
+              </span>
+              <span className="text-caption text-navy-600">
+                {upcoming
+                  ? `${upcoming.percentOff}% ${t("atEntry", { n: upcoming.fromSubmissionNumber })}`
+                  : t("maxReached")}
+              </span>
+            </dd>
+          </div>
+        </dl>
       </div>
 
-      <div className="account-shell pb-[var(--account-y)] pt-6">
+      <div className="account-shell pb-[var(--account-y)] pt-5">
         {entries.length === 0 ? (
           <AccountEmptyState
             title={t("emptyTitle")}
@@ -164,103 +185,89 @@ export default async function DashboardPage({
             }
           />
         ) : (
-          <AccountStack>
-            {/* ---- what needs doing. One panel, first. ------------------- */}
-            <AccountPanel
-              title={t("attentionTitle")}
-              action={
-                cycle ? (
-                  <Meta>{t("cycleLine", { year: cycle.year, phase: tPhase(cycle.phase) })}</Meta>
-                ) : null
-              }
-              padded={false}
-            >
-              <div className={cn("py-6", PANEL_X)}>
+          <AccountStack className="gap-7">
+            {/* The desk's signature: one dark field reserved for the next
+                decision. The rest of the account never competes with it. */}
+            <section className="relative overflow-hidden bg-navy-950 text-cream-50">
+              <span
+                aria-hidden
+                className="absolute start-0 top-0 h-1 w-24 bg-blue-700 after:absolute after:start-full after:top-0 after:h-1 after:w-8 after:bg-campaign-yellow"
+              />
+              <div className={cn("border-b border-cream-50/15 py-5", PANEL_X)}>
+                <h2 className="font-display text-account-section text-cream-50">
+                  {t("attentionTitle")}
+                </h2>
+              </div>
+              <div className={cn("py-7 sm:py-8", PANEL_X)}>
                 <Obligations actions={actions} entries={entries} subCategories={subCategories} />
               </div>
-            </AccountPanel>
+            </section>
 
-            {/* ---- the work, and what it has won ------------------------- */}
-            <div className="grid items-start gap-5 xl:grid-cols-2">
-              {voting.length ? (
-                <AccountPanel
-                  title={t("recordTitle")}
-                  lead={t("recordLead")}
-                  action={
-                    <Link href="/entries?state=shortlisted" className={accountAction.quiet}>
-                      {t("shareAll")}
-                    </Link>
-                  }
-                >
-                  <ul className="grid grid-cols-3 gap-x-4 gap-y-6 sm:grid-cols-4 xl:grid-cols-3">
-                    {voting.map((entry) => (
-                      <li key={entry.id} className="min-w-0">
+            {/* One portfolio, not two galleries that repeat the same work. */}
+            {portfolioEntries.length ? (
+              <AccountPanel
+                title={t("portfolioTitle")}
+                lead={t("portfolioLead")}
+                action={
+                  <Link href="/entries" className={accountAction.quiet}>
+                    {t("viewPortfolio")}
+                  </Link>
+                }
+              >
+                <ul className="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-5">
+                  {portfolioEntries.map((entry, index) => {
+                    const award = awardByEntry.get(entry.id);
+                    const featured = index === 0;
+                    return (
+                      <li
+                        key={entry.id}
+                        className={cn("min-w-0", featured && "col-span-2 row-span-2")}
+                      >
                         <Link
                           href={`/projects/${entry.slug}`}
-                          className="block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                          className="group block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
                         >
-                          <EntryCover
-                            entry={entry}
-                            parentId={parentOf.get(entry.baseSubCategoryId) ?? ""}
-                            className="aspect-square w-full"
-                            sizes="(max-width: 640px) 30vw, 15vw"
-                          />
-                          <span className="mt-2.5 block truncate text-body-sm font-medium text-navy-900">
+                          <span className="relative block overflow-hidden">
+                            <EntryCover
+                              entry={entry}
+                              parentId={parentOf.get(entry.baseSubCategoryId) ?? ""}
+                              className={cn(
+                                "w-full transition-transform duration-300 group-hover:scale-[1.015]",
+                                featured ? "aspect-[4/3]" : "aspect-square",
+                              )}
+                              sizes={featured ? "(max-width: 768px) 90vw, 48vw" : "24vw"}
+                              priority={featured}
+                            />
+                            {award ? (
+                              <AwardMark
+                                level={award.level}
+                                year={award.cycleYear}
+                                size={featured ? "sm" : "xs"}
+                                className="absolute end-2 top-0"
+                              />
+                            ) : null}
+                          </span>
+                          <span
+                            className={cn(
+                              "mt-3 block font-display text-navy-900 group-hover:text-blue-700",
+                              featured ? "text-account-card" : "truncate text-body-sm",
+                            )}
+                          >
                             {entry.title}
                           </span>
                         </Link>
-                        <span className="mt-0.5 block truncate text-caption text-navy-600">
-                          {subById.get(entry.baseSubCategoryId)?.name[locale]}
-                        </span>
+                        <div className="mt-1 flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
+                          <EntryStatus state={entry.state} />
+                          <span className="truncate text-caption text-navy-600">
+                            {subById.get(entry.baseSubCategoryId)?.name[locale]}
+                          </span>
+                        </div>
                       </li>
-                    ))}
-                  </ul>
-                </AccountPanel>
-              ) : null}
-
-              {deliverables.length ? (
-                <AccountPanel
-                  title={t("awardedTitle")}
-                  action={
-                    <Link href="/my-awards" className={accountAction.quiet}>
-                      {t("viewAwards")}
-                    </Link>
-                  }
-                >
-                  <ul className="grid grid-cols-3 gap-x-4 gap-y-6 sm:grid-cols-4 xl:grid-cols-3">
-                    {deliverables.map((d) => {
-                      const entry = entryById.get(d.entryId);
-                      return (
-                        <li key={d.resultId} className="min-w-0">
-                          <span className="relative block">
-                            {entry ? (
-                              <EntryCover
-                                entry={entry}
-                                parentId={parentOf.get(entry.baseSubCategoryId) ?? ""}
-                                className="aspect-square w-full"
-                                sizes="(max-width: 640px) 30vw, 15vw"
-                              />
-                            ) : null}
-                            <AwardMark
-                              level={d.level}
-                              year={d.cycleYear}
-                              size="xs"
-                              className="absolute -top-1 end-1"
-                            />
-                          </span>
-                          <span className="mt-2.5 block truncate text-body-sm font-medium text-navy-900">
-                            {d.entryTitle}
-                          </span>
-                          <span className="mt-0.5 block truncate text-caption text-navy-600">
-                            {d.group}
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </AccountPanel>
-              ) : null}
-            </div>
+                    );
+                  })}
+                </ul>
+              </AccountPanel>
+            ) : null}
 
             {/* ---- the account's own facts ------------------------------- */}
             <div className="grid gap-5 lg:grid-cols-[1fr_1.4fr]">
