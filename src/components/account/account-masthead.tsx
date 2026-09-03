@@ -11,12 +11,9 @@ import { cn } from "@/lib/utils";
 /**
  * The account's identity masthead — Direction C's organising device.
  *
- * **The same bar on every route.** It carried three scales — a full identity
- * block on Overview and Profile, a smaller one on the listings, none at all on
- * the entry and wizard routes — and the avatar, the name and the bar's own
- * height changed as somebody moved between tabs. Chrome that moves is chrome
- * somebody has to re-read. The pages below it still differ from each other;
- * the frame around them does not.
+ * **The same frame on every route.** Identity and action occupy one compact
+ * band; destinations occupy their own rail beneath it. That separation keeps
+ * the person's context legible without making it compete with navigation.
  *
  * **Standing lives on the page, not in the bar.** Three number/label pairs
  * squeezed between a job title and a button had no room and no rank; they are
@@ -95,12 +92,12 @@ export function AccountMasthead({
     item.count !== undefined && item.count > 0 ? (
       <span
         className={cn(
-          "shrink-0 font-data text-[0.8125rem] tabular-nums",
-          item.urgent && !active
-            ? "bg-campaign-yellow px-2 py-0.5 text-navy-950"
+          "inline-flex min-w-6 shrink-0 items-center justify-center px-1.5 py-0.5 font-data text-[0.75rem] tabular-nums",
+          item.urgent
+            ? "bg-campaign-yellow text-navy-950"
             : active
-              ? "text-cream-200/75"
-              : "text-navy-600",
+              ? "bg-navy-900/10 text-navy-900"
+              : "bg-white text-navy-600",
         )}
       >
         {item.count}
@@ -116,7 +113,7 @@ export function AccountMasthead({
    * it against the box makes the box the box.
    */
   const portrait = (
-    <span className="relative block size-12 shrink-0 overflow-hidden bg-navy-900/8">
+    <span className="relative block size-14 shrink-0 overflow-hidden bg-navy-900/8 md:size-16">
       {identity.photoUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={identity.photoUrl} alt="" className="absolute inset-0 size-full object-cover" />
@@ -124,142 +121,152 @@ export function AccountMasthead({
         <Image
           src="/brand/logo-icon.svg"
           alt=""
-          width={40}
-          height={40}
-          className="absolute inset-0 m-auto size-6"
+          width={48}
+          height={48}
+          className="absolute inset-0 m-auto size-7"
         />
       )}
     </span>
   );
 
   return (
-    <div data-account-masthead className="border-b border-navy-900/12 bg-white">
+    <div data-account-masthead className="bg-white">
       <div
         // The fixed rail's clearance, owned here exactly as `PageHeader` owns
         // its own: SiteFrame's <main> clears the announcement bar and no more.
-        className="account-shell pb-0 pt-5 md:pt-[calc(4.5rem+1.25rem)]"
+        className="account-shell pb-4 pt-4 md:pt-[calc(4.5rem+1rem)]"
       >
-        {/* Identity is a block, not a line.
-            The name and what somebody is were on one baseline with the standing
-            figures and the action, which made five things compete for one row.
-            The name now leads and the role sits under it; the figures are
-            number-over-label on the end edge, which is how a figure is read. */}
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
-          <div className="flex min-w-0 items-center gap-3.5">
+        <div className="flex min-h-16 items-center gap-5 md:min-h-20">
+          <div className="flex min-w-0 items-center gap-4">
             {portrait}
             <div className="min-w-0">
-              <p className="truncate text-body-md font-semibold leading-tight text-navy-900">
+              <p className="text-overline font-semibold uppercase tracking-[0.14em] text-blue-700">
+                {t("eyebrow")}
+              </p>
+              <p className="mt-1 truncate font-display text-[1.1875rem] font-semibold leading-tight text-navy-950 md:text-account-card">
                 {identity.name}
               </p>
               {identity.role || identity.country ? (
-                <p className="mt-0.5 truncate text-body-sm leading-tight text-navy-600">
+                <p className="mt-1 line-clamp-2 text-body-sm leading-snug text-navy-600 md:line-clamp-1">
                   {[identity.role, identity.country].filter(Boolean).join(" · ")}
                 </p>
               ) : null}
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 md:ms-auto">
+          <div className="ms-auto hidden flex-wrap items-center justify-end gap-3 md:flex">
             {action}
             <Link href={primary.href} className={MASTHEAD_ACTION}>
               {primary.label}
             </Link>
           </div>
         </div>
+      </div>
 
-        {/* The destinations. The same row at every scale, so navigation never
-            moves even though the identity above it does. */}
-        <nav aria-label={t("navLabel")} className="mt-5 hidden md:block">
-          <ul className="-mb-px flex flex-wrap items-center gap-x-6">
-            {items.map((item) => {
-              const active = isActive(item.href);
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-current={active ? "page" : undefined}
-                    className={cn(
-                      "flex items-center gap-2 border-b-2 pb-3 text-[0.875rem] transition-colors",
-                      "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-700",
-                      active
-                        ? "border-navy-900 font-medium text-navy-900"
-                        : "border-transparent text-navy-600 hover:text-navy-900",
-                    )}
-                  >
-                    {item.label}
-                    {count(item, false)}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+      {/* Navigation gets its own quiet rail: the identity remains recognisable,
+          while the active destination reads as a destination rather than a
+          loose underlined link. */}
+      <div className="border-y border-navy-900/12 bg-mist/70">
+        <div className="account-shell">
+          <nav aria-label={t("navLabel")} className="hidden md:block">
+            <ul className="flex min-h-13 items-stretch">
+              {items.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <li key={item.href} className="flex">
+                    <Link
+                      href={item.href}
+                      aria-current={active ? "page" : undefined}
+                      className={cn(
+                        "relative flex min-h-13 items-center gap-2 border-b-2 px-4 text-[0.875rem] transition-colors",
+                        "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-700",
+                        active
+                          ? "border-blue-700 bg-white font-semibold text-navy-950"
+                          : "border-transparent text-navy-600 hover:bg-white/70 hover:text-navy-950",
+                      )}
+                    >
+                      {item.label}
+                      {count(item, active)}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
 
-        {/* Phone: a disclosure that names where you are. */}
-        <div className="mt-4 pb-4 md:hidden">
-          <button
-            ref={triggerRef}
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
-            aria-controls="account-sections"
-            className={cn(
-              "flex min-h-12 w-full items-center gap-3 border border-navy-900/20 bg-white px-4",
-              "text-body-md font-medium text-navy-900 transition-colors hover:bg-mist",
-              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700",
-            )}
-          >
-            <span aria-hidden className="size-2 shrink-0 bg-gold" />
-            <span className="sr-only">{t("currentSection")}: </span>
-            {current?.label ?? t("openSections")}
-            <ChevronDown
-              aria-hidden
-              strokeWidth={2}
+          {/* Phone: a disclosure that names where you are. The primary action
+              lives inside the disclosure, so it is never duplicated. */}
+          <div className="py-3 md:hidden">
+            <button
+              ref={triggerRef}
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              aria-expanded={open}
+              aria-controls="account-sections"
               className={cn(
-                "ms-auto size-5 shrink-0 text-navy-600 transition-transform duration-200 motion-reduce:transition-none",
-                open && "rotate-180",
+                "flex min-h-12 w-full items-center gap-3 border border-navy-900/18 bg-white px-4",
+                "text-body-md font-medium text-navy-900 transition-colors hover:bg-mist",
+                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700",
               )}
-            />
-          </button>
-
-          {open ? (
-            <div
-              ref={panelRef}
-              id="account-sections"
-              tabIndex={-1}
-              className="mt-px border border-navy-900/20 bg-white focus:outline-none"
             >
-              <nav aria-label={t("navLabel")}>
-                <ul className="flex flex-col">
-                  {all.map((item) => {
-                    const active = isActive(item.href);
-                    return (
-                      <li key={item.href} className="border-b border-navy-900/10 last:border-b-0">
-                        <Link
-                          href={item.href}
-                          aria-current={active ? "page" : undefined}
-                          className={cn(
-                            "flex min-h-12 items-center gap-3 px-4 py-3 text-body-md transition-colors",
-                            "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-700",
-                            active
-                              ? "bg-navy-900 font-medium text-cream-50"
-                              : "text-navy-800 hover:bg-mist",
-                          )}
+              <span aria-hidden className="size-2 shrink-0 bg-gold" />
+              <span className="sr-only">{t("currentSection")}: </span>
+              {current?.label ?? t("openSections")}
+              <ChevronDown
+                aria-hidden
+                strokeWidth={2}
+                className={cn(
+                  "ms-auto size-5 shrink-0 text-navy-600 transition-transform duration-200 motion-reduce:transition-none",
+                  open && "rotate-180",
+                )}
+              />
+            </button>
+
+            {open ? (
+              <div
+                ref={panelRef}
+                id="account-sections"
+                tabIndex={-1}
+                className="mt-1 border border-navy-900/18 bg-white focus:outline-none"
+              >
+                <nav aria-label={t("navLabel")}>
+                  <ul className="flex flex-col">
+                    {all.map((item) => {
+                      const active = isActive(item.href);
+                      return (
+                        <li
+                          key={item.href}
+                          className="border-b border-navy-900/10 last:border-b-0"
                         >
-                          <span
-                            aria-hidden
-                            className={cn("size-2 shrink-0", active ? "bg-gold" : "bg-transparent")}
-                          />
-                          {item.label}
-                          {count(item, active)}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </nav>
-            </div>
-          ) : null}
+                          <Link
+                            href={item.href}
+                            aria-current={active ? "page" : undefined}
+                            className={cn(
+                              "flex min-h-12 items-center gap-3 px-4 py-3 text-body-md transition-colors",
+                              "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-700",
+                              active
+                                ? "bg-navy-900 font-medium text-cream-50"
+                                : "text-navy-800 hover:bg-mist",
+                            )}
+                          >
+                            <span
+                              aria-hidden
+                              className={cn(
+                                "size-2 shrink-0",
+                                active ? "bg-gold" : "bg-transparent",
+                              )}
+                            />
+                            {item.label}
+                            {count(item, active)}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </nav>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>
@@ -267,7 +274,7 @@ export function AccountMasthead({
 }
 
 const MASTHEAD_ACTION = cn(
-  "inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap px-5",
+  "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap px-6",
   "bg-navy-900 text-[0.875rem] font-medium text-cream-50 transition-colors hover:bg-blue-700",
   "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700",
 );
