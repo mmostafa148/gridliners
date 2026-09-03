@@ -160,9 +160,12 @@ export default async function MyAwardsPage({ params }: { params: Promise<{ local
                                     {tTier(award.tier as "students")} · {award.entryId}
                                   </p>
 
-                                  <nav aria-label={award.entryTitle} className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-t border-navy-900/12 pt-5 lg:mt-auto">
-                                    <Link href={`/awards/${award.resultId}`} className={accountAction.quiet}>{t("publicPage")}</Link>
-                                    <Link href={`/projects/${award.entrySlug}`} className={accountAction.quiet}>{t("viewWork")}</Link>
+                                  <nav
+                                    aria-label={award.entryTitle}
+                                    className="mt-8 flex flex-wrap gap-3 border-t border-navy-900/12 pt-5 lg:mt-auto lg:pe-[11.125rem]"
+                                  >
+                                    <Link href={`/awards/${award.resultId}`} className={cn(accountAction.secondary, "min-h-11 px-3")}>{t("publicPage")}</Link>
+                                    <Link href={`/projects/${award.entrySlug}`} className={cn(accountAction.secondary, "min-h-11 px-3")}>{t("viewWork")}</Link>
                                   </nav>
                                 </div>
 
