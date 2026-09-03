@@ -175,9 +175,9 @@ export function ProfileForm({
             </section>
 
             {/* ---- the editable record --------------------------------- */}
-            <AccountPanel title={t("accountTitle")} lead={t("accountLead")}>
+            <AccountPanel title={t("accountTitle")} lead={t("accountLead")} padded={false}>
               {state.error && !state.done ? (
-                <div className="mb-7">
+                <div className="px-5 pt-6 sm:px-7">
                   <ErrorSummary
                     title={t("title")}
                     items={[{ field: state.field, message: t(`errors.${state.error}`) }]}
@@ -185,28 +185,33 @@ export function ProfileForm({
                 </div>
               ) : null}
               {state.done ? (
-                <div className="mb-7">
+                <div className="px-5 pt-6 sm:px-7">
                   <SuccessNote>{t("saved")}</SuccessNote>
                 </div>
               ) : null}
 
-              <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1.12fr)_minmax(22rem,0.88fr)]">
+              <div className="divide-y divide-navy-900/10">
                 <section
                   aria-labelledby="profile-identity"
-                  className="min-w-0 border-s-2 border-blue-700 bg-mist/45 p-5 sm:p-7"
+                  className="grid min-w-0 lg:grid-cols-[minmax(13rem,0.46fr)_minmax(0,1.54fr)]"
                 >
-                  <div className="flex items-start gap-3">
-                    <UserRound aria-hidden className="mt-0.5 size-5 shrink-0 text-blue-700" strokeWidth={1.75} />
-                    <div>
-                      <SectionTitle as="h3" id="profile-identity" className="text-body-lg">
-                        {t("identityTitle")}
-                      </SectionTitle>
-                      <p className="mt-1.5 max-w-[46ch] text-body-sm text-navy-600">
-                        {t("identityLead")}
-                      </p>
+                  <div className="relative bg-mist/65 px-5 py-6 before:absolute before:inset-y-0 before:start-0 before:w-0.5 before:bg-blue-700 sm:px-7 lg:border-e lg:border-navy-900/10">
+                    <div className="flex items-start gap-3 lg:block">
+                      <span className="grid size-10 shrink-0 place-items-center border border-blue-700/20 bg-white text-blue-700 lg:mb-6">
+                        <UserRound aria-hidden className="size-5" strokeWidth={1.75} />
+                      </span>
+                      <div>
+                        <Eyebrow className="mb-2 hidden lg:block">{t("identityEyebrow")}</Eyebrow>
+                        <SectionTitle as="h3" id="profile-identity" className="text-body-lg">
+                          {t("identityTitle")}
+                        </SectionTitle>
+                        <p className="mt-1.5 max-w-[46ch] text-body-sm text-navy-600">
+                          {t("identityLead")}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                  <div className="mt-6 grid gap-5 sm:grid-cols-2">
+                  <div className="grid gap-5 p-5 sm:grid-cols-2 sm:p-7">
                     <Field
                       name="name"
                       label={t("name")}
@@ -241,10 +246,15 @@ export function ProfileForm({
                   </div>
                 </section>
 
-                <div className="flex min-w-0 flex-col gap-8 border border-navy-900/10 p-5 sm:p-7">
-                  <section aria-labelledby="profile-place" className="min-w-0">
-                    <div className="flex items-start gap-3">
-                      <MapPin aria-hidden className="mt-0.5 size-5 shrink-0 text-blue-700" strokeWidth={1.75} />
+                <section
+                  aria-labelledby="profile-place"
+                  className="grid min-w-0 lg:grid-cols-[minmax(13rem,0.46fr)_minmax(0,1.54fr)]"
+                >
+                  <div className="bg-mist/40 px-5 py-6 sm:px-7 lg:border-e lg:border-navy-900/10">
+                    <div className="flex items-start gap-3 lg:block">
+                      <span className="grid size-10 shrink-0 place-items-center border border-blue-700/20 bg-white text-blue-700 lg:mb-6">
+                        <MapPin aria-hidden className="size-5" strokeWidth={1.75} />
+                      </span>
                       <div>
                         <SectionTitle as="h3" id="profile-place" className="text-body-lg">
                           {t("placeTitle")}
@@ -252,8 +262,9 @@ export function ProfileForm({
                         <p className="mt-1.5 text-body-sm text-navy-600">{t("placeLead")}</p>
                       </div>
                     </div>
-                    <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
-                      <Field name="nationality" label={t("nationality")}>
+                  </div>
+                  <div className="grid content-start gap-5 p-5 sm:grid-cols-2 sm:p-7">
+                    <Field name="nationality" label={t("nationality")}>
                         {({ id, name, className, describedBy, invalid }) => (
                           <div className="relative">
                             <select
@@ -279,8 +290,8 @@ export function ProfileForm({
                             />
                           </div>
                         )}
-                      </Field>
-                      <Field name="country" label={t("country")}>
+                    </Field>
+                    <Field name="country" label={t("country")}>
                         {({ id, name, className, describedBy, invalid }) => (
                           <div className="relative">
                             <select
@@ -307,16 +318,19 @@ export function ProfileForm({
                             />
                           </div>
                         )}
-                      </Field>
-                    </div>
-                  </section>
+                    </Field>
+                  </div>
+                </section>
 
-                  <section
-                    aria-labelledby="profile-prefs"
-                    className="min-w-0 border-t border-navy-900/10 pt-7"
-                  >
-                    <div className="flex items-start gap-3">
-                      <Globe2 aria-hidden className="mt-0.5 size-5 shrink-0 text-blue-700" strokeWidth={1.75} />
+                <section
+                  aria-labelledby="profile-prefs"
+                  className="grid min-w-0 lg:grid-cols-[minmax(13rem,0.46fr)_minmax(0,1.54fr)]"
+                >
+                  <div className="bg-mist/40 px-5 py-6 sm:px-7 lg:border-e lg:border-navy-900/10">
+                    <div className="flex items-start gap-3 lg:block">
+                      <span className="grid size-10 shrink-0 place-items-center border border-blue-700/20 bg-white text-blue-700 lg:mb-6">
+                        <Globe2 aria-hidden className="size-5" strokeWidth={1.75} />
+                      </span>
                       <div>
                         <SectionTitle as="h3" id="profile-prefs" className="text-body-lg">
                           {t("prefsTitle")}
@@ -324,7 +338,9 @@ export function ProfileForm({
                         <p className="mt-1.5 text-body-sm text-navy-600">{t("prefsLead")}</p>
                       </div>
                     </div>
-                    <div className="mt-6">
+                  </div>
+                  <div className="content-start p-5 sm:p-7">
+                    <div className="max-w-[38rem]">
                       <Field name="uiLanguage" label={t("language")}>
                         {({ id, name, className, describedBy, invalid }) => (
                           <div className="relative">
@@ -349,14 +365,16 @@ export function ProfileForm({
                         )}
                       </Field>
                     </div>
-                  </section>
-                </div>
+                  </div>
+                </section>
               </div>
 
               {/* The save sits at the end of the fields it saves. */}
-              <AccountActionBar note={dirty && !state.done ? t("unsaved") : t("saveLead")}>
-                <SubmitButton label={t("save")} pendingLabel={t("saving")} />
-              </AccountActionBar>
+              <div className="px-5 pb-6 sm:px-7">
+                <AccountActionBar note={dirty && !state.done ? t("unsaved") : t("saveLead")}>
+                  <SubmitButton label={t("save")} pendingLabel={t("saving")} />
+                </AccountActionBar>
+              </div>
             </AccountPanel>
           </AccountStack>
         </div>
@@ -396,28 +414,22 @@ function PasswordPanel() {
             ) : null}
           </div>
 
-          <div className="grid border-y border-navy-900/10 lg:grid-cols-[minmax(18rem,0.72fr)_minmax(0,1.28fr)]">
-            <section className="bg-mist/70 p-5 sm:p-7 lg:border-e lg:border-navy-900/10">
-              <ShieldCheck aria-hidden className="size-8 text-blue-700" strokeWidth={1.5} />
-              <Eyebrow className="mt-7">{t("securityEyebrow")}</Eyebrow>
-              <SectionTitle as="h3" className="mt-2 text-body-lg">
+          <div className="grid border-b border-navy-900/10 lg:grid-cols-[minmax(15rem,0.56fr)_minmax(0,1.44fr)]">
+            <section className="relative overflow-hidden bg-navy-950 p-6 text-cream-50 sm:p-8 lg:border-e lg:border-navy-900/10">
+              <span aria-hidden className="absolute end-0 top-0 size-28 translate-x-1/2 -translate-y-1/2 border-[1.5rem] border-white/[0.045]" />
+              <span className="grid size-11 place-items-center border border-cream-50/20 bg-white/[0.04] text-gold">
+                <ShieldCheck aria-hidden className="size-6" strokeWidth={1.5} />
+              </span>
+              <Eyebrow tone="goldOnNavy" className="mt-8">{t("securityEyebrow")}</Eyebrow>
+              <SectionTitle as="h3" className="mt-2 text-body-lg text-cream-50">
                 {t("confirmIdentityTitle")}
               </SectionTitle>
-              <p className="mt-2 max-w-[42ch] text-body-sm text-navy-600">
+              <p className="mt-2 max-w-[38ch] text-body-sm text-cream-200/75">
                 {t("currentPasswordLead")}
               </p>
-              <div className="mt-6 max-w-[28rem]">
-              <PasswordField
-                name="currentPassword"
-                label={tAuth("currentPassword")}
-                autoComplete="current-password"
-                required
-                error={err("currentPassword")}
-              />
-              </div>
             </section>
 
-            <section className="p-5 sm:p-7">
+            <section className="p-5 sm:p-7 lg:p-8">
               <Eyebrow>{t("newPasswordEyebrow")}</Eyebrow>
               <SectionTitle as="h3" className="mt-2 text-body-lg">
                 {t("newPasswordTitle")}
@@ -425,30 +437,37 @@ function PasswordPanel() {
               <p className="mt-2 max-w-[54ch] text-body-sm text-navy-600">
                 {t("newPasswordLead")}
               </p>
-              <div className="mt-6 grid gap-5 sm:grid-cols-2">
-              <PasswordField
-                name="newPassword"
-                label={tAuth("newPassword")}
-                autoComplete="new-password"
-                hint={tAuth("passwordHint")}
-                required
-                error={err("newPassword")}
-              />
-              <PasswordField
-                name="confirmPassword"
-                label={tAuth("confirmPassword")}
-                autoComplete="new-password"
-                required
-                error={err("confirmPassword")}
-              />
+              <div className="mt-7 grid items-start gap-5 xl:grid-cols-[minmax(13rem,0.78fr)_minmax(0,1fr)_minmax(0,1fr)]">
+                <div className="border-s-2 border-blue-700 bg-mist/65 p-4">
+                  <PasswordField
+                    name="currentPassword"
+                    label={tAuth("currentPassword")}
+                    autoComplete="current-password"
+                    required
+                    error={err("currentPassword")}
+                  />
+                </div>
+                <PasswordField
+                  name="newPassword"
+                  label={tAuth("newPassword")}
+                  autoComplete="new-password"
+                  hint={tAuth("passwordHint")}
+                  required
+                  error={err("newPassword")}
+                />
+                <PasswordField
+                  name="confirmPassword"
+                  label={tAuth("confirmPassword")}
+                  autoComplete="new-password"
+                  required
+                  error={err("confirmPassword")}
+                />
               </div>
-            </section>
-            </div>
 
-          <div className="px-5 pb-6 sm:px-7">
-            <AccountActionBar>
-              <SubmitButton label={t("changePassword")} pendingLabel={t("changing")} />
-            </AccountActionBar>
+              <AccountActionBar>
+                <SubmitButton label={t("changePassword")} pendingLabel={t("changing")} />
+              </AccountActionBar>
+            </section>
           </div>
         </AccountPanel>
       </div>
