@@ -34,13 +34,11 @@ const FORMAT_TONE: Record<string, string> = {
 
 export async function CollectAward({
   resultId,
-  entrySlug,
   level,
   cycleYear,
   locale,
 }: {
   resultId: string;
-  entrySlug: string;
   level: string;
   cycleYear: number;
   locale: string;
@@ -64,13 +62,14 @@ export async function CollectAward({
   ];
 
   return (
-    <details className="group w-full">
+    <details name="award-collection" className="group w-full">
       <summary
         className={cn(
-          "inline-flex h-11 w-fit cursor-pointer list-none items-center gap-2.5 px-5",
+          "relative inline-flex min-h-11 w-fit cursor-pointer list-none items-center gap-2.5 overflow-hidden px-5",
           "text-[0.875rem] font-medium transition-colors",
           "bg-navy-900 text-cream-50 hover:bg-blue-700",
           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700",
+          "after:absolute after:end-0 after:top-0 after:size-2 after:bg-gold",
         )}
       >
         <Download aria-hidden className="size-4 group-open:hidden" />
@@ -78,7 +77,7 @@ export async function CollectAward({
         <span className="hidden group-open:inline">{t("collectClose")}</span>
       </summary>
 
-      <div className="mt-5 grid gap-x-8 gap-y-7 lg:grid-cols-2">
+      <div className="mt-5 grid gap-x-8 gap-y-7 bg-mist p-4 sm:p-5 xl:grid-cols-2">
         <div className="min-w-0">
           <p
             className="mb-2.5 text-caption font-semibold uppercase tracking-[0.06em] text-navy-600"
