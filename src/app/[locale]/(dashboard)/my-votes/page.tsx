@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
-import { ExternalLink } from "lucide-react";
+import { ArrowUpRight, Check } from "lucide-react";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
 
 import { AccountShell } from "@/components/account/account-shell";
 import { EntryCover } from "@/components/account/entry-cover";
 import {
   AccountEmptyState,
-  AccountPanel,
   AccountStack,
-  CountPill,
+  Eyebrow,
+  Figure,
   ItemTitle,
   Meta,
-  StatusChip,
   accountAction,
   accountStep,
 } from "@/components/account/system";
@@ -58,13 +57,20 @@ export default async function MyVotesPage({
   setRequestLocale(locale);
   const { participant } = await requireParticipant();
 
-  const [t, format] = await Promise.all([getTranslations("votes"), getFormatter()]);
+  const [t, tPhase, format] = await Promise.all([
+    getTranslations("votes"),
+    getTranslations("cyclePhase"),
+    getFormatter(),
+  ]);
 
   const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
   const asked = Number.parseInt(one(sp.page) ?? "1", 10);
   const page = Number.isFinite(asked) && asked > 0 ? asked : 1;
 
-  const listing = await api.votes.forEmail(participant.email, { page, pageSize: PAGE_SIZE });
+  const [listing, cycle] = await Promise.all([
+    api.votes.forEmail(participant.email, { page, pageSize: PAGE_SIZE }),
+    api.cycles.getActive(),
+  ]);
 
   // The projects voted for, resolved one by one. Only the public facts.
   const rows = await Promise.all(
@@ -96,114 +102,154 @@ export default async function MyVotesPage({
 
   return (
     <AccountShell participantId={participant.id} locale={locale}>
-      {/* The page names itself once. The count is a fact about the list, not
-          a headline. */}
       <div className="account-shell pt-7 md:pt-9">
-        {/* The total sits beside the title it totals, not floated to the far
-            end of a panel header where it reads as an orphan. */}
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <div className="border-b border-navy-900/12 pb-6">
           <h1 className="font-display text-account-title text-navy-900">{t("title")}</h1>
-          {listing.total ? (
-            <CountPill>
-              {listing.total === 1 ? t("resultsOne") : t("results", { count: listing.total })}
-            </CountPill>
-          ) : null}
+          <p className="mt-1.5 max-w-[68ch] text-body-sm text-navy-600">{t("lead")}</p>
         </div>
-        <p className="mt-1.5 max-w-[68ch] text-body-sm text-navy-600">{t("lead")}</p>
       </div>
 
       <div className="account-shell pb-[var(--account-y)] pt-6">
-        <AccountStack>
-          {listing.total === 0 ? (
-            <AccountPanel>
-              <AccountEmptyState title={t("noneTitle")} body={t("noneBody")} />
-            </AccountPanel>
-          ) : (
-            /* No panel title: the page is already called My Votes, and a panel
-               repeating its own page's h1 is chrome for its own sake. The count
-               and the matching note lead the panel instead. */
-            <AccountPanel>
+        <AccountStack className="gap-6">
+          {/* The page's signature is a ballot receipt: the programme's dark
+              ground carries the current cycle, while the two facts on the end
+              keep the record useful without turning it into a KPI dashboard. */}
+          <section
+            aria-labelledby="vote-record-title"
+            className="relative overflow-hidden bg-navy-950 text-cream-50"
+          >
+            <span
+              aria-hidden
+              className="absolute start-0 top-0 h-1 w-24 bg-blue-700 after:absolute after:start-full after:top-0 after:h-1 after:w-8 after:bg-campaign-yellow"
+            />
+            <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(28rem,0.78fr)]">
+              <div className="px-6 py-8 sm:px-8 sm:py-9 lg:px-10 lg:py-10">
+                <Eyebrow tone="onNavy">{t("ballotEyebrow", { year: cycle.year })}</Eyebrow>
+                <h2
+                  id="vote-record-title"
+                  className="mt-3 max-w-[18ch] font-display text-[clamp(1.7rem,3vw,2.7rem)] leading-[1.04] text-cream-50"
+                >
+                  {t("ballotTitle")}
+                </h2>
+                <p className="mt-3 max-w-[54ch] text-body-sm text-cream-200/80">
+                  {t("ballotLead")}
+                </p>
+              </div>
 
-              {/* Horizontal records, two across.
-                  A four-column grid of 4:3 covers left two dead columns for an
-                  account with two votes, and blew each cover up to ~470px —
-                  the size at which a drawn stand-in stops looking like a work
-                  and starts looking like an artboard. A square cover at 128px
-                  is the size these read at, and a horizontal card fills the row
-                  at any number of votes. */}
-              <ul className="grid gap-4 xl:grid-cols-2">
-                {votes.map((vote) => (
-                  <li key={vote.voteId}>
-                    <div
+              <dl className="grid grid-cols-2 border-t border-cream-50/15 lg:border-s lg:border-t-0">
+                <div className="flex min-h-36 flex-col justify-end border-e border-cream-50/15 p-6 sm:p-8 lg:min-h-0">
+                  <dt className="text-caption text-cream-200/65">{t("votesRecorded")}</dt>
+                  <dd className="mt-2">
+                    <Figure size="lg" className="text-[clamp(2.4rem,5vw,4.5rem)] leading-none text-cream-50">
+                      {format.number(listing.total)}
+                    </Figure>
+                  </dd>
+                </div>
+                <div className="flex min-h-36 flex-col justify-between p-6 sm:p-8 lg:min-h-0">
+                  <div>
+                    <dt className="text-caption text-cream-200/65">{t("votingCloses")}</dt>
+                    <dd className="mt-2 font-data text-body-md tabular-nums text-cream-50">
+                      {format.dateTime(new Date(cycle.votingWindow.end), { dateStyle: "medium" })}
+                    </dd>
+                  </div>
+                  <p className="mt-6 inline-flex items-center gap-2 text-caption text-cream-200/75">
+                    <span aria-hidden className="size-1.5 bg-campaign-yellow" />
+                    {tPhase(cycle.phase)}
+                  </p>
+                </div>
+              </dl>
+            </div>
+          </section>
+
+          {listing.total === 0 ? (
+            <AccountEmptyState
+              title={t("noneTitle")}
+              body={t("noneBody")}
+              action={
+                <Link href={`/finalists/${cycle.year}`} className={accountAction.primary}>
+                  {t("exploreProjects")}
+                  <ArrowUpRight aria-hidden className="size-4 rtl:-scale-x-100" />
+                </Link>
+              }
+            />
+          ) : (
+            <section aria-label={t("galleryLabel")}>
+              <ul className="grid gap-5 xl:grid-cols-2">
+                {votes.map((vote, index) => {
+                  const cover = (
+                    <EntryCover
+                      entry={vote.entry}
+                      parentId={vote.parentId}
+                      priority={index < 2}
+                      className="aspect-[16/10] w-full transition-transform duration-300 group-hover:scale-[1.018] motion-reduce:transition-none"
+                      sizes="(max-width: 1280px) 92vw, 44vw"
+                    />
+                  );
+
+                  return (
+                    <li
+                      key={vote.voteId}
                       className={cn(
-                        "flex h-full flex-col gap-4 border border-navy-900/10 bg-mist/40 p-4",
-                        "sm:flex-row sm:gap-5",
-                        "transition-colors hover:border-navy-900/25 hover:bg-white",
+                        "group flex min-w-0 flex-col border border-navy-900/10 bg-white",
+                        "transition-colors duration-200 hover:border-navy-900/30 focus-within:border-blue-700/45",
                       )}
                     >
-                      {vote.public ? (
-                        <Link
-                          href={`/projects/${vote.slug}`}
-                          tabIndex={-1}
+                      <div className="relative overflow-hidden border-b border-navy-900/10 bg-mist">
+                        {vote.public ? (
+                          <Link href={`/projects/${vote.slug}`} tabIndex={-1} aria-hidden>
+                            {cover}
+                          </Link>
+                        ) : (
+                          cover
+                        )}
+                        <span
                           aria-hidden
-                          className="block w-full shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 sm:w-auto"
-                        >
-                          <EntryCover
-                            entry={vote.entry}
-                            parentId={vote.parentId}
-                            className="aspect-[3/2] w-full ring-1 ring-navy-900/10 sm:aspect-square sm:size-32"
-                            sizes="(max-width: 640px) 100vw, 128px"
-                          />
-                        </Link>
-                      ) : (
-                        <EntryCover
-                          entry={vote.entry}
-                          parentId={vote.parentId}
-                          className="aspect-[3/2] w-full shrink-0 ring-1 ring-navy-900/10 sm:aspect-square sm:size-32"
-                          sizes="(max-width: 640px) 100vw, 128px"
+                          className="absolute bottom-0 start-0 h-1 w-20 bg-blue-700 after:absolute after:start-full after:top-0 after:h-1 after:w-7 after:bg-campaign-yellow"
                         />
-                      )}
+                      </div>
 
-                      <div className="flex min-w-0 flex-1 flex-col">
+                      <div className="flex flex-1 flex-col p-5 sm:p-6">
+                        <Meta className="block">{vote.category}</Meta>
                         {vote.public ? (
                           <Link
                             href={`/projects/${vote.slug}`}
-                            className="min-w-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                            className="mt-2 w-fit focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
                           >
                             <ItemTitle className="transition-colors hover:text-blue-700">
                               {vote.title}
                             </ItemTitle>
                           </Link>
                         ) : (
-                          <ItemTitle>{vote.title}</ItemTitle>
+                          <ItemTitle className="mt-2">{vote.title}</ItemTitle>
                         )}
-                        <p className="mt-1 truncate text-body-sm text-navy-700">{vote.maker}</p>
-                        <Meta className="mt-0.5 block truncate">{vote.category}</Meta>
 
-                        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-4">
-                          <StatusChip
-                            tone="good"
-                            className="min-w-0 whitespace-normal"
-                            label={`${t("castAt")} ${format.dateTime(new Date(vote.castAt), {
-                              dateStyle: "medium",
-                            })}`}
-                          />
+                        <dl className="mt-5 border-t border-navy-900/10 pt-4">
+                          <div className="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-1">
+                            <dt className="text-caption text-navy-600">{t("entity")}</dt>
+                            <dd className="text-body-sm font-medium text-navy-900">{vote.maker}</dd>
+                          </div>
+                        </dl>
+
+                        <div className="mt-auto flex flex-col gap-4 pt-5 sm:flex-row sm:items-center sm:justify-between">
+                          <p className="inline-flex items-center gap-2 text-caption text-navy-600">
+                            <span className="inline-flex size-5 items-center justify-center bg-blue-700/8 text-blue-800">
+                              <Check aria-hidden className="size-3.5" strokeWidth={2.2} />
+                            </span>
+                            {t("castAt")} {format.dateTime(new Date(vote.castAt), { dateStyle: "medium" })}
+                          </p>
                           {vote.public ? (
-                            <Link
-                              href={`/projects/${vote.slug}`}
-                              className={cn(accountAction.quiet, "gap-1.5")}
-                            >
+                            <Link href={`/projects/${vote.slug}`} className={accountAction.secondary}>
                               {t("viewProject")}
-                              <ExternalLink aria-hidden className="size-3.5" />
+                              <ArrowUpRight aria-hidden className="size-4 rtl:-scale-x-100" />
                             </Link>
                           ) : null}
                         </div>
                       </div>
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  );
+                })}
               </ul>
-            </AccountPanel>
+            </section>
           )}
 
           {listing.pages > 1 ? (
