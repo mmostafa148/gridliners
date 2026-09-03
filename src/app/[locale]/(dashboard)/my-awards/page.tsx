@@ -119,16 +119,21 @@ export default async function MyAwardsPage({ params }: { params: Promise<{ local
                             return (
                               <article
                                 key={award.resultId}
-                                className="relative grid overflow-hidden border border-navy-900/15 bg-white lg:grid-cols-[minmax(18rem,36%)_1fr]"
+                                className="relative grid border border-navy-900/15 bg-white lg:grid-cols-[42%_58%] xl:grid-cols-2"
                               >
                                 <span aria-hidden className={cn("absolute inset-x-0 top-0 z-10 h-1", LEVEL_RAIL[award.level])} />
-                                <div className={cn("relative min-h-60 bg-navy-900/8 sm:min-h-72 lg:min-h-[23rem]", reverse && "lg:order-2")}>
+                                <div
+                                  className={cn(
+                                    "relative min-h-60 bg-navy-900/8 sm:min-h-72 lg:row-start-1 lg:min-h-[23rem]",
+                                    reverse ? "lg:col-start-2" : "lg:col-start-1",
+                                  )}
+                                >
                                   {entry ? (
                                     <EntryCover
                                       entry={entry}
                                       parentId={parentOf.get(entry.baseSubCategoryId) ?? ""}
                                       className="absolute inset-0 size-full"
-                                      sizes="(min-width: 1024px) 36vw, 100vw"
+                                      sizes="(min-width: 1280px) 50vw, (min-width: 1024px) 42vw, 100vw"
                                       priority={year === awardYears[0] && index === 0}
                                     />
                                   ) : null}
@@ -140,7 +145,12 @@ export default async function MyAwardsPage({ params }: { params: Promise<{ local
                                   />
                                 </div>
 
-                                <div className="flex min-w-0 flex-col p-6 sm:p-8 lg:p-10">
+                                <div
+                                  className={cn(
+                                    "flex min-w-0 flex-col p-6 sm:p-8 lg:row-start-1 lg:p-10",
+                                    reverse ? "lg:col-start-1" : "lg:col-start-2",
+                                  )}
+                                >
                                   <Eyebrow tone="gold">{tLevel(award.level)}</Eyebrow>
                                   <h4 className="mt-2 max-w-[22ch] font-display text-[clamp(1.75rem,3vw,3rem)] font-semibold leading-[1.02] text-navy-950">
                                     {award.entryTitle}
@@ -150,19 +160,19 @@ export default async function MyAwardsPage({ params }: { params: Promise<{ local
                                     {tTier(award.tier as "students")} · {award.entryId}
                                   </p>
 
-                                  <div className="mt-8 border-t border-navy-900/12 pt-5 lg:mt-auto">
-                                    <CollectAward
-                                      resultId={award.resultId}
-                                      level={award.level}
-                                      cycleYear={award.cycleYear}
-                                      locale={locale}
-                                    />
-                                    <nav aria-label={award.entryTitle} className="mt-5 flex flex-wrap gap-x-6 gap-y-3">
-                                      <Link href={`/awards/${award.resultId}`} className={accountAction.quiet}>{t("publicPage")}</Link>
-                                      <Link href={`/projects/${award.entrySlug}`} className={accountAction.quiet}>{t("viewWork")}</Link>
-                                    </nav>
-                                  </div>
+                                  <nav aria-label={award.entryTitle} className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-t border-navy-900/12 pt-5 lg:mt-auto">
+                                    <Link href={`/awards/${award.resultId}`} className={accountAction.quiet}>{t("publicPage")}</Link>
+                                    <Link href={`/projects/${award.entrySlug}`} className={accountAction.quiet}>{t("viewWork")}</Link>
+                                  </nav>
                                 </div>
+
+                                <CollectAward
+                                  resultId={award.resultId}
+                                  level={award.level}
+                                  cycleYear={award.cycleYear}
+                                  locale={locale}
+                                  contentSide={reverse ? "start" : "end"}
+                                />
                               </article>
                             );
                           })}

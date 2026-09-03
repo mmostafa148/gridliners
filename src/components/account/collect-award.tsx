@@ -37,11 +37,13 @@ export async function CollectAward({
   level,
   cycleYear,
   locale,
+  contentSide,
 }: {
   resultId: string;
   level: string;
   cycleYear: number;
   locale: string;
+  contentSide: "start" | "end";
 }) {
   const t = await getTranslations("awards");
 
@@ -62,7 +64,10 @@ export async function CollectAward({
   ];
 
   return (
-    <details name="award-collection" className="group w-full">
+    <details
+      name="award-collection"
+      className="group w-full border-t border-navy-900/12 pb-6 pt-5 sm:pb-8 lg:col-span-2 lg:row-start-2"
+    >
       <summary
         className={cn(
           "relative inline-flex min-h-11 w-fit cursor-pointer list-none items-center gap-2.5 overflow-hidden px-5",
@@ -70,6 +75,10 @@ export async function CollectAward({
           "bg-navy-900 text-cream-50 hover:bg-blue-700",
           "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700",
           "after:absolute after:end-0 after:top-0 after:size-2 after:bg-gold",
+          "ms-6 sm:ms-8",
+          contentSide === "end"
+            ? "lg:ms-[calc(42%+2.5rem)] xl:ms-[calc(50%+2.5rem)]"
+            : "lg:ms-10",
         )}
       >
         <Download aria-hidden className="size-4 group-open:hidden" />
@@ -77,7 +86,7 @@ export async function CollectAward({
         <span className="hidden group-open:inline">{t("collectClose")}</span>
       </summary>
 
-      <div className="mt-5 grid gap-x-8 gap-y-7 bg-mist p-4 sm:p-5 xl:grid-cols-2">
+      <div className="mx-6 mt-5 grid gap-x-8 gap-y-7 bg-mist p-4 sm:mx-8 sm:p-5 lg:mx-10 xl:grid-cols-2">
         <div className="min-w-0">
           <p
             className="mb-2.5 text-caption font-semibold uppercase tracking-[0.06em] text-navy-600"
