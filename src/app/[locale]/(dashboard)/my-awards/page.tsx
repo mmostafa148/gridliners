@@ -112,14 +112,14 @@ export default async function MyAwardsPage({ params }: { params: Promise<{ local
                           <Meta>{t("awardsInYear", { count: yearAwards.length })}</Meta>
                         </header>
 
-                        <div className="border-y border-navy-900/15">
+                        <div className="space-y-4 sm:space-y-5">
                           {yearAwards.map((award, index) => {
                             const entry = entryById.get(award.entryId);
                             const reverse = index % 2 === 1;
                             return (
                               <article
                                 key={award.resultId}
-                                className="relative grid overflow-hidden border-b border-navy-900/15 bg-white last:border-b-0 lg:grid-cols-[minmax(18rem,36%)_1fr]"
+                                className="relative grid overflow-hidden border border-navy-900/15 bg-white lg:grid-cols-[minmax(18rem,36%)_1fr]"
                               >
                                 <span aria-hidden className={cn("absolute inset-x-0 top-0 z-10 h-1", LEVEL_RAIL[award.level])} />
                                 <div className={cn("relative min-h-60 bg-navy-900/8 sm:min-h-72 lg:min-h-[23rem]", reverse && "lg:order-2")}>
@@ -175,16 +175,16 @@ export default async function MyAwardsPage({ params }: { params: Promise<{ local
             ) : null}
 
             {finalists.length ? (
-              <section aria-labelledby="finalist-recognition-title" className="bg-white">
-                <header className="border-b border-navy-900/12 px-5 py-5 sm:px-7">
+              <section aria-labelledby="finalist-recognition-title">
+                <header className="border border-navy-900/12 bg-white px-5 py-5 sm:px-7">
                   <Eyebrow>{t("finalistTitle")}</Eyebrow>
                   <h2 id="finalist-recognition-title" className="mt-1.5 font-display text-account-section text-navy-950">{t("recognitionTitle")}</h2>
                   <p className="mt-1.5 text-body-sm text-navy-600">{t("finalistLead")}</p>
                 </header>
 
-                <ul className="grid sm:grid-cols-2 xl:grid-cols-3">
+                <ul className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                   {finalists.map((entry) => (
-                    <li key={entry.id} className="group relative border-b border-navy-900/10 p-5 sm:border-e sm:p-6 sm:[&:nth-child(2n)]:border-e-0 xl:[&:nth-child(2n)]:border-e xl:[&:nth-child(3n)]:border-e-0">
+                    <li key={entry.id} className="group relative border border-navy-900/12 bg-white p-5 sm:p-6">
                       <span aria-hidden className="absolute inset-x-0 top-0 h-1 origin-start scale-x-0 bg-blue-700 transition-transform group-hover:scale-x-100 group-focus-within:scale-x-100 motion-reduce:transition-none" />
                       <div className="flex gap-4">
                         <EntryCover
