@@ -1,5 +1,6 @@
 "use client";
 
+import { Camera, Globe2, MapPin, ShieldCheck, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 
@@ -14,7 +15,7 @@ import {
 import {
   AccountPanel,
   AccountStack,
-  Meta,
+  Eyebrow,
   SectionTitle,
   accountAction,
 } from "@/components/account/system";
@@ -71,55 +72,70 @@ export function ProfileForm({
       <form action={action} noValidate onChange={() => setDirty(true)}>
         <div className="account-shell pb-5 pt-6">
           <AccountStack>
-            {/* ---- who this account belongs to ------------------------- */}
-            <AccountPanel>
-              <div className="flex flex-col gap-7 sm:flex-row sm:items-start sm:gap-9">
-                {/* The preview is the control's feedback. A file picker with no
-                    preview asks somebody to trust the right file was chosen. */}
-                <span className="relative block size-28 shrink-0 overflow-hidden bg-navy-900/8">
-                  {photo && !removePhoto ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={photo} alt="" className="absolute inset-0 size-full object-cover" />
-                  ) : (
-                    <span className="absolute inset-0 grid place-items-center">
-                      <Meta>{t("unset")}</Meta>
-                    </span>
-                  )}
-                </span>
+            {/* The stable account identity is the cover of the dossier. */}
+            <section
+              aria-labelledby="profile-dossier-title"
+              className="relative overflow-hidden bg-navy-950 text-cream-50"
+            >
+              <span aria-hidden className="absolute inset-x-0 top-0 flex h-1">
+                <span className="w-24 bg-blue-700" />
+                <span className="w-8 bg-gold" />
+              </span>
+              <span
+                aria-hidden
+                className="absolute end-0 top-0 hidden size-56 translate-x-1/3 -translate-y-1/3 border-[3rem] border-white/[0.035] lg:block"
+              />
 
-                <input type="hidden" name="photoUrl" value={removePhoto ? "" : (photo ?? "")} />
-                <input type="hidden" name="removePhoto" value={removePhoto ? "1" : "0"} />
+              <div className="grid min-w-0 lg:grid-cols-[15rem_minmax(0,1fr)]">
+                <div className="relative min-h-60 bg-cream-100/6 p-6 sm:p-8 lg:min-h-full lg:border-e lg:border-cream-50/12">
+                  <span className="relative block aspect-square w-36 overflow-hidden bg-cream-50 sm:w-44 lg:w-full">
+                    {photo && !removePhoto ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={photo} alt="" className="absolute inset-0 size-full object-cover" />
+                    ) : (
+                      <span className="absolute inset-0 grid place-items-center text-navy-600">
+                        <UserRound aria-hidden className="size-12" strokeWidth={1.25} />
+                        <span className="sr-only">{t("unset")}</span>
+                      </span>
+                    )}
+                  </span>
+                  <span aria-hidden className="absolute bottom-0 end-0 size-8 bg-gold" />
+                </div>
 
-                <div className="flex min-w-0 flex-1 flex-col gap-5">
-                  <div className="min-w-0">
-                    <p className="font-display text-account-section text-navy-900">
-                      {participant.name}
-                    </p>
-                    <p className="mt-1 text-body-sm text-navy-600">
-                      {[participant.jobTitle, participant.companyName].filter(Boolean).join(", ")}
-                    </p>
-                  </div>
+                <div className="relative z-10 p-6 sm:p-8 lg:p-10">
+                  <Eyebrow tone="goldOnNavy">{t("identityEyebrow")}</Eyebrow>
+                  <h2
+                    id="profile-dossier-title"
+                    className="mt-4 max-w-[18ch] font-display text-account-title leading-[1.04] text-cream-50"
+                  >
+                    {participant.name}
+                  </h2>
+                  <p className="mt-2 max-w-[54ch] text-body-md text-cream-200/80">
+                    {[participant.jobTitle, participant.companyName].filter(Boolean).join(" · ") ||
+                      t("identityFallback")}
+                  </p>
 
-                  {/* Facts the participant does not edit here, beside the
-                      picture rather than stranded in a column of their own. */}
-                  <dl className="flex flex-wrap gap-x-12 gap-y-4">
-                    {facts.map((f) => (
-                      <div key={f.label} className="flex flex-col gap-1">
-                        <dt className="text-caption text-navy-600">{f.label}</dt>
-                        <dd className="font-data text-body-sm tabular-nums text-navy-900">
-                          {f.value}
+                  <dl className="mt-8 grid max-w-[46rem] gap-x-12 gap-y-5 border-t border-cream-50/15 pt-6 sm:grid-cols-2">
+                    {facts.map((fact) => (
+                      <div key={fact.label} className="min-w-0">
+                        <dt className="text-caption text-cream-200/65">{fact.label}</dt>
+                        <dd className="mt-1 font-data text-body-sm tabular-nums text-cream-50 [overflow-wrap:anywhere]">
+                          {fact.value}
                         </dd>
                       </div>
                     ))}
                   </dl>
 
-                  <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+                  <input type="hidden" name="photoUrl" value={removePhoto ? "" : (photo ?? "")} />
+                  <input type="hidden" name="removePhoto" value={removePhoto ? "1" : "0"} />
+                  <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
                     <label
                       className={cn(
-                        accountAction.secondary,
-                        "cursor-pointer focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue-700",
+                        accountAction.onNavy,
+                        "cursor-pointer focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-cream-100",
                       )}
                     >
+                      <Camera aria-hidden className="size-4" strokeWidth={1.75} />
                       {t("choosePhoto")}
                       <input
                         type="file"
@@ -128,9 +144,6 @@ export function ProfileForm({
                         onChange={(event) => {
                           const file = event.target.files?.[0];
                           if (!file) return;
-                          // Held as a data URL in this browser: there is no file
-                          // storage in this build and the panel does not pretend
-                          // otherwise. It previews, and it saves the reference.
                           const reader = new FileReader();
                           reader.onload = () => {
                             setPhoto(String(reader.result));
@@ -148,19 +161,21 @@ export function ProfileForm({
                           setRemovePhoto(true);
                           setDirty(true);
                         }}
-                        className={accountAction.quiet}
+                        className={accountAction.onNavyQuiet}
                       >
                         {t("removePhoto")}
                       </button>
                     ) : null}
-                    <Meta>{t("photoHint")}</Meta>
+                    <span className="basis-full text-caption text-cream-200/65 sm:basis-auto">
+                      {t("photoHint")}
+                    </span>
                   </div>
                 </div>
               </div>
-            </AccountPanel>
+            </section>
 
             {/* ---- the editable record --------------------------------- */}
-            <AccountPanel title={t("accountTitle")}>
+            <AccountPanel title={t("accountTitle")} lead={t("accountLead")}>
               {state.error && !state.done ? (
                 <div className="mb-7">
                   <ErrorSummary
@@ -175,18 +190,23 @@ export function ProfileForm({
                 </div>
               ) : null}
 
-              {/* Two columns of groups, not one column of very wide fields.
-                  A name input at 750px is not a form, and a lone language
-                  select in a row of its own reads as a missing pair. */}
-              <div className="grid gap-x-14 gap-y-10 lg:grid-cols-2">
-                <section aria-labelledby="profile-identity" className="min-w-0">
-                  <SectionTitle as="h3" id="profile-identity" className="text-body-lg">
-                    {t("identityTitle")}
-                  </SectionTitle>
-                  <p className="mt-1.5 max-w-[46ch] text-body-sm text-navy-600">
-                    {t("identityLead")}
-                  </p>
-                  <div className="mt-6 flex max-w-[30rem] flex-col gap-5">
+              <div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1.12fr)_minmax(22rem,0.88fr)]">
+                <section
+                  aria-labelledby="profile-identity"
+                  className="min-w-0 border-s-2 border-blue-700 bg-mist/45 p-5 sm:p-7"
+                >
+                  <div className="flex items-start gap-3">
+                    <UserRound aria-hidden className="mt-0.5 size-5 shrink-0 text-blue-700" strokeWidth={1.75} />
+                    <div>
+                      <SectionTitle as="h3" id="profile-identity" className="text-body-lg">
+                        {t("identityTitle")}
+                      </SectionTitle>
+                      <p className="mt-1.5 max-w-[46ch] text-body-sm text-navy-600">
+                        {t("identityLead")}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-6 grid gap-5 sm:grid-cols-2">
                     <Field
                       name="name"
                       label={t("name")}
@@ -221,18 +241,26 @@ export function ProfileForm({
                   </div>
                 </section>
 
-                <div className="flex min-w-0 flex-col gap-10">
+                <div className="flex min-w-0 flex-col gap-8 border border-navy-900/10 p-5 sm:p-7">
                   <section aria-labelledby="profile-place" className="min-w-0">
-                    <SectionTitle as="h3" id="profile-place" className="text-body-lg">
-                      {t("placeTitle")}
-                    </SectionTitle>
-                    <div className="mt-6 flex max-w-[30rem] flex-col gap-5">
+                    <div className="flex items-start gap-3">
+                      <MapPin aria-hidden className="mt-0.5 size-5 shrink-0 text-blue-700" strokeWidth={1.75} />
+                      <div>
+                        <SectionTitle as="h3" id="profile-place" className="text-body-lg">
+                          {t("placeTitle")}
+                        </SectionTitle>
+                        <p className="mt-1.5 text-body-sm text-navy-600">{t("placeLead")}</p>
+                      </div>
+                    </div>
+                    <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
                       <Field name="nationality" label={t("nationality")}>
-                        {({ id, name, className }) => (
+                        {({ id, name, className, describedBy, invalid }) => (
                           <select
                             id={id}
                             name={name}
                             data-field={name}
+                            aria-describedby={describedBy}
+                            aria-invalid={invalid || undefined}
                             defaultValue={initial("nationality", participant.nationality ?? "")}
                             className={cn(className, "appearance-none bg-white")}
                           >
@@ -246,11 +274,13 @@ export function ProfileForm({
                         )}
                       </Field>
                       <Field name="country" label={t("country")}>
-                        {({ id, name, className }) => (
+                        {({ id, name, className, describedBy, invalid }) => (
                           <select
                             id={id}
                             name={name}
                             data-field={name}
+                            aria-describedby={describedBy}
+                            aria-invalid={invalid || undefined}
                             autoComplete="country"
                             defaultValue={initial("country", participant.country)}
                             className={cn(className, "appearance-none bg-white")}
@@ -269,18 +299,26 @@ export function ProfileForm({
 
                   <section
                     aria-labelledby="profile-prefs"
-                    className="min-w-0 border-t border-navy-900/10 pt-9"
+                    className="min-w-0 border-t border-navy-900/10 pt-7"
                   >
-                    <SectionTitle as="h3" id="profile-prefs" className="text-body-lg">
-                      {t("prefsTitle")}
-                    </SectionTitle>
-                    <div className="mt-6 max-w-[30rem]">
+                    <div className="flex items-start gap-3">
+                      <Globe2 aria-hidden className="mt-0.5 size-5 shrink-0 text-blue-700" strokeWidth={1.75} />
+                      <div>
+                        <SectionTitle as="h3" id="profile-prefs" className="text-body-lg">
+                          {t("prefsTitle")}
+                        </SectionTitle>
+                        <p className="mt-1.5 text-body-sm text-navy-600">{t("prefsLead")}</p>
+                      </div>
+                    </div>
+                    <div className="mt-6">
                       <Field name="uiLanguage" label={t("language")}>
-                        {({ id, name, className }) => (
+                        {({ id, name, className, describedBy, invalid }) => (
                           <select
                             id={id}
                             name={name}
                             data-field={name}
+                            aria-describedby={describedBy}
+                            aria-invalid={invalid || undefined}
                             defaultValue={initial("uiLanguage", participant.uiLanguage)}
                             className={cn(className, "appearance-none bg-white")}
                           >
@@ -295,7 +333,7 @@ export function ProfileForm({
               </div>
 
               {/* The save sits at the end of the fields it saves. */}
-              <AccountActionBar note={dirty && !state.done ? t("unsaved") : ""}>
+              <AccountActionBar note={dirty && !state.done ? t("unsaved") : t("saveLead")}>
                 <SubmitButton label={t("save")} pendingLabel={t("saving")} />
               </AccountActionBar>
             </AccountPanel>
@@ -320,11 +358,10 @@ function PasswordPanel() {
   return (
     <form action={action} noValidate>
       <div className="account-shell pb-[var(--account-y)]">
-        <AccountPanel title={t("passwordTitle")} lead={t("securityLead")}>
-          <div>
-
+        <AccountPanel title={t("passwordTitle")} lead={t("securityLead")} padded={false}>
+          <div className="px-5 pt-6 sm:px-7">
             {state.error ? (
-              <div className="mb-7">
+              <div className="mb-6">
                 <ErrorSummary
                   title={t("passwordTitle")}
                   items={[{ field: state.field, message: tAuth(`errors.${state.error}`) }]}
@@ -332,15 +369,23 @@ function PasswordPanel() {
               </div>
             ) : null}
             {state.done ? (
-              <div className="mb-7">
+              <div className="mb-6">
                 <SuccessNote>{t("passwordChanged")}</SuccessNote>
               </div>
             ) : null}
+          </div>
 
-            {/* Three columns across the panel, so the security task has the
-                same width as the details above it rather than hugging a third
-                of the panel and leaving the rest empty. */}
-            <div className="grid max-w-[62rem] gap-x-10 gap-y-6 md:grid-cols-3">
+          <div className="grid border-y border-navy-900/10 lg:grid-cols-[minmax(18rem,0.72fr)_minmax(0,1.28fr)]">
+            <section className="bg-mist/70 p-5 sm:p-7 lg:border-e lg:border-navy-900/10">
+              <ShieldCheck aria-hidden className="size-8 text-blue-700" strokeWidth={1.5} />
+              <Eyebrow className="mt-7">{t("securityEyebrow")}</Eyebrow>
+              <SectionTitle as="h3" className="mt-2 text-body-lg">
+                {t("confirmIdentityTitle")}
+              </SectionTitle>
+              <p className="mt-2 max-w-[42ch] text-body-sm text-navy-600">
+                {t("currentPasswordLead")}
+              </p>
+              <div className="mt-6 max-w-[28rem]">
               <PasswordField
                 name="currentPassword"
                 label={tAuth("currentPassword")}
@@ -348,6 +393,18 @@ function PasswordPanel() {
                 required
                 error={err("currentPassword")}
               />
+              </div>
+            </section>
+
+            <section className="p-5 sm:p-7">
+              <Eyebrow>{t("newPasswordEyebrow")}</Eyebrow>
+              <SectionTitle as="h3" className="mt-2 text-body-lg">
+                {t("newPasswordTitle")}
+              </SectionTitle>
+              <p className="mt-2 max-w-[54ch] text-body-sm text-navy-600">
+                {t("newPasswordLead")}
+              </p>
+              <div className="mt-6 grid gap-5 sm:grid-cols-2">
               <PasswordField
                 name="newPassword"
                 label={tAuth("newPassword")}
@@ -363,8 +420,11 @@ function PasswordPanel() {
                 required
                 error={err("confirmPassword")}
               />
+              </div>
+            </section>
             </div>
 
+          <div className="px-5 pb-6 sm:px-7">
             <AccountActionBar>
               <SubmitButton label={t("changePassword")} pendingLabel={t("changing")} />
             </AccountActionBar>

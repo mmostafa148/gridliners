@@ -35,8 +35,11 @@ export default async function ProfilePage({
   return (
     <AccountShell participantId={participant.id} locale={locale}>
       <div className="account-shell pt-7 md:pt-9">
-        <h1 className="font-display text-account-title text-navy-900">{t("title")}</h1>
-        <p className="mt-1.5 max-w-[68ch] text-body-sm text-navy-600">{t("lead")}</p>
+        <div className="border-s-2 border-blue-700 ps-5">
+          <p className="font-display text-overline uppercase text-blue-700">{t("pageEyebrow")}</p>
+          <h1 className="mt-2 font-display text-account-title text-navy-900">{t("title")}</h1>
+          <p className="mt-1.5 max-w-[68ch] text-body-sm text-navy-600">{t("lead")}</p>
+        </div>
       </div>
 
       <ProfileForm
