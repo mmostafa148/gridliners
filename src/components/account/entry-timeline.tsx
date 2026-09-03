@@ -23,11 +23,13 @@ export async function EntryTimeline({
   cycle,
   results,
   locale,
+  layout = "vertical",
 }: {
   entry: Entry;
   cycle: Cycle | null;
   results: GroupResult[];
   locale: Locale;
+  layout?: "vertical" | "horizontal";
 }) {
   const [t, format] = await Promise.all([getTranslations("entry"), getFormatter()]);
   void locale;
@@ -82,21 +84,46 @@ export async function EntryTimeline({
   }
 
   return (
-    <ol className="flex flex-col">
+    <ol className={cn("flex flex-col", layout === "horizontal" && "xl:flex-row")}>
       {steps.map((step, i) => (
-        <li key={step.key} className="flex gap-4">
+        <li
+          key={step.key}
+          className={cn(
+            "flex gap-4",
+            layout === "horizontal" && "xl:min-w-0 xl:flex-1 xl:flex-col xl:gap-3",
+          )}
+        >
           {/* The rail: a filled pixel for what has happened, hollow for what
               has not, and a hairline joining them. */}
-          <span aria-hidden className="flex w-2.5 shrink-0 flex-col items-center">
+          <span
+            aria-hidden
+            className={cn(
+              "flex w-2.5 shrink-0 flex-col items-center",
+              layout === "horizontal" && "xl:h-2.5 xl:w-full xl:flex-row",
+            )}
+          >
             <span
               className={cn(
                 "mt-2 size-2.5 shrink-0",
                 step.done ? "bg-blue-700" : "border border-navy-900/35 bg-white",
               )}
             />
-            {i < steps.length - 1 ? <span className="w-px flex-1 bg-navy-900/15" /> : null}
+            {i < steps.length - 1 ? (
+              <span
+                className={cn(
+                  "w-px flex-1 bg-navy-900/15",
+                  layout === "horizontal" && "xl:h-px xl:w-auto",
+                )}
+              />
+            ) : null}
           </span>
-          <div className={cn("flex min-w-0 flex-1 flex-col gap-1", i < steps.length - 1 && "pb-7")}>
+          <div
+            className={cn(
+              "flex min-w-0 flex-1 flex-col gap-1",
+              i < steps.length - 1 && "pb-7",
+              layout === "horizontal" && "xl:pe-4 xl:pb-0",
+            )}
+          >
             <span
               className={cn(
                 "text-body-md",

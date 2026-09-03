@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { ArrowLeft, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink, FileText, ImageIcon, Images, Video } from "lucide-react";
 import { getFormatter, getTranslations, setRequestLocale } from "next-intl/server";
+import { Fragment } from "react";
 
 import { CopyLink } from "@/components/account/copy-link";
 import { AccountShell } from "@/components/account/account-shell";
@@ -107,6 +108,11 @@ export default async function EntryDetailPage({
   const correction = entry.verification?.corrections?.at(-1) ?? null;
   const settlement = entry.verification?.settlement ?? null;
   const cash = payments.find((p) => p.method === "cash" && p.status === "pending");
+  const assetCount =
+    (entry.media.coverUrl ? 1 : 0) +
+    entry.media.galleryUrls.length +
+    entry.media.documentUrls.length +
+    (entry.media.videoUrl ? 1 : 0);
   const myResults = published.filter(
     (r) => r.entryId === entry.id && !r.withheld && r.level !== "did_not_place",
   );
@@ -120,52 +126,116 @@ export default async function EntryDetailPage({
     format.dateTime(new Date(v), { dateStyle: "medium", timeStyle: "short" });
 
   /**
-   * A block at the head of the page: something this state needs said.
-   *
-   * **A named block on a ground, not a bordered white box.** §49 rejected the
-   * repeated card; what survives is the one thing a coloured edge is genuinely
-   * for - marking which of these is urgent - carried on a single start edge
-   * rather than on four sides.
+   * Every state speaks through the same docket. Urgent work uses the dark
+   * institutional ground; quieter states keep the same geometry on paper.
+   * The repeated shape lets the content change without making the page feel
+   * like a different product every time an entry advances.
    */
-  const stateBlock = (
-    tone: "urgent" | "good" | "quiet",
-    title: string,
-    body: React.ReactNode,
-  ) => (
-    <section
-      className={cn(
-        "border-s-2 ps-5",
-        tone === "urgent" && "border-campaign-orange",
-        tone === "good" && "border-blue-700",
-        tone === "quiet" && "border-navy-900/25",
-      )}
-    >
-      <ItemTitle className={cn("mb-2", tone === "urgent" && "text-destructive-ink")}>{title}</ItemTitle>
-      {body}
-    </section>
-  );
+  const stateDocket = ({
+    tone,
+    eyebrow,
+    title,
+    body,
+    actions,
+    aside,
+    note,
+  }: {
+    tone: "urgent" | "good" | "quiet";
+    eyebrow: string;
+    title: string;
+    body: React.ReactNode;
+    actions?: React.ReactNode;
+    aside?: React.ReactNode;
+    note?: React.ReactNode;
+  }) => {
+    const onNavy = tone === "urgent";
 
-  const cashPaymentPanel = cash ? (
-    <section
-      aria-labelledby="cash-payment-title"
-      className="relative overflow-hidden bg-navy-950 text-cream-50"
-    >
-      <span aria-hidden className="absolute inset-y-0 start-0 w-1 bg-gold" />
+    return (
+      <section
+        className={cn(
+          "relative overflow-hidden border",
+          onNavy
+            ? "border-navy-950 bg-navy-950 text-cream-50"
+            : tone === "good"
+              ? "border-blue-700/25 bg-white"
+              : "border-navy-900/12 bg-white",
+        )}
+      >
+        <span
+          aria-hidden
+          className={cn(
+            "absolute inset-y-0 start-0 w-1",
+            tone === "urgent" && "bg-gold",
+            tone === "good" && "bg-blue-700",
+            tone === "quiet" && "bg-navy-400",
+          )}
+        />
 
-      <div className="grid lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <div className="px-6 py-7 sm:px-8 sm:py-9 lg:px-10">
-          <Eyebrow tone="goldOnNavy">{t("paymentEyebrow")}</Eyebrow>
-          <h2
-            id="cash-payment-title"
-            className="mt-2 font-display text-account-section text-cream-50"
+        <div
+          className={cn(
+            "grid",
+            aside && "lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.48fr)]",
+          )}
+        >
+          <div className="px-6 py-7 sm:px-8 lg:px-9 lg:py-8">
+            <Eyebrow tone={onNavy ? "goldOnNavy" : tone === "good" ? "blue" : "quiet"}>
+              {eyebrow}
+            </Eyebrow>
+            <h2
+              className={cn(
+                "mt-2 font-display text-account-section",
+                onNavy ? "text-cream-50" : "text-navy-950",
+              )}
+            >
+              {title}
+            </h2>
+            <div
+              className={cn(
+                "mt-2.5 max-w-[62ch] text-body-md leading-relaxed",
+                onNavy ? "text-cream-200/85" : "text-navy-700",
+              )}
+            >
+              {body}
+            </div>
+            {actions ? <div className="mt-6 flex flex-wrap items-center gap-3">{actions}</div> : null}
+          </div>
+
+          {aside ? (
+            <aside
+              className={cn(
+                "border-t px-6 py-6 sm:px-8 lg:border-s lg:border-t-0 lg:px-8 lg:py-8",
+                onNavy
+                  ? "border-cream-100/15 bg-cream-50/[0.04]"
+                  : "border-navy-900/10 bg-navy-50/65",
+              )}
+            >
+              {aside}
+            </aside>
+          ) : null}
+        </div>
+
+        {note ? (
+          <div
+            className={cn(
+              "border-t px-6 py-3.5 sm:px-8 lg:px-9",
+              onNavy ? "border-cream-100/15" : "border-navy-900/10 bg-navy-50/45",
+            )}
           >
-            {t("cashTitle")}
-          </h2>
-          <p className="mt-3 max-w-[58ch] text-body-md leading-relaxed text-cream-200/85">
-            {t("cashBody")}
-          </p>
+            {note}
+          </div>
+        ) : null}
+      </section>
+    );
+  };
 
-          <div className="mt-7 flex flex-wrap items-center gap-3">
+  const cashPaymentPanel = cash
+    ? stateDocket({
+        tone: "urgent",
+        eyebrow: t("paymentEyebrow"),
+        title: t("cashTitle"),
+        body: t("cashBody"),
+        actions: (
+          <>
             <CopyValue
               value={cash.invoiceNumber}
               label={t("copyReference")}
@@ -174,44 +244,44 @@ export default async function EntryDetailPage({
             <Link href="/billing" className={accountAction.onNavySecondary}>
               {t("seeBilling")}
             </Link>
+          </>
+        ),
+        aside: (
+          <div className="grid grid-cols-2 gap-x-6 gap-y-5">
+            <div className="col-span-2 border-b border-cream-100/15 pb-5">
+              <Eyebrow tone="onNavy">{t("cashAmount")}</Eyebrow>
+              <Money
+                amount={cash.amountUsd}
+                className="mt-2 block font-data text-[clamp(2.75rem,5vw,4.25rem)] font-semibold leading-none text-gold"
+              />
+            </div>
+            <div>
+              <Meta className="block text-cream-200/65">{t("cashExpires")}</Meta>
+              <Figure size="md" className="mt-1.5 block text-cream-50">
+                {cash.expiresAt ? dateTime(cash.expiresAt) : t("none")}
+              </Figure>
+            </div>
+            <div>
+              <Meta className="block text-cream-200/65">{t("cashRef")}</Meta>
+              <Figure size="md" className="mt-1.5 block text-cream-50">
+                {cash.invoiceNumber}
+              </Figure>
+            </div>
           </div>
-        </div>
-
-        <div className="border-t border-cream-100/15 bg-cream-50/[0.04] px-6 py-7 sm:px-8 lg:border-s lg:border-t-0 lg:px-9 lg:py-9">
-          <Eyebrow tone="onNavy">{t("cashAmount")}</Eyebrow>
-          <Money
-            amount={cash.amountUsd}
-            className="mt-3 block font-data text-[clamp(2.75rem,5vw,4.5rem)] font-semibold leading-none text-gold"
-          />
-          <div className="mt-8 border-t border-cream-100/15 pt-5">
-            <Meta className="block text-cream-200/65">{t("cashExpires")}</Meta>
-            <Figure size="md" className="mt-1.5 block text-cream-50">
-              {cash.expiresAt ? dateTime(cash.expiresAt) : t("none")}
-            </Figure>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid gap-6 border-t border-cream-100/15 px-6 py-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:px-8 lg:px-10">
-        <div>
-          <Meta className="block text-cream-200/65">{t("cashRef")}</Meta>
-          <Figure size="md" className="mt-1.5 block text-cream-50">
-            {cash.invoiceNumber}
-          </Figure>
-        </div>
-        <Meta className="max-w-[48ch] text-cream-200/65 sm:text-end">{t("mockNote")}</Meta>
-      </div>
-    </section>
-  ) : null;
+        ),
+        note: <Meta className="block text-cream-200/65">{t("mockNote")}</Meta>,
+      })
+    : null;
 
   const modules = [
     entry.state === "draft"
-      ? stateBlock(
-          "quiet",
-          t("draftTitle"),
-          <>
-            <p className="max-w-[58ch] text-body-md text-navy-700">{t("draftBody")}</p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+      ? stateDocket({
+          tone: "quiet",
+          eyebrow: t("nextStep"),
+          title: t("draftTitle"),
+          body: t("draftBody"),
+          actions: (
+            <>
               <Link href={`/entries/${entry.id}/edit`} className={accountAction.primary}>
                 {t("continueEditing")}
               </Link>
@@ -221,45 +291,63 @@ export default async function EntryDetailPage({
                   {t("discard")}
                 </button>
               </form>
+            </>
+          ),
+          aside: (
+            <div className="flex h-full flex-col justify-center">
+              <Meta>{t("assetsTitle")}</Meta>
+              <Figure size="md" className="mt-2 text-navy-950">
+                {t("assetSummary", { count: assetCount })}
+              </Figure>
             </div>
-          </>,
-        )
+          ),
+        })
       : null,
 
     settlement && settlement.kind === "payment_link" && settlement.status !== "settled"
-      ? stateBlock(
-          "urgent",
-          t("settlementTitle"),
-          <>
-            <p className="max-w-[58ch] text-body-md text-navy-700">{t("upgradeBody")}</p>
-            <AccountDataList className="mt-6" columns={2}>
-              <AccountDatum label={t("upgradeAmount")} figure>
-                <Money amount={settlement.amountUsd} />
-              </AccountDatum>
-              <AccountDatum label={t("upgradeDeadline")} figure>
-                {dateTime(settlement.deadline)}
-              </AccountDatum>
-            </AccountDataList>
-            {entry.state === "excluded" ? null : (
-              <form action={settleUpgradeAction} className="mt-6">
+      ? stateDocket({
+          tone: "urgent",
+          eyebrow: t("paymentEyebrow"),
+          title: t("settlementTitle"),
+          body: t("upgradeBody"),
+          actions:
+            entry.state === "excluded" ? null : (
+              <form action={settleUpgradeAction}>
                 <input type="hidden" name="entryId" value={entry.id} />
-                <button type="submit" className={accountAction.primary}>
+                <button type="submit" className={accountAction.onNavy}>
                   {t("upgradePay")}
                 </button>
               </form>
-            )}
-            <Meta className="mt-6 block">{t("mockNote")}</Meta>
-          </>,
-        )
+            ),
+          aside: (
+            <div className="grid gap-5">
+              <div className="border-b border-cream-100/15 pb-5">
+                <Eyebrow tone="onNavy">{t("upgradeAmount")}</Eyebrow>
+                <Money
+                  amount={settlement.amountUsd}
+                  className="mt-2 block font-data text-[clamp(2.5rem,4.5vw,4rem)] font-semibold leading-none text-gold"
+                />
+              </div>
+              <div>
+                <Meta className="block text-cream-200/65">{t("upgradeDeadline")}</Meta>
+                <Figure size="md" className="mt-1.5 block text-cream-50">
+                  {dateTime(settlement.deadline)}
+                </Figure>
+              </div>
+            </div>
+          ),
+          note: <Meta className="block text-cream-200/65">{t("mockNote")}</Meta>,
+        })
       : null,
 
     settlement && settlement.kind === "credit"
-      ? stateBlock(
-          "good",
-          t("settlementTitle"),
-          <>
-            <p className="max-w-[58ch] text-body-md text-navy-700">{t("downgradeBody")}</p>
-            <AccountDataList className="mt-6" columns={3}>
+      ? stateDocket({
+          tone: "good",
+          eyebrow: t("settlementComplete"),
+          title: t("settlementTitle"),
+          body: t("downgradeBody"),
+          aside: (
+            <AccountDataList columns={1}>
               <AccountDatum label={t("downgradeAmount")} figure>
                 <Money amount={settlement.amountUsd} />
               </AccountDatum>
@@ -270,41 +358,43 @@ export default async function EntryDetailPage({
                 {credit?.validForCycleId.replace("cycle-", "") ?? t("none")}
               </AccountDatum>
             </AccountDataList>
-          </>,
-        )
+          ),
+        })
       : null,
 
     entry.state === "shortlisted"
-      ? stateBlock(
-          "good",
-          t("shareTitle"),
-          <>
-            <p className="max-w-[58ch] text-body-md text-navy-700">{t("shareBody")}</p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-4">
+      ? stateDocket({
+          tone: "good",
+          eyebrow: t("publicProject"),
+          title: t("shareTitle"),
+          body: t("shareBody"),
+          actions: (
+            <>
               <Link href={`/projects/${entry.slug}`} className={accountAction.primary}>
                 {t("publicLink")}
                 <ExternalLink aria-hidden className="size-4" />
               </Link>
               <CopyLink path={`/${locale}/projects/${entry.slug}`} />
-              <span className="ms-auto flex flex-col gap-1">
-                <Meta>{t("resVotes")}</Meta>
-                <Figure size="md">{votes}</Figure>
-              </span>
-            </div>
-          </>,
-        )
+            </>
+          ),
+          aside: (
+            <span className="flex flex-col gap-1">
+              <Meta>{t("resVotes")}</Meta>
+              <Figure size="lg" className="text-navy-950">{votes}</Figure>
+            </span>
+          ),
+        })
       : null,
 
     (["excluded", "cancelled", "disqualified", "not_shortlisted"] as const).includes(
       entry.state as "excluded",
     )
-      ? stateBlock(
-          "quiet",
-          t(`${entry.state === "not_shortlisted" ? "notShortlisted" : entry.state}Title`),
-          <p className="max-w-[62ch] text-body-md text-navy-700">
-            {t(`${entry.state === "not_shortlisted" ? "notShortlisted" : entry.state}Body`)}
-          </p>,
-        )
+      ? stateDocket({
+          tone: "quiet",
+          eyebrow: t("entryStatusEyebrow"),
+          title: t(`${entry.state === "not_shortlisted" ? "notShortlisted" : entry.state}Title`),
+          body: t(`${entry.state === "not_shortlisted" ? "notShortlisted" : entry.state}Body`),
+        })
       : null,
   ].filter(Boolean);
 
@@ -319,44 +409,40 @@ export default async function EntryDetailPage({
         </Link>
       }
     >
-      {/* The entry is a compact docket. Its cover identifies the work while
-          the text beside it says exactly where that work currently stands. */}
+      {/* The entry reads as a project dossier, not a stretched table row. */}
       <div className="account-shell pb-[var(--account-y)] pt-6">
         <AccountStack>
           <AccountPanel padded={false} className="overflow-hidden">
-            <div className="grid sm:grid-cols-[11rem_minmax(0,1fr)] lg:grid-cols-[13rem_minmax(0,1fr)]">
+            <div className="grid md:grid-cols-[15rem_minmax(0,1fr)] lg:grid-cols-[17rem_minmax(0,1fr)]">
               <EntryCover
                 entry={entry}
                 parentId={groups[0]?.parentId ?? ""}
-                className="aspect-[16/9] w-full sm:aspect-auto sm:h-full sm:min-h-44"
-                sizes="(min-width: 1024px) 208px, (min-width: 640px) 176px, 100vw"
+                className="aspect-[16/9] w-full md:aspect-auto md:h-full md:min-h-52"
+                sizes="(min-width: 1024px) 272px, (min-width: 768px) 240px, 100vw"
                 priority
               />
 
-              <div className="relative flex min-w-0 flex-col justify-center px-5 py-6 sm:px-7 sm:py-7 lg:px-9">
+              <div className="relative flex min-w-0 flex-col px-5 py-6 sm:px-7 sm:py-7 lg:px-9 lg:py-8">
                 <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-navy-950" />
-                <Eyebrow tone="quiet">
-                  {cycle ? t("cycleEyebrow", { year: cycle.year }) : ""}
-                </Eyebrow>
-                <h1 className="mt-1.5 font-display text-account-title text-balance text-navy-900">
-                  {entry.title}
-                </h1>
-
-                <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2.5">
-                  <EntryStatus state={entry.state} />
-                  <Meta>
-                    {t("entryId")} <span className="font-data text-navy-800">{entry.id}</span>
-                  </Meta>
-                  <Meta>
-                    {t("judgedTier")} <span className="text-navy-800">{tTier(tier)}</span>
-                  </Meta>
-                  {entry.declaredTier !== tier ? (
-                    <Meta>
-                      {t("declaredTier")}{" "}
-                      <span className="text-navy-800">{tTier(entry.declaredTier)}</span>
-                    </Meta>
-                  ) : null}
+                <div className="flex flex-1 flex-col justify-center">
+                  <Eyebrow tone="quiet">
+                    {cycle ? t("cycleEyebrow", { year: cycle.year }) : ""}
+                  </Eyebrow>
+                  <h1 className="mt-2 max-w-[24ch] text-balance font-display text-[clamp(1.75rem,2.5vw,2.5rem)] font-bold leading-[1.08] tracking-[-0.02em] text-navy-950">
+                    {entry.title}
+                  </h1>
+                  <div className="mt-4">
+                    <EntryStatus state={entry.state} />
+                  </div>
                 </div>
+
+                <dl className="mt-6 grid gap-x-8 gap-y-4 border-t border-navy-900/10 pt-4 sm:grid-cols-2 xl:grid-cols-3">
+                  <AccountDatum label={t("entryId")} figure>{entry.id}</AccountDatum>
+                  <AccountDatum label={t("judgedTier")}>{tTier(tier)}</AccountDatum>
+                  {entry.declaredTier !== tier ? (
+                    <AccountDatum label={t("declaredTier")}>{tTier(entry.declaredTier)}</AccountDatum>
+                  ) : null}
+                </dl>
               </div>
             </div>
           </AccountPanel>
@@ -366,86 +452,84 @@ export default async function EntryDetailPage({
           {cashPaymentPanel}
 
           {/* ---- what this entry needs, if anything ---------------------- */}
-          {modules.length ? (
-            <AccountPanel className="flex flex-col gap-7">{modules}</AccountPanel>
-          ) : null}
+          {modules.map((module, index) => (
+            <Fragment key={`entry-state-${index}`}>{module}</Fragment>
+          ))}
 
-          {/* ---- the record. The cover is above; this is what it says. --- */}
-          <AccountPanel title={t("recordTitle")}>
-        <div className="grid gap-x-12 gap-y-9 lg:grid-cols-12">
-          <div className="flex flex-col gap-7 lg:col-span-7">
-            {/* The entrant's own words, in their own direction, inside a page
-                that may be running the other way. */}
-            <bdi
-              lang={entry.contentLanguage}
-              dir={entry.contentLanguage === "ar" ? "rtl" : "ltr"}
-              className="block max-w-[62ch] whitespace-pre-line text-body-lg leading-relaxed text-navy-800"
-            >
-              {entry.description}
-            </bdi>
+          {/* The record is deliberately compact: prose and facts on the page,
+              classification and media on a supporting ground. */}
+          <AccountPanel title={t("recordTitle")} padded={false}>
+            <div className="grid lg:grid-cols-[minmax(0,1.25fr)_minmax(22rem,0.75fr)]">
+              <div className="px-5 py-6 sm:px-7 sm:py-7 lg:pe-10">
+                <bdi
+                  lang={entry.contentLanguage}
+                  dir={entry.contentLanguage === "ar" ? "rtl" : "ltr"}
+                  className="block max-w-[62ch] whitespace-pre-line text-body-lg leading-relaxed text-navy-800"
+                >
+                  {entry.description}
+                </bdi>
 
-            <AccountDataList columns={2}>
-              <AccountDatum label={t("client")}>{entry.client ?? t("none")}</AccountDatum>
-              <AccountDatum label={t("country")}>{countryName(entry.country, locale)}</AccountDatum>
-              <AccountDatum label={t("language")}>
-                {entry.contentLanguage.toUpperCase()}
-              </AccountDatum>
-              <AccountDatum label={t("credits")}>
-                {entry.credits.length ? entry.credits.join(", ") : t("noCredits")}
-              </AccountDatum>
-              {entry.externalUrl ? (
-                <AccountDatum label={t("projectUrl")}>
-                  <a
-                    href={entry.externalUrl}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="break-all underline underline-offset-4 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
-                  >
-                    {entry.externalUrl}
-                  </a>
-                </AccountDatum>
-              ) : null}
-            </AccountDataList>
-          </div>
+                <AccountDataList className="mt-7 border-t border-navy-900/10 pt-6" columns={2}>
+                  <AccountDatum label={t("client")}>{entry.client ?? t("none")}</AccountDatum>
+                  <AccountDatum label={t("country")}>{countryName(entry.country, locale)}</AccountDatum>
+                  <AccountDatum label={t("language")}>
+                    {entry.contentLanguage.toUpperCase()}
+                  </AccountDatum>
+                  <AccountDatum label={t("credits")}>
+                    {entry.credits.length ? entry.credits.join(", ") : t("noCredits")}
+                  </AccountDatum>
+                  {entry.externalUrl ? (
+                    <AccountDatum label={t("projectUrl")}>
+                      <a
+                        href={entry.externalUrl}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="break-all underline underline-offset-4 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                      >
+                        {entry.externalUrl}
+                      </a>
+                    </AccountDatum>
+                  ) : null}
+                </AccountDataList>
+              </div>
 
-          {/* The groups it stands in, and its assets: a supporting column
-              rather than five empty ones. */}
-          <div className="flex flex-col gap-10 lg:col-span-5">
-            <div>
-              <ItemTitle as="h3" className="mb-4">{t("groupsTitle")}</ItemTitle>
-              <ul className="flex flex-col border-t-2 border-navy-900">
-                {groups.map((sub) => (
-                  <li
-                    key={sub.id}
-                    className="flex flex-col gap-1 border-b border-navy-900/12 py-4"
-                  >
-                    <span className="text-body-md text-navy-900">{sub.name[locale]}</span>
-                    <Meta>{parentById.get(sub.parentId)?.name[locale]}</Meta>
-                  </li>
-                ))}
-              </ul>
+              <aside className="border-t border-navy-900/10 bg-navy-50/60 px-5 py-6 sm:px-7 sm:py-7 lg:border-s lg:border-t-0">
+                <ItemTitle as="h3">{t("groupsTitle")}</ItemTitle>
+                <ul className="mt-4 grid gap-2">
+                  {groups.map((sub) => (
+                    <li key={sub.id} className="border-s-2 border-blue-700 bg-white px-4 py-3">
+                      <span className="block text-body-md font-medium text-navy-900">
+                        {sub.name[locale]}
+                      </span>
+                      <Meta className="mt-0.5 block">{parentById.get(sub.parentId)?.name[locale]}</Meta>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-7 border-t border-navy-900/10 pt-6">
+                  <ItemTitle as="h3">{t("assetsTitle")}</ItemTitle>
+                  <dl className="mt-4 grid grid-cols-2 gap-px bg-navy-900/10">
+                    {[
+                      { label: t("cover"), value: entry.media.coverUrl ? 1 : 0, Icon: ImageIcon },
+                      { label: t("gallery"), value: entry.media.galleryUrls.length, Icon: Images },
+                      { label: t("documents"), value: entry.media.documentUrls.length, Icon: FileText },
+                      { label: t("video"), value: entry.media.videoUrl ? 1 : 0, Icon: Video },
+                    ].map(({ label, value, Icon }) => (
+                      <div key={label} className="flex items-center gap-3 bg-white px-4 py-3.5">
+                        <Icon aria-hidden className="size-4 shrink-0 text-blue-700" strokeWidth={1.75} />
+                        <div className="min-w-0">
+                          <dt className="text-caption text-navy-600">{label}</dt>
+                          <dd className="mt-0.5 font-data text-body-md font-semibold tabular-nums text-navy-950">
+                            {value}
+                          </dd>
+                        </div>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              </aside>
             </div>
-
-            <div>
-              <ItemTitle as="h3" className="mb-4">{t("assetsTitle")}</ItemTitle>
-              <AccountDataList columns={2}>
-                <AccountDatum label={t("cover")} figure>
-                  {entry.media.coverUrl ? "1" : "0"}
-                </AccountDatum>
-                <AccountDatum label={t("gallery")} figure>
-                  {String(entry.media.galleryUrls.length)}
-                </AccountDatum>
-                <AccountDatum label={t("documents")} figure>
-                  {String(entry.media.documentUrls.length)}
-                </AccountDatum>
-                <AccountDatum label={t("video")} figure>
-                  {entry.media.videoUrl ? "1" : "0"}
-                </AccountDatum>
-              </AccountDataList>
-            </div>
-          </div>
-        </div>
-      </AccountPanel>
+          </AccountPanel>
 
       {/* ---- what this entry won ----------------------------------------- */}
       {myResults.length ? (
@@ -489,68 +573,78 @@ export default async function EntryDetailPage({
         </AccountPanel>
       ) : null}
 
-          {/* Timeline and payments describe one history, so they share one
-              surface instead of competing as two equal cards. */}
-          <AccountPanel title={t("activityTitle")} lead={t("activityLead")}>
-            <div className="grid gap-10 lg:grid-cols-2 lg:gap-0">
-              <div className="lg:pe-10">
-                <ItemTitle as="h3" className="mb-6">{t("timelineTitle")}</ItemTitle>
-            <EntryTimeline entry={entry} cycle={cycle} results={myResults} locale={locale} />
-            {correction ? (
-              <div className="mt-9 border-t border-navy-900/12 pt-7">
-                <ItemTitle className="mb-4">{t("correctionTitle")}</ItemTitle>
-                <AccountDataList columns={3}>
-                  <AccountDatum label={t("correctionFrom")}>{tTier(correction.from)}</AccountDatum>
-                  <AccountDatum label={t("correctionTo")}>{tTier(correction.to)}</AccountDatum>
-                  <AccountDatum label={t("correctionAt")} figure>
-                    {date(correction.at)}
-                  </AccountDatum>
-                </AccountDataList>
-                <p className="mt-6 max-w-[62ch] text-body-md text-navy-700">
-                  <Meta className="me-1.5">{t("correctionNote")}</Meta>
-                  {correction.note}
-                </p>
-              </div>
-            ) : null}
+          {/* A history reads in sequence. Payments follow it as a ledger strip,
+              instead of forcing two sparse columns to pretend they are equal. */}
+          <AccountPanel title={t("activityTitle")} lead={t("activityLead")} padded={false}>
+            <div className="px-5 py-6 sm:px-7 sm:py-7">
+              <ItemTitle as="h3" className="mb-6">{t("timelineTitle")}</ItemTitle>
+              <EntryTimeline
+                entry={entry}
+                cycle={cycle}
+                results={myResults}
+                locale={locale}
+                layout="horizontal"
+              />
+
+              {correction ? (
+                <div className="mt-7 border-t border-navy-900/12 pt-6">
+                  <div className="grid gap-5 lg:grid-cols-[12rem_minmax(0,1fr)] lg:items-start">
+                    <ItemTitle>{t("correctionTitle")}</ItemTitle>
+                    <div>
+                      <AccountDataList columns={3}>
+                        <AccountDatum label={t("correctionFrom")}>{tTier(correction.from)}</AccountDatum>
+                        <AccountDatum label={t("correctionTo")}>{tTier(correction.to)}</AccountDatum>
+                        <AccountDatum label={t("correctionAt")} figure>
+                          {date(correction.at)}
+                        </AccountDatum>
+                      </AccountDataList>
+                      <p className="mt-5 max-w-[72ch] text-body-md text-navy-700">
+                        <Meta className="mb-1 block">{t("correctionNote")}</Meta>
+                        {correction.note}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+
+            <div className="border-t border-navy-900/10 bg-navy-50/60 px-5 py-5 sm:px-7">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+                <ItemTitle as="h3">{t("paymentsTitle")}</ItemTitle>
+                <Link href="/billing" className={accountAction.quiet}>
+                  {t("seeBilling")}
+                </Link>
               </div>
 
-              <div className="border-t border-navy-900/10 pt-8 lg:border-s lg:border-t-0 lg:ps-10 lg:pt-0">
-                <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-                  <ItemTitle as="h3">{t("paymentsTitle")}</ItemTitle>
-                  <Link href="/billing" className={accountAction.quiet}>
-                    {t("seeBilling")}
-                  </Link>
-                </div>
-            {payments.length ? (
-              <ul className="flex flex-col">
-                {payments.map((payment) => (
-                  <li
-                    key={payment.id}
-                    className={cn(
-                      "grid gap-3 py-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center",
-                      accountRow,
-                    )}
-                  >
-                    <div className="min-w-0">
-                      <p className="text-body-md font-medium text-navy-900">{tKind(payment.kind)}</p>
-                      <Figure size="sm" className="mt-1 block text-navy-600">
-                        {payment.id}
-                      </Figure>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-4 sm:justify-end">
-                      <StatusChip tone={paymentTone[payment.status]} label={tStatus(payment.status)} />
-                      <Money
-                        amount={payment.amountUsd}
-                        className="min-w-16 text-end font-data text-body-md font-semibold text-navy-900"
-                      />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-body-sm text-navy-600">{t("noPayments")}</p>
-            )}
-              </div>
+              {payments.length ? (
+                <ul className="grid gap-x-10 lg:grid-cols-2">
+                  {payments.map((payment) => (
+                    <li
+                      key={payment.id}
+                      className={cn(
+                        "grid gap-3 py-3.5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center",
+                        accountRow,
+                      )}
+                    >
+                      <div className="min-w-0">
+                        <p className="text-body-md font-medium text-navy-900">{tKind(payment.kind)}</p>
+                        <Figure size="sm" className="mt-1 block text-navy-600">
+                          {payment.id}
+                        </Figure>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-4 sm:justify-end">
+                        <StatusChip tone={paymentTone[payment.status]} label={tStatus(payment.status)} />
+                        <Money
+                          amount={payment.amountUsd}
+                          className="min-w-16 text-end font-data text-body-md font-semibold text-navy-900"
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="py-2 text-body-sm text-navy-600">{t("noPayments")}</p>
+              )}
             </div>
           </AccountPanel>
         </AccountStack>
