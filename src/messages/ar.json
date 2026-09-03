@@ -1311,6 +1311,8 @@
     "colState": "الحالة",
     "colPaid": "المدفوع",
     "colUpdated": "آخر تحديث",
+    "record": "السجل",
+    "paymentLabel": "الدفع",
     "declaredAs": "مُعلنة {tier}",
     "verifiedAs": "تُحكَّم بوصفها {tier}",
     "unpaid": "غير مدفوعة",
@@ -1335,6 +1337,9 @@
       "results": "عرض النتائج"
     },
     "calendarLabel": "روزنامة الجوائز {year}",
+    "calendarEyebrow": "روزنامة الجوائز",
+    "registerTitle": "سجل المشاركات",
+    "registerLead": "الأعمال المقدمة في هذه الدورة، مع حالة كل عمل وسجل حسابه.",
     "inCalendar": "{count} في هذه الروزنامة",
     "inCalendarOne": "واحدة في هذه الروزنامة"
   },

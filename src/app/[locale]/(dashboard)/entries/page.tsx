@@ -39,15 +39,14 @@ export async function generateMetadata({
  * **Grouped, not merely filterable.** The sitemap's node is *"List of
  * submitted Projects by Awards Calendar"*, and §51 recorded that the build had
  * turned an organising principle into a filter chip. The page now carries a
- * heading per cycle and the entries under it; the `?cycle=` filter still works
- * and still writes to the URL, because narrowing to one calendar is a
- * different act from seeing them all in order.
+ * heading per cycle and the entries under it. A calendar is the page's
+ * structure, not a filter beside State, so it is never reduced to a chip.
  *
  * **The project image leads each record**, again from the sitemap: Project
- * Image, Project Title, Entry-ID, one CTA. State sits directly under the title
- * so it is scanned rather than read.
+ * Image, Project Title, Entry-ID, one CTA. State remains prominent in its own
+ * readable column on desktop and beside the work on phone.
  *
- * Paging, filters, URL state and the per-state action rules are unchanged.
+ * Paging, URL state and the per-state action rules are unchanged.
  */
 export default async function EntriesPage({
   params,
@@ -77,7 +76,6 @@ export default async function EntriesPage({
     : (many(sp.state).filter((v) =>
         (ENTRY_STATES as readonly string[]).includes(v),
       ) as EntryState[]);
-  const cycleIds = one(sp["clear-cycle"]) ? [] : many(sp.cycle);
   const query = one(sp.query)?.trim() || undefined;
   const asked = Number.parseInt(one(sp.page) ?? "1", 10);
   const page = Number.isFinite(asked) && asked > 0 ? asked : 1;
@@ -88,21 +86,17 @@ export default async function EntriesPage({
     api.taxonomy.subCategories(),
   ]);
 
-  // An unknown cycle filters nothing rather than 404s: a list is not a resource.
-  const known = new Set(cycles.map((c) => c.id));
-  const chosenCycles = cycleIds.filter((id) => known.has(id));
-  const current = { states, cycles: chosenCycles, query, page };
+  const current = { states, query, page };
 
   const listing = await api.entries.page({
     participantId: participant.id,
     states: states.length ? states : undefined,
-    cycleIds: chosenCycles.length ? chosenCycles : undefined,
     search: query,
     page,
     pageSize: PAGE_SIZE,
   });
 
-    const cycleYear = new Map(cycles.map((c) => [c.id, c.year]));
+  const cycleYear = new Map(cycles.map((c) => [c.id, c.year]));
   const payments = await api.payments.forParticipant(participant.id);
   const paidFor = new Map<string, number>();
   for (const p of payments) {
@@ -140,13 +134,14 @@ export default async function EntriesPage({
           />
         ) : (
           <AccountStack>
-            {/* Search and both filters on one line. Each clears itself. */}
-            <AccountPanel>
+            {/* The calendar is the structure below. Search and State only
+                narrow the records inside those calendar sections. */}
+            <div className="border-y border-navy-900/12 py-4">
               <FilterBar
                 action="/entries"
                 placeholder={t("searchPlaceholder")}
                 query={query ?? ""}
-                hasAny={Boolean(query) || states.length > 0 || chosenCycles.length > 0}
+                hasAny={Boolean(query) || states.length > 0}
                 clearAllHref={`/${locale}/entries`}
               >
                 <FilterMenu
@@ -161,17 +156,8 @@ export default async function EntriesPage({
                     mark: <EntryStatus state={state} markOnly />,
                   }))}
                 />
-                <FilterMenu
-                  name="cycle"
-                  label={t("filterCycle")}
-                  selected={chosenCycles}
-                  options={cycles.map((cycle) => ({
-                    value: cycle.id,
-                    label: String(cycle.year),
-                  }))}
-                />
               </FilterBar>
-            </AccountPanel>
+            </div>
 
             {listing.items.length === 0 ? (
               <AccountPanel>
@@ -192,19 +178,40 @@ export default async function EntriesPage({
                 .sort((a, b) => (cycleYear.get(b) ?? 0) - (cycleYear.get(a) ?? 0))
                 .map((id) => {
                   const inYear = listing.items.filter((e) => e.cycleId === id);
+                  const year = cycleYear.get(id) ?? "";
                   return (
-                    <AccountPanel
-                      key={id}
-                      title={t("calendarLabel", { year: cycleYear.get(id) ?? "" })}
-                      action={
-                        <Meta>
-                          {inYear.length === 1
-                            ? t("inCalendarOne")
-                            : t("inCalendar", { count: inYear.length })}
-                        </Meta>
-                      }
-                      padded={false}
-                    >
+                    <section key={id} className="border border-navy-900/10 bg-white">
+                      <header className="grid border-b border-navy-900/10 md:grid-cols-[13rem_1fr]">
+                        <div className="relative bg-navy-950 px-5 py-5 text-cream-50 sm:px-7 md:py-6">
+                          <span aria-hidden className="absolute inset-x-0 top-0 flex h-1">
+                            <span className="basis-[72%] bg-blue-700" />
+                            <span className="basis-[14%] bg-gold" />
+                          </span>
+                          <h2>
+                            <span className="block text-overline font-semibold uppercase tracking-[0.12em] text-cream-200/75">
+                              {t("calendarEyebrow")}
+                            </span>
+                            <span className="mt-1 block font-data text-[2.75rem] leading-none tabular-nums">
+                              {year}
+                            </span>
+                          </h2>
+                        </div>
+                        <div className="flex flex-wrap items-end justify-between gap-4 px-5 py-5 sm:px-7 md:py-6">
+                          <div>
+                            <p className="font-display text-account-card font-semibold text-navy-950">
+                              {t("registerTitle")}
+                            </p>
+                            <p className="mt-1 max-w-[54ch] text-body-sm text-navy-600">
+                              {t("registerLead")}
+                            </p>
+                          </div>
+                          <Meta>
+                            {inYear.length === 1
+                              ? t("inCalendarOne")
+                              : t("inCalendar", { count: inYear.length })}
+                          </Meta>
+                        </div>
+                      </header>
                       <EntryTable
                         entries={inYear}
                         subCategories={subCategories}
@@ -212,7 +219,7 @@ export default async function EntriesPage({
                         finalized={finalized}
                         locale={locale}
                       />
-                    </AccountPanel>
+                    </section>
                   );
                 })
             )}

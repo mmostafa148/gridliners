@@ -1311,6 +1311,8 @@
     "colState": "State",
     "colPaid": "Paid",
     "colUpdated": "Last update",
+    "record": "Record",
+    "paymentLabel": "Payment",
     "declaredAs": "Declared {tier}",
     "verifiedAs": "Judged as {tier}",
     "unpaid": "Unpaid",
@@ -1335,6 +1337,9 @@
       "results": "View results"
     },
     "calendarLabel": "Awards calendar {year}",
+    "calendarEyebrow": "Awards calendar",
+    "registerTitle": "Entry register",
+    "registerLead": "The work entered in this cycle, with its standing and account record.",
     "inCalendar": "{count} in this calendar",
     "inCalendarOne": "1 in this calendar"
   },
