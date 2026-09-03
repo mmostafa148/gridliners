@@ -103,7 +103,7 @@ export default async function DashboardPage({
   });
   const portfolioEntries = [
     ...new Map([...shortlisted, ...awardedEntries].map((entry) => [entry.id, entry])).values(),
-  ].slice(0, 7);
+  ].slice(0, 6);
   const awardByEntry = new Map(deliverables.map((deliverable) => [deliverable.entryId, deliverable]));
 
   return (
@@ -213,55 +213,51 @@ export default async function DashboardPage({
                     {t("viewPortfolio")}
                   </Link>
                 }
+                padded={false}
               >
-                <ul className="grid grid-cols-2 gap-x-4 gap-y-7 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-5">
-                  {portfolioEntries.map((entry, index) => {
+                <ul className="grid gap-px border-t border-navy-900/10 bg-navy-900/10 sm:grid-cols-2 lg:grid-cols-3">
+                  {portfolioEntries.map((entry) => {
                     const award = awardByEntry.get(entry.id);
-                    const featured = index === 0;
                     return (
-                      <li
-                        key={entry.id}
-                        className={cn("min-w-0", featured && "col-span-2 row-span-2")}
-                      >
+                      <li key={entry.id} className="min-w-0 bg-white">
                         <Link
                           href={`/projects/${entry.slug}`}
-                          className="group block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+                          className={cn(
+                            "group flex h-full flex-col p-4 transition-colors hover:bg-mist/55 sm:p-5",
+                            "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-700",
+                          )}
                         >
                           <span className="relative block overflow-hidden">
                             <EntryCover
                               entry={entry}
                               parentId={parentOf.get(entry.baseSubCategoryId) ?? ""}
-                              className={cn(
-                                "w-full transition-transform duration-300 group-hover:scale-[1.015]",
-                                featured ? "aspect-[4/3]" : "aspect-square",
-                              )}
-                              sizes={featured ? "(max-width: 768px) 90vw, 48vw" : "24vw"}
-                              priority={featured}
+                              className="aspect-[4/3] w-full transition-transform duration-300 group-hover:scale-[1.015] motion-reduce:transition-none"
+                              sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 30vw"
                             />
                             {award ? (
                               <AwardMark
                                 level={award.level}
                                 year={award.cycleYear}
-                                size={featured ? "sm" : "xs"}
+                                size="xs"
                                 className="absolute end-2 top-0"
                               />
                             ) : null}
                           </span>
-                          <span
-                            className={cn(
-                              "mt-3 block font-display text-navy-900 group-hover:text-blue-700",
-                              featured ? "text-account-card" : "truncate text-body-sm",
-                            )}
-                          >
-                            {entry.title}
+                          <span className="mt-4 flex items-baseline justify-between gap-4">
+                            <span className="min-w-0 font-display text-account-card text-navy-900 transition-colors group-hover:text-blue-700">
+                              {entry.title}
+                            </span>
+                            <Figure size="sm" className="shrink-0 text-navy-500">
+                              {entry.id}
+                            </Figure>
+                          </span>
+                          <span className="mt-2 flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
+                            <EntryStatus state={entry.state} />
+                            <span className="min-w-0 truncate text-caption text-navy-600">
+                              {subById.get(entry.baseSubCategoryId)?.name[locale]}
+                            </span>
                           </span>
                         </Link>
-                        <div className="mt-1 flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
-                          <EntryStatus state={entry.state} />
-                          <span className="truncate text-caption text-navy-600">
-                            {subById.get(entry.baseSubCategoryId)?.name[locale]}
-                          </span>
-                        </div>
                       </li>
                     );
                   })}
