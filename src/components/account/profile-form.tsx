@@ -190,28 +190,30 @@ export function ProfileForm({
                 </div>
               ) : null}
 
-              <div className="divide-y divide-navy-900/10">
+              <div className="bg-mist/45 p-4 sm:p-6 lg:p-7">
                 <section
                   aria-labelledby="profile-identity"
-                  className="grid min-w-0 lg:grid-cols-[minmax(13rem,0.46fr)_minmax(0,1.54fr)]"
+                  className="relative overflow-hidden border border-navy-900/12 bg-white pt-1"
                 >
-                  <div className="relative bg-mist/65 px-5 py-6 before:absolute before:inset-y-0 before:start-0 before:w-0.5 before:bg-blue-700 sm:px-7 lg:border-e lg:border-navy-900/10">
-                    <div className="flex items-start gap-3 lg:block">
-                      <span className="grid size-10 shrink-0 place-items-center border border-blue-700/20 bg-white text-blue-700 lg:mb-6">
-                        <UserRound aria-hidden className="size-5" strokeWidth={1.75} />
-                      </span>
-                      <div>
-                        <Eyebrow className="mb-2 hidden lg:block">{t("identityEyebrow")}</Eyebrow>
-                        <SectionTitle as="h3" id="profile-identity" className="text-body-lg">
-                          {t("identityTitle")}
-                        </SectionTitle>
-                        <p className="mt-1.5 max-w-[46ch] text-body-sm text-navy-600">
-                          {t("identityLead")}
-                        </p>
-                      </div>
+                  <span aria-hidden className="absolute inset-x-0 top-0 flex h-1">
+                    <span className="w-24 bg-blue-700" />
+                    <span className="w-8 bg-gold" />
+                  </span>
+                  <div className="flex items-start gap-4 border-b border-navy-900/10 p-5 sm:p-6">
+                    <span className="grid size-11 shrink-0 place-items-center bg-blue-700/8 text-blue-700">
+                      <UserRound aria-hidden className="size-5" strokeWidth={1.75} />
+                    </span>
+                    <div>
+                      <Eyebrow className="mb-1.5">{t("identityEyebrow")}</Eyebrow>
+                      <SectionTitle as="h3" id="profile-identity" className="text-body-lg">
+                        {t("identityTitle")}
+                      </SectionTitle>
+                      <p className="mt-1 max-w-[58ch] text-body-sm text-navy-600">
+                        {t("identityLead")}
+                      </p>
                     </div>
                   </div>
-                  <div className="grid gap-5 p-5 sm:grid-cols-2 sm:p-7">
+                  <div className="grid gap-5 p-5 sm:grid-cols-2 sm:p-6">
                     <Field
                       name="name"
                       label={t("name")}
@@ -246,13 +248,13 @@ export function ProfileForm({
                   </div>
                 </section>
 
-                <section
-                  aria-labelledby="profile-place"
-                  className="grid min-w-0 lg:grid-cols-[minmax(13rem,0.46fr)_minmax(0,1.54fr)]"
-                >
-                  <div className="bg-mist/40 px-5 py-6 sm:px-7 lg:border-e lg:border-navy-900/10">
-                    <div className="flex items-start gap-3 lg:block">
-                      <span className="grid size-10 shrink-0 place-items-center border border-blue-700/20 bg-white text-blue-700 lg:mb-6">
+                <div className="mt-5 grid items-stretch gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(20rem,0.8fr)]">
+                  <section
+                    aria-labelledby="profile-place"
+                    className="border border-navy-900/12 bg-white p-5 sm:p-6"
+                  >
+                    <div className="flex items-start gap-4">
+                      <span className="grid size-11 shrink-0 place-items-center bg-blue-700/8 text-blue-700">
                         <MapPin aria-hidden className="size-5" strokeWidth={1.75} />
                       </span>
                       <div>
@@ -262,8 +264,7 @@ export function ProfileForm({
                         <p className="mt-1.5 text-body-sm text-navy-600">{t("placeLead")}</p>
                       </div>
                     </div>
-                  </div>
-                  <div className="grid content-start gap-5 p-5 sm:grid-cols-2 sm:p-7">
+                    <div className="mt-6 grid gap-5 sm:grid-cols-2">
                     <Field name="nationality" label={t("nationality")}>
                         {({ id, name, className, describedBy, invalid }) => (
                           <div className="relative">
@@ -320,15 +321,18 @@ export function ProfileForm({
                         )}
                     </Field>
                   </div>
-                </section>
+                  </section>
 
-                <section
-                  aria-labelledby="profile-prefs"
-                  className="grid min-w-0 lg:grid-cols-[minmax(13rem,0.46fr)_minmax(0,1.54fr)]"
-                >
-                  <div className="bg-mist/40 px-5 py-6 sm:px-7 lg:border-e lg:border-navy-900/10">
-                    <div className="flex items-start gap-3 lg:block">
-                      <span className="grid size-10 shrink-0 place-items-center border border-blue-700/20 bg-white text-blue-700 lg:mb-6">
+                  <section
+                    aria-labelledby="profile-prefs"
+                    className="relative overflow-hidden border border-navy-900/12 bg-white p-5 sm:p-6"
+                  >
+                    <span aria-hidden className="absolute inset-x-0 top-0 flex h-0.5">
+                      <span className="w-20 bg-blue-700" />
+                      <span className="w-6 bg-gold" />
+                    </span>
+                    <div className="flex items-start gap-4">
+                      <span className="grid size-11 shrink-0 place-items-center bg-blue-700/8 text-blue-700">
                         <Globe2 aria-hidden className="size-5" strokeWidth={1.75} />
                       </span>
                       <div>
@@ -338,9 +342,7 @@ export function ProfileForm({
                         <p className="mt-1.5 text-body-sm text-navy-600">{t("prefsLead")}</p>
                       </div>
                     </div>
-                  </div>
-                  <div className="content-start p-5 sm:p-7">
-                    <div className="max-w-[38rem]">
+                    <div className="mt-6">
                       <Field name="uiLanguage" label={t("language")}>
                         {({ id, name, className, describedBy, invalid }) => (
                           <div className="relative">
@@ -365,8 +367,8 @@ export function ProfileForm({
                         )}
                       </Field>
                     </div>
-                  </div>
-                </section>
+                  </section>
+                </div>
               </div>
 
               {/* The save sits at the end of the fields it saves. */}
@@ -398,47 +400,35 @@ function PasswordPanel() {
     <form action={action} noValidate>
       <div className="account-shell pb-[var(--account-y)]">
         <AccountPanel title={t("passwordTitle")} lead={t("securityLead")} padded={false}>
-          <div className="px-5 pt-6 sm:px-7">
-            {state.error ? (
-              <div className="mb-6">
+          {state.error || state.done ? (
+            <div className="px-5 pt-6 sm:px-7">
+              {state.error ? (
                 <ErrorSummary
                   title={t("passwordTitle")}
                   items={[{ field: state.field, message: tAuth(`errors.${state.error}`) }]}
                 />
-              </div>
-            ) : null}
-            {state.done ? (
-              <div className="mb-6">
+              ) : null}
+              {state.done ? (
                 <SuccessNote>{t("passwordChanged")}</SuccessNote>
-              </div>
-            ) : null}
-          </div>
+              ) : null}
+            </div>
+          ) : null}
 
-          <div className="grid border-b border-navy-900/10 lg:grid-cols-[minmax(15rem,0.56fr)_minmax(0,1.44fr)]">
-            <section className="relative overflow-hidden bg-navy-950 p-6 text-cream-50 sm:p-8 lg:border-e lg:border-navy-900/10">
-              <span aria-hidden className="absolute end-0 top-0 size-28 translate-x-1/2 -translate-y-1/2 border-[1.5rem] border-white/[0.045]" />
-              <span className="grid size-11 place-items-center border border-cream-50/20 bg-white/[0.04] text-gold">
-                <ShieldCheck aria-hidden className="size-6" strokeWidth={1.5} />
-              </span>
-              <Eyebrow tone="goldOnNavy" className="mt-8">{t("securityEyebrow")}</Eyebrow>
-              <SectionTitle as="h3" className="mt-2 text-body-lg text-cream-50">
-                {t("confirmIdentityTitle")}
-              </SectionTitle>
-              <p className="mt-2 max-w-[38ch] text-body-sm text-cream-200/75">
-                {t("currentPasswordLead")}
-              </p>
-            </section>
-
-            <section className="p-5 sm:p-7 lg:p-8">
-              <Eyebrow>{t("newPasswordEyebrow")}</Eyebrow>
-              <SectionTitle as="h3" className="mt-2 text-body-lg">
-                {t("newPasswordTitle")}
-              </SectionTitle>
-              <p className="mt-2 max-w-[54ch] text-body-sm text-navy-600">
-                {t("newPasswordLead")}
-              </p>
-              <div className="mt-7 grid items-start gap-5 xl:grid-cols-[minmax(13rem,0.78fr)_minmax(0,1fr)_minmax(0,1fr)]">
-                <div className="border-s-2 border-blue-700 bg-mist/65 p-4">
+          <div className="bg-mist/45 p-4 sm:p-6 lg:p-7">
+            <div className="mx-auto grid max-w-[76rem] items-stretch gap-5 lg:grid-cols-[minmax(18rem,0.78fr)_minmax(0,1.22fr)]">
+              <section className="relative border border-navy-900/12 bg-white p-5 pt-7 sm:p-6 sm:pt-8">
+                <span aria-hidden className="absolute inset-y-0 start-0 w-0.5 bg-blue-700" />
+                <span className="grid size-11 place-items-center bg-blue-700/8 text-blue-700">
+                  <ShieldCheck aria-hidden className="size-6" strokeWidth={1.5} />
+                </span>
+                <Eyebrow className="mt-6">{t("securityEyebrow")}</Eyebrow>
+                <SectionTitle as="h3" className="mt-2 text-body-lg">
+                  {t("confirmIdentityTitle")}
+                </SectionTitle>
+                <p className="mt-2 max-w-[42ch] text-body-sm text-navy-600">
+                  {t("currentPasswordLead")}
+                </p>
+                <div className="mt-6">
                   <PasswordField
                     name="currentPassword"
                     label={tAuth("currentPassword")}
@@ -447,27 +437,43 @@ function PasswordPanel() {
                     error={err("currentPassword")}
                   />
                 </div>
-                <PasswordField
-                  name="newPassword"
-                  label={tAuth("newPassword")}
-                  autoComplete="new-password"
-                  hint={tAuth("passwordHint")}
-                  required
-                  error={err("newPassword")}
-                />
-                <PasswordField
-                  name="confirmPassword"
-                  label={tAuth("confirmPassword")}
-                  autoComplete="new-password"
-                  required
-                  error={err("confirmPassword")}
-                />
-              </div>
+              </section>
 
-              <AccountActionBar>
-                <SubmitButton label={t("changePassword")} pendingLabel={t("changing")} />
-              </AccountActionBar>
-            </section>
+              <section className="relative overflow-hidden border border-navy-900/12 bg-white p-5 pt-7 sm:p-6 sm:pt-8">
+                <span aria-hidden className="absolute inset-x-0 top-0 flex h-1">
+                  <span className="w-24 bg-blue-700" />
+                  <span className="w-8 bg-gold" />
+                </span>
+                <Eyebrow>{t("newPasswordEyebrow")}</Eyebrow>
+                <SectionTitle as="h3" className="mt-2 text-body-lg">
+                  {t("newPasswordTitle")}
+                </SectionTitle>
+                <p className="mt-2 max-w-[54ch] text-body-sm text-navy-600">
+                  {t("newPasswordLead")}
+                </p>
+                <div className="mt-6 grid items-start gap-5 sm:grid-cols-2">
+                  <PasswordField
+                    name="newPassword"
+                    label={tAuth("newPassword")}
+                    autoComplete="new-password"
+                    hint={tAuth("passwordHint")}
+                    required
+                    error={err("newPassword")}
+                  />
+                  <PasswordField
+                    name="confirmPassword"
+                    label={tAuth("confirmPassword")}
+                    autoComplete="new-password"
+                    required
+                    error={err("confirmPassword")}
+                  />
+                </div>
+
+                <AccountActionBar>
+                  <SubmitButton label={t("changePassword")} pendingLabel={t("changing")} />
+                </AccountActionBar>
+              </section>
+            </div>
           </div>
         </AccountPanel>
       </div>
