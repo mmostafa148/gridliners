@@ -415,7 +415,7 @@ function PasswordPanel() {
           ) : null}
 
           <div className="bg-mist/45 p-4 sm:p-6 lg:p-7">
-            <div className="mx-auto grid max-w-[76rem] items-stretch gap-5 lg:grid-cols-[minmax(18rem,0.78fr)_minmax(0,1.22fr)]">
+            <div className="grid w-full items-stretch gap-5 lg:grid-cols-[minmax(18rem,0.78fr)_minmax(0,1.22fr)]">
               <section className="relative border border-navy-900/12 bg-white p-5 pt-7 sm:p-6 sm:pt-8">
                 <span aria-hidden className="absolute inset-y-0 start-0 w-0.5 bg-blue-700" />
                 <span className="grid size-11 place-items-center bg-blue-700/8 text-blue-700">
