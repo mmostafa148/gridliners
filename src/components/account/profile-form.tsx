@@ -1,6 +1,6 @@
 "use client";
 
-import { Camera, Globe2, MapPin, ShieldCheck, UserRound } from "lucide-react";
+import { Camera, ChevronDown, Globe2, MapPin, ShieldCheck, UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useActionState, useState } from "react";
 
@@ -255,43 +255,57 @@ export function ProfileForm({
                     <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
                       <Field name="nationality" label={t("nationality")}>
                         {({ id, name, className, describedBy, invalid }) => (
-                          <select
-                            id={id}
-                            name={name}
-                            data-field={name}
-                            aria-describedby={describedBy}
-                            aria-invalid={invalid || undefined}
-                            defaultValue={initial("nationality", participant.nationality ?? "")}
-                            className={cn(className, "appearance-none bg-white")}
-                          >
-                            <option value="">{t("unset")}</option>
-                            {countries.map((c) => (
-                              <option key={c.code} value={c.code}>
-                                {c.name}
-                              </option>
-                            ))}
-                          </select>
+                          <div className="relative">
+                            <select
+                              id={id}
+                              name={name}
+                              data-field={name}
+                              aria-describedby={describedBy}
+                              aria-invalid={invalid || undefined}
+                              defaultValue={initial("nationality", participant.nationality ?? "")}
+                              className={cn(className, "appearance-none bg-white pe-12")}
+                            >
+                              <option value="">{t("unset")}</option>
+                              {countries.map((c) => (
+                                <option key={c.code} value={c.code}>
+                                  {c.name}
+                                </option>
+                              ))}
+                            </select>
+                            <ChevronDown
+                              aria-hidden
+                              className="pointer-events-none absolute end-4 top-1/2 size-4 -translate-y-1/2 text-navy-600"
+                              strokeWidth={1.75}
+                            />
+                          </div>
                         )}
                       </Field>
                       <Field name="country" label={t("country")}>
                         {({ id, name, className, describedBy, invalid }) => (
-                          <select
-                            id={id}
-                            name={name}
-                            data-field={name}
-                            aria-describedby={describedBy}
-                            aria-invalid={invalid || undefined}
-                            autoComplete="country"
-                            defaultValue={initial("country", participant.country)}
-                            className={cn(className, "appearance-none bg-white")}
-                          >
-                            <option value="">{t("unset")}</option>
-                            {countries.map((c) => (
-                              <option key={c.code} value={c.code}>
-                                {c.name}
-                              </option>
-                            ))}
-                          </select>
+                          <div className="relative">
+                            <select
+                              id={id}
+                              name={name}
+                              data-field={name}
+                              aria-describedby={describedBy}
+                              aria-invalid={invalid || undefined}
+                              autoComplete="country"
+                              defaultValue={initial("country", participant.country)}
+                              className={cn(className, "appearance-none bg-white pe-12")}
+                            >
+                              <option value="">{t("unset")}</option>
+                              {countries.map((c) => (
+                                <option key={c.code} value={c.code}>
+                                  {c.name}
+                                </option>
+                              ))}
+                            </select>
+                            <ChevronDown
+                              aria-hidden
+                              className="pointer-events-none absolute end-4 top-1/2 size-4 -translate-y-1/2 text-navy-600"
+                              strokeWidth={1.75}
+                            />
+                          </div>
                         )}
                       </Field>
                     </div>
@@ -313,18 +327,25 @@ export function ProfileForm({
                     <div className="mt-6">
                       <Field name="uiLanguage" label={t("language")}>
                         {({ id, name, className, describedBy, invalid }) => (
-                          <select
-                            id={id}
-                            name={name}
-                            data-field={name}
-                            aria-describedby={describedBy}
-                            aria-invalid={invalid || undefined}
-                            defaultValue={initial("uiLanguage", participant.uiLanguage)}
-                            className={cn(className, "appearance-none bg-white")}
-                          >
-                            <option value="en">English</option>
-                            <option value="ar">العربية</option>
-                          </select>
+                          <div className="relative">
+                            <select
+                              id={id}
+                              name={name}
+                              data-field={name}
+                              aria-describedby={describedBy}
+                              aria-invalid={invalid || undefined}
+                              defaultValue={initial("uiLanguage", participant.uiLanguage)}
+                              className={cn(className, "appearance-none bg-white pe-12")}
+                            >
+                              <option value="en">English</option>
+                              <option value="ar">العربية</option>
+                            </select>
+                            <ChevronDown
+                              aria-hidden
+                              className="pointer-events-none absolute end-4 top-1/2 size-4 -translate-y-1/2 text-navy-600"
+                              strokeWidth={1.75}
+                            />
+                          </div>
                         )}
                       </Field>
                     </div>
