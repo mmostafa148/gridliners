@@ -63,26 +63,32 @@ export async function saveDraftAction(
     const existing = await api.entries.getById(entryId);
     // Ownership and state, both checked server-side. A submitted entry is a
     // record; the same URL must refuse to mutate it.
-    if (!existing || existing.participantId !== participant.id) {
+    if (existing && existing.participantId !== participant.id) {
       return { ok: false, reason: "not_found" };
     }
-    if (existing.state !== "draft") return { ok: false, reason: "notDraft" };
+    if (existing) {
+      if (existing.state !== "draft") return { ok: false, reason: "notDraft" };
 
-    await api.entries.update(entryId, {
-      title: draft.title,
-      description: draft.description,
-      contentLanguage: draft.contentLanguage as ContentLanguage,
-      country: draft.country,
-      credits,
-      ...(draft.client ? { client: draft.client } : {}),
-      ...(draft.externalUrl ? { externalUrl: draft.externalUrl } : {}),
-      declaredTier: tier,
-      baseSubCategoryId: draft.baseSubCategoryId,
-      additionalSubCategoryIds: draft.additionalSubCategoryIds,
-      eligibilityProof: proofFor(draft, tier, cycle.year),
-      media: mediaFor(draft),
-    });
-    return { ok: true, entryId };
+      await api.entries.update(entryId, {
+        title: draft.title,
+        description: draft.description,
+        contentLanguage: draft.contentLanguage as ContentLanguage,
+        country: draft.country,
+        credits,
+        ...(draft.client ? { client: draft.client } : {}),
+        ...(draft.externalUrl ? { externalUrl: draft.externalUrl } : {}),
+        declaredTier: tier,
+        baseSubCategoryId: draft.baseSubCategoryId,
+        additionalSubCategoryIds: draft.additionalSubCategoryIds,
+        eligibilityProof: proofFor(draft, tier, cycle.year),
+        media: mediaFor(draft),
+      });
+      return { ok: true, entryId };
+    }
+
+    // The demo store is memory-backed. A serverless instance may receive the
+    // next step without the draft created by the previous instance, so a
+    // missing own draft is recreated from the client-held wizard data below.
   }
 
   /**
@@ -130,20 +136,33 @@ export async function saveDraftAction(
  * payment is the one this action asked the pricing service for.
  */
 export async function checkoutAction(
-  entryId: string,
+  entryId: string | null,
+  draft: WizardDraft,
   method: PaymentMethod,
   promoCode: string | null,
   creditCode: string | null,
 ): Promise<{ ok: false; reason: string } | never> {
   const { participant } = await requireParticipant();
-  const entry = await api.entries.getById(entryId);
-  if (!entry || entry.participantId !== participant.id) return { ok: false, reason: "not_found" };
+  const existing = entryId ? await api.entries.getById(entryId) : null;
+  if (existing && existing.participantId !== participant.id) {
+    return { ok: false, reason: "not_found" };
+  }
 
   // Idempotence: an entry that has already left draft has been paid for. A
   // second POST — a double click, a resubmitted form — must not charge again.
-  if (entry.state !== "draft") {
+  if (existing && existing.state !== "draft") {
     const locale = await getLocale();
-    redirect(`/${locale}/entries/${entryId}/checkout`);
+    redirect(`/${locale}/entries/${existing.id}/checkout`);
+  }
+
+  // Persist once more in the same request that checks out. Besides ensuring
+  // the latest fields are used, this recreates a memory-backed demo draft when
+  // Vercel routes the request to a fresh serverless instance.
+  const saved = await saveDraftAction(existing?.id ?? null, draft);
+  if (!saved.ok) return saved;
+  const entry = await api.entries.getById(saved.entryId);
+  if (!entry || entry.participantId !== participant.id) {
+    return { ok: false, reason: "not_found" };
   }
 
   const snapshot = await api.pricing.quote({
@@ -156,7 +175,7 @@ export async function checkoutAction(
     creditCode: creditCode ?? undefined,
   });
 
-  await api.entries.submit(entryId, method, snapshot);
+  await api.entries.submit(entry.id, method, snapshot);
   const locale = await getLocale();
-  redirect(`/${locale}/entries/${entryId}/checkout`);
+  redirect(`/${locale}/entries/${entry.id}/checkout`);
 }

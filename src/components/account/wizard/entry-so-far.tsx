@@ -35,11 +35,11 @@ export function EntrySoFar({
 
   const slot = (label: string, value: string | null) => (
     <span className="flex min-w-0 flex-col gap-1">
-      <span className="text-caption text-navy-600">{label}</span>
+      <span className="text-caption text-cream-200/65">{label}</span>
       <span
         className={cn(
           "truncate text-body-md",
-          value ? "font-medium text-navy-900" : "text-navy-600",
+          value ? "font-medium text-cream-50" : "text-cream-200/65",
         )}
       >
         {value ?? t("notYet")}
@@ -50,20 +50,21 @@ export function EntrySoFar({
   return (
     <div
       className={cn(
-        "flex flex-wrap items-center gap-x-10 gap-y-4 border-y border-navy-900/12 bg-mist px-5 py-4",
+        "relative flex flex-wrap items-center gap-x-10 gap-y-4 overflow-hidden bg-navy-950 px-5 py-4 text-cream-50 sm:px-6",
         className,
       )}
     >
+      <span aria-hidden className="absolute inset-y-0 start-0 w-1 bg-gold" />
       {slot(t("tier"), tier)}
       {slot(t("category"), base)}
       {slot(t("addOns"), addOns ? String(addOns) : null)}
       <span className="flex items-baseline gap-3 md:ms-auto">
-        <span className="text-caption text-navy-600">{t("total")}</span>
+        <span className="text-caption text-cream-200/65">{t("total")}</span>
         <span
           aria-live="polite"
           className={cn(
             "font-data text-data-md tabular-nums",
-            total === null ? "text-navy-600" : "text-navy-900",
+            total === null ? "text-cream-200/65" : "text-gold",
           )}
         >
           {total === null ? t("notYet") : `$${total.toLocaleString("en-US")}`}

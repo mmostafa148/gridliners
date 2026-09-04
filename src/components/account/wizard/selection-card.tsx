@@ -46,13 +46,20 @@ export function SelectionCard({
   return (
     <label
       className={cn(
-        "group relative flex cursor-pointer flex-col gap-4 p-5 transition-colors",
+        "group relative flex h-full min-h-[17rem] cursor-pointer flex-col gap-4 overflow-hidden border p-5 transition-colors",
         "focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue-700",
         selected
-          ? "bg-navy-900 text-cream-50"
-          : "bg-mist text-navy-900 hover:bg-navy-900/8",
+          ? "border-navy-900 bg-navy-900 text-cream-50"
+          : "border-navy-900/12 bg-white text-navy-900 hover:border-blue-700/35 hover:bg-blue-700/[0.025]",
       )}
     >
+      <span
+        aria-hidden
+        className={cn(
+          "absolute inset-x-0 top-0 h-1 transition-colors",
+          selected ? "bg-gold" : "bg-navy-900/10 group-hover:bg-blue-700/45",
+        )}
+      />
       <input
         type="radio"
         name={inputName}
@@ -110,10 +117,6 @@ export function SelectionCard({
         </span>
       </div>
 
-      {/* Requirements are revealed on selection, not repeated three times.
-          Before choosing, a tier is a name, who it is for, and a price; the
-          proof it needs matters only once it is the tier being entered. */}
-      {selected ? (
       <dl
         className={cn(
           "flex flex-col gap-3 border-t pt-4",
@@ -139,9 +142,8 @@ export function SelectionCard({
           </dd>
         </div>
       </dl>
-      ) : null}
 
-      {note && selected ? (
+      {note ? (
         <p className={cn("text-caption", selected ? "text-cream-200/70" : "text-navy-600")}>
           {note}
         </p>

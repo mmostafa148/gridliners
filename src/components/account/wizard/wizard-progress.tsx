@@ -34,24 +34,30 @@ export function WizardProgress({
   return (
     <div>
       {/* Desktop: all six, named. */}
-      <ol className="hidden gap-px md:flex">
+      <ol className="hidden gap-px border border-navy-900/10 bg-navy-900/10 p-1 md:flex">
         {steps.map((n) => {
           const done = n < furthest || (n < step && n <= furthest);
           const current = n === step;
           const reachable = n <= furthest;
           return (
-            <li key={n} className="min-w-0 flex-1">
+            <li key={n} className="relative min-w-0 flex-1">
+              {current ? (
+                <span aria-hidden className="absolute inset-x-0 top-0 z-10 flex h-1">
+                  <span className="w-3/4 bg-blue-700" />
+                  <span className="flex-1 bg-gold" />
+                </span>
+              ) : null}
               <button
                 type="button"
                 disabled={!reachable}
                 onClick={() => reachable && onGo(n)}
                 aria-current={current ? "step" : undefined}
                 className={cn(
-                  "flex w-full flex-col gap-1.5 px-3 py-3.5 text-start transition-colors",
+                  "flex min-h-16 w-full flex-col justify-center gap-1.5 px-3 py-3 text-start transition-colors",
                   "focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-700",
                   current && "bg-navy-900 text-cream-50",
-                  !current && done && "bg-mist text-navy-900 hover:bg-navy-900/10",
-                  !current && !done && "bg-mist/60 text-navy-600",
+                  !current && done && "bg-white text-navy-900 hover:bg-blue-700/6",
+                  !current && !done && "bg-white/75 text-navy-600",
                   !reachable && "cursor-not-allowed",
                 )}
               >

@@ -45,21 +45,25 @@ export default async function NewEntryPage({
         </p>
       </div>
       <div className="account-shell pb-[var(--account-y)] pt-6">
-        <div className="border border-navy-900/10 bg-white p-5 sm:p-7">
-        <EntryWizard
-          entryId={null}
-          initial={emptyDraft({
-            country: participant.country || "",
-            contentLanguage: participant.uiLanguage,
-          })}
-          parents={data.parents}
-          subCategories={data.subCategories}
-          pricing={data.pricing}
-          windows={data.cycle.submissionWindows}
-          cashExpiryDays={data.cycle.cashExpiryDays}
-          credits={data.credits}
-          countries={data.countries}
-        />
+        <div className="relative border border-navy-900/10 bg-white p-4 pt-5 shadow-[0_20px_55px_rgba(3,24,61,0.06)] sm:p-6 sm:pt-7">
+          <span aria-hidden className="absolute inset-x-0 top-0 flex h-1">
+            <span className="w-32 bg-blue-700" />
+            <span className="w-12 bg-gold" />
+          </span>
+          <EntryWizard
+            entryId={null}
+            initial={emptyDraft({
+              country: participant.country || "",
+              contentLanguage: participant.uiLanguage,
+            })}
+            parents={data.parents}
+            subCategories={data.subCategories}
+            pricing={data.pricing}
+            windows={data.cycle.submissionWindows}
+            cashExpiryDays={data.cycle.cashExpiryDays}
+            credits={data.credits}
+            countries={data.countries}
+          />
         </div>
       </div>
     </AccountShell>

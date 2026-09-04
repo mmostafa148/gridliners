@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Info, Loader2, TriangleAlert } from "lucide-react";
+import { Banknote, Check, ChevronDown, CreditCard, Info, Loader2, TriangleAlert } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 
@@ -30,7 +30,6 @@ import type {
 import { checkoutAction, saveDraftAction } from "@/lib/account/wizard-actions";
 import {
   DESCRIPTION_MAX,
-  WIZARD_STEPS,
   basePriceFor,
   currentWindow,
   requiredProofs,
@@ -90,7 +89,6 @@ export function EntryWizard({
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [id, setId] = useState<string | null>(entryId);
   const [savedAt, setSavedAt] = useState<string | null>(null);
-  const [saveError, setSaveError] = useState<string | null>(null);
   const [dirty, setDirty] = useState(false);
   const [promo, setPromo] = useState("");
   const [promoError, setPromoError] = useState(false);
@@ -138,10 +136,14 @@ export function EntryWizard({
         setId(result.entryId);
         setDirty(false);
         setSavedAt(new Date().toLocaleTimeString(locale));
+        setErrors((current) => {
+          const next = { ...current };
+          delete next.form;
+          return next;
+        });
       } else {
         // Surfaced rather than swallowed. The step's summary is where a reader
         // is already looking when something did not happen.
-        setSaveError(result.reason);
         setErrors({ form: result.reason === "notDraft" ? "notDraft" : "saveFailed" });
       }
     });
@@ -152,6 +154,8 @@ export function EntryWizard({
     setErrors(found);
     setTouched((prev) => ({ ...prev, ...Object.fromEntries(Object.keys(found).map((k) => [k, true])) }));
     if (Object.keys(found).length) return;
+    setErrors({});
+    setTouched({});
     // Each completed step is saved, so leaving at any point loses nothing.
     save();
     if (step < 6) {
@@ -180,20 +184,23 @@ export function EntryWizard({
       setTouched((p) => ({ ...p, acceptTerms: true }));
       return;
     }
-    if (!id) {
-      save();
-      return;
-    }
     startTransition(async () => {
-      await checkoutAction(id, method, promo || null, creditCode);
+      const result = await checkoutAction(id, draft, method, promo || null, creditCode);
+      if (result?.ok === false) {
+        setErrors({ form: "saveFailed" });
+      }
     });
   }
 
   const stepTitle = t(`step.${step}`);
 
   return (
-    <div className="flex flex-col gap-7">
-      <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
+      <div className="relative flex flex-col gap-4 overflow-hidden border border-navy-900/10 bg-white p-4 pt-5 sm:p-5 sm:pt-6">
+        <span aria-hidden className="absolute inset-x-0 top-0 flex h-1">
+          <span className="w-28 bg-blue-700" />
+          <span className="w-10 bg-gold" />
+        </span>
         <div className="flex flex-wrap items-baseline justify-between gap-3">
           <Meta className="font-medium text-navy-800">{t("stepOf", { step, total: 6 })}</Meta>
           <span aria-live="polite" className="text-caption text-navy-600">
@@ -208,7 +215,7 @@ export function EntryWizard({
 
         {/* What has been chosen so far, on every step. */}
         <EntrySoFar
-          className="mt-2"
+          className="mt-1"
           tier={draft.tier ? tTier(draft.tier) : null}
           base={base?.name[locale] ?? null}
           addOns={addOnLines.length}
@@ -216,7 +223,7 @@ export function EntryWizard({
         />
       </div>
 
-      <div>
+      <section className="bg-mist/45 p-4 sm:p-6 lg:p-7">
         <SectionTitle className="focus:outline-none">
           <span ref={headingRef} tabIndex={-1} className="focus:outline-none">
             {stepTitle}
@@ -224,23 +231,17 @@ export function EntryWizard({
         </SectionTitle>
         <p className="mt-2 max-w-[62ch] text-body-sm text-navy-600">{t(`s${step}.lead`)}</p>
 
-        <div className="mt-7 flex flex-col gap-7">
+        <div className="mt-6 flex flex-col gap-6">
           {summaryItems.length ? (
             <ErrorSummary title={t("summaryTitle")} items={summaryItems} />
           ) : null}
-          {saveError ? (
-            <p role="alert" className="border-s-2 border-destructive bg-destructive/6 p-4 font-data text-data-sm text-navy-900">
-              {saveError}
-            </p>
-          ) : null}
-
           {/* ---- 1. tier and proofs ------------------------------------- */}
           {step === 1 ? (
             <div className="flex flex-col gap-7">
 
               <fieldset>
                 <legend className="sr-only">{t("step.1")}</legend>
-                <div className="grid items-start gap-4 lg:grid-cols-3">
+                <div className="grid items-stretch gap-4 lg:grid-cols-3">
                   {TIERS.map((tier) => {
                     const prices = pricing.basePrices[tier];
                     return (
@@ -268,7 +269,7 @@ export function EntryWizard({
               </fieldset>
 
               {draft.tier ? (
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-5 border border-navy-900/12 bg-white p-5 sm:p-6">
                   <ItemTitle as="p">{t("s1.proofsTitle")}</ItemTitle>
                   <div className="grid gap-5 md:grid-cols-2">
                     {requiredProofs(draft.tier).map((key) => (
@@ -311,44 +312,52 @@ export function EntryWizard({
 
               <Field name="parentId" label={t("s2.parent")} required error={err("parentId")}>
                 {({ id: fid, name, className }) => (
-                  <select
-                    id={fid}
-                    name={name}
-                    data-field={name}
-                    value={draft.parentId}
-                    onChange={(e) =>
-                      // Changing the parent clears the choices under it: an
-                      // add-on from the old parent would break the same-parent
-                      // rule the moment it were saved.
-                      set({
-                        parentId: e.target.value,
-                        baseSubCategoryId: "",
-                        additionalSubCategoryIds: [],
-                      })
-                    }
-                    onBlur={() => blur("parentId")}
-                    className={cn(className, "appearance-none bg-white")}
-                  >
-                    <option value="">—</option>
-                    {parents.map((parent) => (
-                      <option key={parent.id} value={parent.id}>
-                        {parent.name[locale]}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <select
+                      id={fid}
+                      name={name}
+                      data-field={name}
+                      value={draft.parentId}
+                      onChange={(e) =>
+                        // Changing the parent clears the choices under it: an
+                        // add-on from the old parent would break the same-parent
+                        // rule the moment it were saved.
+                        set({
+                          parentId: e.target.value,
+                          baseSubCategoryId: "",
+                          additionalSubCategoryIds: [],
+                        })
+                      }
+                      onBlur={() => blur("parentId")}
+                      className={cn(className, "appearance-none bg-white pe-12")}
+                    >
+                      <option value="">—</option>
+                      {parents.map((parent) => (
+                        <option key={parent.id} value={parent.id}>
+                          {parent.name[locale]}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown aria-hidden className="pointer-events-none absolute end-4 top-1/2 size-4 -translate-y-1/2 text-navy-500" />
+                  </div>
                 )}
               </Field>
 
               {draft.parentId ? (
                 <>
-                  <fieldset className="flex flex-col gap-3">
+                  <fieldset className="flex flex-col gap-3 border border-navy-900/12 bg-white p-5 sm:p-6">
                     <legend className="mb-3 text-body-md font-medium text-navy-900">
                       {t("s2.base")}
                     </legend>
-                    <ul className="border-t border-navy-900/15">
+                    <ul className="grid gap-3 sm:grid-cols-2">
                       {inParent.map((sub) => (
-                        <li key={sub.id} className="border-b border-navy-900/12">
-                          <label className="flex cursor-pointer items-center gap-4 px-5 py-4 transition-colors hover:bg-mist focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-700">
+                        <li key={sub.id}>
+                          <label className={cn(
+                            "flex min-h-16 cursor-pointer items-center gap-4 border px-4 py-4 transition-colors focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-700",
+                            draft.baseSubCategoryId === sub.id
+                              ? "border-blue-700/35 bg-blue-700/[0.055]"
+                              : "border-navy-900/12 hover:border-blue-700/25 hover:bg-mist/60",
+                          )}>
                             <input
                               type="radio"
                               name="baseSubCategoryId"
@@ -380,17 +389,22 @@ export function EntryWizard({
                   </fieldset>
 
                   {draft.baseSubCategoryId ? (
-                    <fieldset className="flex flex-col gap-3">
+                    <fieldset className="flex flex-col gap-3 border border-navy-900/12 bg-white p-5 sm:p-6">
                       <legend className="mb-3 text-body-md font-medium text-navy-900">
                         {t("s2.addOns")}
                       </legend>
                       <p className="max-w-[62ch] text-body-md text-navy-700">{t("s2.sameParentNote")}</p>
-                      <ul className="border-t border-navy-900/15">
+                      <ul className="grid gap-3 sm:grid-cols-2">
                         {inParent
                           .filter((sub) => sub.id !== draft.baseSubCategoryId)
                           .map((sub) => (
-                            <li key={sub.id} className="border-b border-navy-900/12">
-                              <label className="flex cursor-pointer items-center gap-4 px-5 py-4 transition-colors hover:bg-mist focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-700">
+                            <li key={sub.id}>
+                              <label className={cn(
+                                "flex min-h-16 cursor-pointer items-center gap-4 border px-4 py-4 transition-colors focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-blue-700",
+                                draft.additionalSubCategoryIds.includes(sub.id)
+                                  ? "border-blue-700/35 bg-blue-700/[0.055]"
+                                  : "border-navy-900/12 hover:border-blue-700/25 hover:bg-mist/60",
+                              )}>
                                 <input
                                   type="checkbox"
                                   checked={draft.additionalSubCategoryIds.includes(sub.id)}
@@ -417,7 +431,11 @@ export function EntryWizard({
                   ) : null}
 
                   {/* The running total, updating as the boxes are ticked. */}
-                  <div className="border-t-2 border-navy-900 pt-6">
+                  <div className="relative overflow-hidden border border-navy-900/12 bg-white p-5 pt-7 sm:p-6 sm:pt-8">
+                    <span aria-hidden className="absolute inset-x-0 top-0 flex h-1">
+                      <span className="w-24 bg-blue-700" />
+                      <span className="w-8 bg-gold" />
+                    </span>
                     <ItemTitle as="p">{t("s2.runningTotal")}</ItemTitle>
                     <dl className="mt-4 flex max-w-[28rem] flex-col gap-2.5">
                       <div className="flex items-baseline justify-between gap-4">
@@ -442,7 +460,9 @@ export function EntryWizard({
                   </div>
                 </>
               ) : (
-                <p className="text-body-md text-navy-700">{t("s2.chooseParent")}</p>
+                <p className="border border-dashed border-navy-900/20 bg-white p-6 text-body-md text-navy-700">
+                  {t("s2.chooseParent")}
+                </p>
               )}
             </div>
           ) : null}
@@ -451,7 +471,7 @@ export function EntryWizard({
           {step === 3 ? (
             <div className="flex flex-col gap-6">
 
-              <div className="grid gap-5 md:grid-cols-2">
+              <div className="grid gap-5 border border-navy-900/12 bg-white p-5 sm:p-6 md:grid-cols-2">
                 <Field name="title" label={t("s3.entryTitle")} required error={err("title")}>
                   {({ id: fid, name, className }) => (
                     <input
@@ -479,19 +499,22 @@ export function EntryWizard({
 
                 <Field name="country" label={t("s3.country")} required error={err("country")}>
                   {({ id: fid, name, className }) => (
-                    <select
-                      id={fid} name={name} data-field={name}
-                      value={draft.country}
-                      onChange={(e) => set({ country: e.target.value })}
-                      onBlur={() => blur("country")}
-                      autoComplete="country"
-                      className={cn(className, "appearance-none bg-white")}
-                    >
-                      <option value="">—</option>
-                      {countries.map((c) => (
-                        <option key={c.code} value={c.code}>{c.name}</option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <select
+                        id={fid} name={name} data-field={name}
+                        value={draft.country}
+                        onChange={(e) => set({ country: e.target.value })}
+                        onBlur={() => blur("country")}
+                        autoComplete="country"
+                        className={cn(className, "appearance-none bg-white pe-12")}
+                      >
+                        <option value="">—</option>
+                        {countries.map((c) => (
+                          <option key={c.code} value={c.code}>{c.name}</option>
+                        ))}
+                      </select>
+                      <ChevronDown aria-hidden className="pointer-events-none absolute end-4 top-1/2 size-4 -translate-y-1/2 text-navy-500" />
+                    </div>
                   )}
                 </Field>
 
@@ -501,46 +524,51 @@ export function EntryWizard({
                   hint={t("s3.contentLanguageHint")}
                 >
                   {({ id: fid, name, className }) => (
-                    <select
-                      id={fid} name={name} data-field={name}
-                      value={draft.contentLanguage}
-                      onChange={(e) => set({ contentLanguage: e.target.value as ContentLanguage })}
-                      className={cn(className, "appearance-none bg-white")}
-                    >
-                      <option value="en">English</option>
-                      <option value="ar">العربية</option>
-                    </select>
+                    <div className="relative">
+                      <select
+                        id={fid} name={name} data-field={name}
+                        value={draft.contentLanguage}
+                        onChange={(e) => set({ contentLanguage: e.target.value as ContentLanguage })}
+                        className={cn(className, "appearance-none bg-white pe-12")}
+                      >
+                        <option value="en">English</option>
+                        <option value="ar">العربية</option>
+                      </select>
+                      <ChevronDown aria-hidden className="pointer-events-none absolute end-4 top-1/2 size-4 -translate-y-1/2 text-navy-500" />
+                    </div>
                   )}
                 </Field>
               </div>
 
-              <Field
-                name="description"
-                label={t("s3.description")}
-                hint={t("s3.descriptionHint")}
-                required
-                error={err("description")}
-              >
-                {({ id: fid, name, className }) => (
-                  <textarea
-                    id={fid} name={name} data-field={name}
-                    rows={7}
-                    value={draft.description}
-                    onChange={(e) => set({ description: e.target.value })}
-                    onBlur={() => blur("description")}
-                    // The entrant's own direction, inside a page that may run
-                    // the other way.
-                    dir={draft.contentLanguage === "ar" ? "rtl" : "ltr"}
-                    lang={draft.contentLanguage}
-                    className={cn(className, "h-auto py-3 leading-relaxed")}
-                  />
-                )}
-              </Field>
-              <p className="-mt-3 font-data text-data-sm tabular-nums text-navy-600" aria-live="polite">
-                {t("s3.charsLeft", { n: Math.max(0, DESCRIPTION_MAX - draft.description.length) })}
-              </p>
+              <div className="border border-navy-900/12 bg-white p-5 sm:p-6">
+                <Field
+                  name="description"
+                  label={t("s3.description")}
+                  hint={t("s3.descriptionHint")}
+                  required
+                  error={err("description")}
+                >
+                  {({ id: fid, name, className }) => (
+                    <textarea
+                      id={fid} name={name} data-field={name}
+                      rows={7}
+                      value={draft.description}
+                      onChange={(e) => set({ description: e.target.value })}
+                      onBlur={() => blur("description")}
+                      // The entrant's own direction, inside a page that may run
+                      // the other way.
+                      dir={draft.contentLanguage === "ar" ? "rtl" : "ltr"}
+                      lang={draft.contentLanguage}
+                      className={cn(className, "h-auto py-3 leading-relaxed")}
+                    />
+                  )}
+                </Field>
+                <p className="mt-3 font-data text-data-sm tabular-nums text-navy-600" aria-live="polite">
+                  {t("s3.charsLeft", { n: Math.max(0, DESCRIPTION_MAX - draft.description.length) })}
+                </p>
+              </div>
 
-              <div className="grid gap-5 md:grid-cols-2">
+              <div className="grid gap-5 border border-navy-900/12 bg-white p-5 sm:p-6 md:grid-cols-2">
                 <Field name="externalUrl" label={t("s3.projectUrl")} hint={t("s3.projectUrlHint")} error={err("externalUrl")}>
                   {({ id: fid, name, className }) => (
                     <input
@@ -565,18 +593,19 @@ export function EntryWizard({
                     />
                   )}
                 </Field>
+                <div className="md:col-span-2">
+                  <Field name="credits" label={t("s3.credits")} hint={t("s3.creditsHint")}>
+                    {({ id: fid, name, className }) => (
+                      <textarea
+                        id={fid} name={name} data-field={name} rows={4}
+                        value={draft.credits}
+                        onChange={(e) => set({ credits: e.target.value })}
+                        className={cn(className, "h-auto py-3 leading-relaxed")}
+                      />
+                    )}
+                  </Field>
+                </div>
               </div>
-
-              <Field name="credits" label={t("s3.credits")} hint={t("s3.creditsHint")}>
-                {({ id: fid, name, className }) => (
-                  <textarea
-                    id={fid} name={name} data-field={name} rows={4}
-                    value={draft.credits}
-                    onChange={(e) => set({ credits: e.target.value })}
-                    className={cn(className, "h-auto py-3 leading-relaxed")}
-                  />
-                )}
-              </Field>
             </div>
           ) : null}
 
@@ -588,55 +617,65 @@ export function EntryWizard({
                 {t("s4.mockBody")}
               </AccountNote>
 
-              <UploadField
-                fieldName="cover"
-                label={t("s4.cover")}
-                hint={t("s4.coverHint")}
-                accept=".jpg,.jpeg,.png"
-                maxMb={8}
-                files={draft.media.coverName ? [{ name: draft.media.coverName, status: "done" }] : []}
-                onChange={(next) =>
-                  set({ media: { ...draft.media, coverName: next[0]?.name ?? "" } })
-                }
-                error={err("cover")}
-              />
-
-              <UploadField
-                fieldName="gallery"
-                label={t("s4.gallery")}
-                hint={t("s4.galleryHint")}
-                accept=".jpg,.jpeg,.png"
-                multiple
-                maxMb={8}
-                maxCount={8}
-                files={draft.media.gallery.map((name) => ({ name, status: "done" as const }))}
-                onChange={(next) => set({ media: { ...draft.media, gallery: next.map((f) => f.name) } })}
-              />
-
-              <UploadField
-                fieldName="documents"
-                label={t("s4.documents")}
-                hint={t("s4.documentsHint")}
-                accept=".pdf"
-                multiple
-                maxMb={12}
-                maxCount={4}
-                files={draft.media.documents.map((name) => ({ name, status: "done" as const }))}
-                onChange={(next) => set({ media: { ...draft.media, documents: next.map((f) => f.name) } })}
-              />
-
-              <Field name="videoUrl" label={t("s4.video")} hint={t("s4.videoHint")} error={err("videoUrl")}>
-                {({ id: fid, name, className }) => (
-                  <input
-                    id={fid} name={name} data-field={name} type="url" inputMode="url"
-                    value={draft.media.videoUrl}
-                    onChange={(e) => set({ media: { ...draft.media, videoUrl: e.target.value } })}
-                    onBlur={() => blur("videoUrl")}
-                    placeholder="https://"
-                    className={className}
+              <div className="grid items-start gap-5 lg:grid-cols-2">
+                <div className="border border-navy-900/12 bg-white p-5 sm:p-6">
+                  <UploadField
+                    fieldName="cover"
+                    label={t("s4.cover")}
+                    hint={t("s4.coverHint")}
+                    accept=".jpg,.jpeg,.png"
+                    maxMb={8}
+                    files={draft.media.coverName ? [{ name: draft.media.coverName, status: "done" }] : []}
+                    onChange={(next) =>
+                      set({ media: { ...draft.media, coverName: next[0]?.name ?? "" } })
+                    }
+                    error={err("cover")}
                   />
-                )}
-              </Field>
+                </div>
+
+                <div className="border border-navy-900/12 bg-white p-5 sm:p-6">
+                  <UploadField
+                    fieldName="gallery"
+                    label={t("s4.gallery")}
+                    hint={t("s4.galleryHint")}
+                    accept=".jpg,.jpeg,.png"
+                    multiple
+                    maxMb={8}
+                    maxCount={8}
+                    files={draft.media.gallery.map((name) => ({ name, status: "done" as const }))}
+                    onChange={(next) => set({ media: { ...draft.media, gallery: next.map((f) => f.name) } })}
+                  />
+                </div>
+
+                <div className="border border-navy-900/12 bg-white p-5 sm:p-6">
+                  <UploadField
+                    fieldName="documents"
+                    label={t("s4.documents")}
+                    hint={t("s4.documentsHint")}
+                    accept=".pdf"
+                    multiple
+                    maxMb={12}
+                    maxCount={4}
+                    files={draft.media.documents.map((name) => ({ name, status: "done" as const }))}
+                    onChange={(next) => set({ media: { ...draft.media, documents: next.map((f) => f.name) } })}
+                  />
+                </div>
+
+                <div className="border border-navy-900/12 bg-white p-5 sm:p-6">
+                  <Field name="videoUrl" label={t("s4.video")} hint={t("s4.videoHint")} error={err("videoUrl")}>
+                    {({ id: fid, name, className }) => (
+                      <input
+                        id={fid} name={name} data-field={name} type="url" inputMode="url"
+                        value={draft.media.videoUrl}
+                        onChange={(e) => set({ media: { ...draft.media, videoUrl: e.target.value } })}
+                        onBlur={() => blur("videoUrl")}
+                        placeholder="https://"
+                        className={className}
+                      />
+                    )}
+                  </Field>
+                </div>
+              </div>
             </div>
           ) : null}
 
@@ -672,9 +711,19 @@ export function EntryWizard({
                 {t("s6.mockBody")}
               </AccountNote>
 
-              <div className="grid gap-x-12 gap-y-10 md:grid-cols-2">
-                <div className="flex flex-col gap-4 border-t-2 border-navy-900 pt-6">
-                  <ItemTitle as="p">{t("s6.card")}</ItemTitle>
+              <div className="grid items-stretch gap-5 md:grid-cols-2">
+                <section className="relative flex min-h-64 flex-col gap-4 overflow-hidden border border-navy-900/12 bg-white p-6 pt-8">
+                  <span aria-hidden className="absolute inset-x-0 top-0 flex h-1">
+                    <span className="w-3/4 bg-blue-700" />
+                    <span className="flex-1 bg-gold" />
+                  </span>
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="grid size-11 place-items-center bg-blue-700/8 text-blue-700">
+                      <CreditCard aria-hidden className="size-5" strokeWidth={1.75} />
+                    </span>
+                    <Figure className="text-data-lg text-navy-900">${runningTotal}</Figure>
+                  </div>
+                  <ItemTitle as="p" className="mt-2">{t("s6.card")}</ItemTitle>
                   <p className="flex-1 text-body-md text-navy-700">{t("s6.cardBody")}</p>
                   <button
                     type="button"
@@ -688,10 +737,17 @@ export function EntryWizard({
                     ) : null}
                     {t("s6.payNow", { amount: `$${runningTotal}` })}
                   </button>
-                </div>
+                </section>
 
-                <div className="flex flex-col gap-4 border-t border-navy-900/25 pt-6">
-                  <ItemTitle as="p">{t("s6.cash")}</ItemTitle>
+                <section className="relative flex min-h-64 flex-col gap-4 overflow-hidden border border-navy-900/12 bg-white p-6 pt-8">
+                  <span aria-hidden className="absolute inset-x-0 top-0 h-1 bg-navy-900/15" />
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="grid size-11 place-items-center bg-navy-900/6 text-navy-800">
+                      <Banknote aria-hidden className="size-5" strokeWidth={1.75} />
+                    </span>
+                    <Figure className="text-data-lg text-navy-900">${runningTotal}</Figure>
+                  </div>
+                  <ItemTitle as="p" className="mt-2">{t("s6.cash")}</ItemTitle>
                   <p className="flex-1 text-body-md text-navy-700">{t("s6.cashBody")}</p>
                   <Meta className="block">{t("s6.expiryNote", { days: cashExpiryDays })}</Meta>
                   <button
@@ -703,7 +759,7 @@ export function EntryWizard({
                   >
                     {t("s6.cashNow")}
                   </button>
-                </div>
+                </section>
               </div>
 
               {touched.acceptTerms && errors.acceptTerms ? (
@@ -717,7 +773,7 @@ export function EntryWizard({
 
         {/* The step's actions, on the page rather than in a grey strip. */}
         {step < 6 ? (
-          <div className="mt-9 flex flex-wrap items-center gap-4 border-t border-navy-900/12 pt-6">
+          <div className="mt-8 flex flex-wrap items-center gap-3 border-t border-navy-900/12 bg-white px-4 py-4 shadow-[0_-12px_28px_rgba(3,24,61,0.06)] sm:px-5">
             <button type="button" onClick={advance} className={accountAction.primary}>
               {t("next")}
             </button>
@@ -735,13 +791,13 @@ export function EntryWizard({
             ) : null}
           </div>
         ) : (
-          <div className="mt-9 border-t border-navy-900/12 pt-6">
+          <div className="mt-8 border-t border-navy-900/12 bg-white px-4 py-4 shadow-[0_-12px_28px_rgba(3,24,61,0.06)] sm:px-5">
             <button type="button" onClick={() => setStep(5)} className={accountAction.quiet}>
               {t("back")}
             </button>
           </div>
         )}
-      </div>
+      </section>
     </div>
   );
 }
@@ -805,10 +861,10 @@ function ReviewStep({
   return (
     /* The record is read; the money is checked. They are two different jobs,
        so they are two columns rather than five stacked rectangles. */
-    <div className="grid gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,1fr)_22rem]">
-      <div className="flex min-w-0 flex-col gap-11">
-      <section>
-        <div className="flex items-center justify-between gap-6 border-b-2 border-navy-900 pb-3">
+    <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+      <div className="flex min-w-0 flex-col gap-5">
+      <section className="border border-navy-900/12 bg-white p-5 sm:p-6">
+        <div className="flex items-center justify-between gap-6 border-b border-navy-900/12 pb-4">
           <ItemTitle as="p">{t("s5.content")}</ItemTitle>
           {editLink(3)}
         </div>
@@ -826,8 +882,8 @@ function ReviewStep({
         </dl>
       </section>
 
-      <section>
-        <div className="flex items-center justify-between gap-6 border-b-2 border-navy-900 pb-3">
+      <section className="border border-navy-900/12 bg-white p-5 sm:p-6">
+        <div className="flex items-center justify-between gap-6 border-b border-navy-900/12 pb-4">
           <ItemTitle as="p">{t("s5.media")}</ItemTitle>
           {editLink(4)}
         </div>
@@ -839,7 +895,7 @@ function ReviewStep({
         </dl>
       </section>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 border border-navy-900/12 bg-white p-5 sm:p-6">
         <label className="flex max-w-[62ch] items-start gap-3.5 text-body-md text-navy-900">
           <input
             type="checkbox"
@@ -857,7 +913,11 @@ function ReviewStep({
       </div>
 
       {/* The money, held beside the record rather than under it. */}
-      <aside className="bg-mist p-7 lg:sticky lg:top-28 lg:self-start">
+      <aside className="relative overflow-hidden border border-navy-900/12 bg-white p-6 pt-8 lg:sticky lg:top-28 lg:self-start">
+        <span aria-hidden className="absolute inset-x-0 top-0 flex h-1">
+          <span className="w-3/4 bg-blue-700" />
+          <span className="flex-1 bg-gold" />
+        </span>
         <div className="flex items-center justify-between gap-6">
           <ItemTitle as="p">{t("s5.pricing")}</ItemTitle>
           {editLink(2)}

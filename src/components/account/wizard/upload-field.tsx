@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, ChevronDown, ChevronUp, Loader2, Paperclip, X } from "lucide-react";
+import { AlertTriangle, ChevronDown, ChevronUp, Loader2, UploadCloud, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useId, useRef, useState } from "react";
 
@@ -105,22 +105,29 @@ export function UploadField({
       <FieldLabel>{label}</FieldLabel>
       <p className="text-body-sm text-navy-600">{hint}</p>
 
-      <div className="mt-1 flex flex-wrap items-center gap-3">
+      <div className="mt-1">
         <label
           htmlFor={uid}
           className={cn(
-            "inline-flex h-11 cursor-pointer items-center gap-2 border border-navy-900/30 px-4",
+            "group flex min-h-36 w-full cursor-pointer flex-col items-center justify-center gap-3 border border-dashed border-navy-900/25 bg-mist/45 px-6 py-8 text-center",
             "text-body-md font-medium text-navy-900 transition-colors",
-            "hover:bg-navy-900 hover:text-cream-50",
+            "hover:border-blue-700/50 hover:bg-blue-700/[0.035]",
             "focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-blue-700",
           )}
         >
-          {busy ? (
-            <Loader2 aria-hidden className="size-4 animate-spin motion-reduce:animate-none" />
-          ) : (
-            <Paperclip aria-hidden className="size-4" />
-          )}
-          {multiple ? t("add") : t("addCover")}
+          <span className="grid size-12 place-items-center border border-blue-700/15 bg-white text-blue-700 transition-colors group-hover:border-blue-700/30">
+            {busy ? (
+              <Loader2 aria-hidden className="size-5 animate-spin motion-reduce:animate-none" />
+            ) : (
+              <UploadCloud aria-hidden className="size-5" strokeWidth={1.7} />
+            )}
+          </span>
+          <span>{multiple ? t("add") : t("addCover")}</span>
+          {files.length === 0 ? (
+            <span className="text-caption font-normal text-navy-600">
+              {multiple ? t("empty") : t("noCover")}
+            </span>
+          ) : null}
           <input
             ref={inputRef}
             id={uid}
@@ -132,11 +139,6 @@ export function UploadField({
             className="sr-only"
           />
         </label>
-        {files.length === 0 ? (
-          <span className="text-body-sm text-navy-600">
-            {multiple ? t("empty") : t("noCover")}
-          </span>
-        ) : null}
       </div>
 
       {files.length ? (
