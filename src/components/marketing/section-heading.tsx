@@ -34,6 +34,7 @@ export function SectionHeading({
 
   return (
     <div
+      data-motion-heading
       className={cn(
         "flex flex-col gap-4 md:flex-row md:items-end md:justify-between",
         className,

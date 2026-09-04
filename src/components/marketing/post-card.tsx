@@ -37,12 +37,13 @@ export async function PostCard({
   );
 
   return (
-    <article className="h-full">
+    <article data-motion-card className="h-full">
       <Link
         href={`/news/${post.slug}`}
         className="group flex h-full flex-col focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-700"
       >
         <div
+          data-motion-media
           className={cn(
             "relative w-full overflow-hidden bg-navy-950",
             featured ? "aspect-[16/9]" : "aspect-[8/5]",

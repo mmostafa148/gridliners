@@ -32,7 +32,10 @@ export function DuotoneImage({
   children?: React.ReactNode;
 }) {
   return (
-    <div className={cn("duotone overflow-hidden bg-navy-950", className)}>
+    <div
+      data-motion-media
+      className={cn("duotone overflow-hidden bg-navy-950", className)}
+    >
       <Image
         src={asset.src}
         alt={alt}

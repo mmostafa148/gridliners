@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { PublicFooter } from "@/components/layout/public-footer";
 import { PublicHeader } from "@/components/layout/public-header";
+import { SiteMotion } from "@/components/motion/site-motion";
 import { api } from "@/lib/api";
 import { getSession } from "@/lib/auth/session";
 import { phasePresentation } from "@/lib/cycle-phase";
@@ -95,12 +96,14 @@ export async function SiteFrame({ children }: { children: React.ReactNode }) {
         action={{ href: primary.href, label: tCta(primary.labelKey) }}
         identity={identity}
       />
+      <SiteMotion />
       {/* Cleared for the fixed announcement bar, and on a phone for the rail
           under it as well, since that is where the rail lives below md. Inner
           pages clear the rest themselves — public pages in `PageHeader`, the
           account area in `AccountNav`. */}
       <main
         id="main-content"
+        data-site-motion-root
         className="flex-1 pt-[var(--chrome-h)] md:pt-[var(--announce-h)]"
       >
         {children}

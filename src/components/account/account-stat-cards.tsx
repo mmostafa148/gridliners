@@ -64,6 +64,7 @@ export function AccountStatCards({
 }) {
   return (
     <ul
+      data-motion-track
       className={cn(
         // The column count follows the number of cards, so three fill the row
         // as evenly as four do.

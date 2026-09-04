@@ -90,6 +90,7 @@ export function ProjectCard({
 
   return (
     <article
+      data-motion-card
       className={cn(
         "group flex flex-col border border-border bg-card transition-colors",
         "hover:border-navy-400",
@@ -101,7 +102,10 @@ export function ProjectCard({
             card carries its Winner Frame — the brand's own award artwork —
             rather than a placeholder, and the frame is replaced by the cover
             image when one exists. */}
-        <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-navy-900 p-6">
+        <div
+          data-motion-media
+          className="relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-navy-900 p-6"
+        >
           {isMedal ? (
             <WinnerFrame
               level={level as MedalLevel}

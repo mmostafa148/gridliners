@@ -149,7 +149,7 @@ export function PageHeader({
             side. The lead used to sit in the end columns, which put it on top
             of the field: legible, but it read as two things that had landed in
             the same place rather than a composition. */}
-        <div className="lg:w-7/12">
+        <div data-motion-intro className="lg:w-7/12">
           {eyebrow ? (
             <p className="font-display text-coord uppercase text-cream-200/70">
               {eyebrow}

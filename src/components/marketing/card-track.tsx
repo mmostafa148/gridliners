@@ -116,7 +116,10 @@ export function CardTrack({
     <div>
       {/* The heading and the controls on one line. They are the section's two
           fixed points: what this is, and everything you can do with it. */}
-      <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+      <div
+        data-motion-heading
+        className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
+      >
         {heading}
         <div className="flex shrink-0 flex-wrap items-center gap-4">
           {action}
@@ -129,6 +132,7 @@ export function CardTrack({
 
       <ul
         ref={track}
+        data-motion-track
         className={cn(
           "mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-1",
           "motion-reduce:scroll-auto",

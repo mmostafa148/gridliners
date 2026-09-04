@@ -163,6 +163,7 @@ export function AccountSection({
   const onNavy = ground === "navy";
   return (
     <section
+      data-motion-panel
       className={cn(
         ground === "mist" && "bg-mist",
         ground === "white" && "bg-white",
@@ -461,6 +462,7 @@ export function AccountPanel({
 }) {
   return (
     <section
+      data-motion-panel
       // The id sits on the panel, not on its heading: a link to a panel should
       // bring the panel's own top edge into view, and `scroll-mt` clears the
       // fixed rail so the heading is not left under it.
