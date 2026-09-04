@@ -518,7 +518,7 @@
       "show": "Show {name}'s testimonial"
     },
     "becomePartner": {
-      "title": "Become a partner",
+      "title": "Put your name next to the work that wins.",
       "cycleLabel": "Partnership cycle",
       "description": "Partnership puts your name inside the programme rather than beside it: on the winner materials, in the ceremony, and next to the work itself.",
       "howTitle": "How it works",
@@ -533,8 +533,9 @@
       "partner": "Partner",
       "supporter": "Supporter",
       "note": "Pricing is set per cycle and depends on the tier and the category. Nothing is sold off a rate card.",
-      "cta": "Start a conversation",
+      "cta": "Explore partnership",
       "contact": "Talk to the team",
+      "imageCaption": "Partnership in the room, not outside it",
       "benefit1": "Your mark on the partners wall and the winner materials",
       "benefit2": "Seats at the ceremony",
       "benefit3": "Named in the results announcement",
