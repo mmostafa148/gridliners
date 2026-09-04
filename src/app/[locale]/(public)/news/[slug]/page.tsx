@@ -88,87 +88,108 @@ export default async function PostPage({
     <>
       <article>
         <header className="bg-navy-950 text-cream-50">
-          <div className="page-shell flex flex-col gap-7 pb-11 pt-[calc(var(--chrome-h)-var(--announce-h)+1.5rem)] lg:pb-14 lg:pt-[calc(var(--chrome-h)-var(--announce-h)+2.5rem)]">
-            <p className="font-display text-coord uppercase">
-              <Link
-                href="/news"
-                className="inline-flex items-center gap-2 text-cream-200/85 underline underline-offset-4 transition-colors hover:text-cream-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream-100"
-              >
-                <ArrowLeft aria-hidden className="size-3.5 rtl:-scale-x-100" strokeWidth={2.5} />
-                {t("backToNews")}
-              </Link>
-            </p>
+          <div className="page-shell pt-[calc(var(--chrome-h)-var(--announce-h)+1.25rem)]">
+            <div
+              className={
+                post.imageUrl
+                  ? "grid border-y border-cream-50/15 lg:min-h-[clamp(36rem,68vh,46rem)] lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]"
+                  : "max-w-[64rem] border-y border-cream-50/15"
+              }
+            >
+              <div className="flex flex-col py-9 lg:min-h-full lg:pe-14 lg:py-14 xl:pe-20">
+                <p className="font-display text-coord uppercase">
+                  <Link
+                    href="/news"
+                    className="inline-flex min-h-11 items-center gap-2 text-cream-200/85 underline underline-offset-4 transition-colors hover:text-cream-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream-100"
+                  >
+                    <ArrowLeft
+                      aria-hidden
+                      className="size-3.5 rtl:-scale-x-100"
+                      strokeWidth={2.5}
+                    />
+                    {t("backToNews")}
+                  </Link>
+                </p>
 
-            <div className="max-w-[54rem]">
-              <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-display text-coord uppercase text-cream-200/85">
-                <span>{t(`kind.${post.kind}`)}</span>
-                {category ? (
-                  <>
-                    <span aria-hidden className="size-[3px] shrink-0 bg-cream-200/55" />
-                    <span>{category.name[locale]}</span>
-                  </>
-                ) : null}
-                <span aria-hidden className="size-[3px] shrink-0 bg-cream-200/55" />
-                <time dateTime={post.publishedAt}>{date}</time>
-                {post.readMinutes ? (
-                  <>
-                    <span aria-hidden className="size-[3px] shrink-0 bg-cream-200/55" />
-                    <span>{t("readTime", { minutes: post.readMinutes })}</span>
-                  </>
-                ) : null}
-              </p>
-              <h1 className="mt-5 text-display-md leading-[1.05] text-balance">
-                {post.title[locale]}
-              </h1>
-              <p className="mt-6 max-w-[60ch] text-body-lg text-cream-100/90">
-                {post.excerpt[locale]}
-              </p>
+                <div className="my-12 lg:my-auto lg:py-10">
+                  <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-display text-coord uppercase text-gold-500">
+                    <span>{t(`kind.${post.kind}`)}</span>
+                    {category ? (
+                      <>
+                        <span aria-hidden className="h-px w-7 shrink-0 bg-gold-500/70" />
+                        <span>{category.name[locale]}</span>
+                      </>
+                    ) : null}
+                  </p>
+                  <h1 className="mt-6 max-w-[15ch] text-[clamp(2.75rem,4.5vw,4.75rem)] font-black leading-[0.96] tracking-[-0.035em] text-balance">
+                    {post.title[locale]}
+                  </h1>
+                  <p className="mt-8 max-w-[52ch] text-body-lg leading-[1.65] text-cream-100/85">
+                    {post.excerpt[locale]}
+                  </p>
+                </div>
+
+                <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-display text-coord uppercase text-cream-200/75">
+                  <time dateTime={post.publishedAt}>{date}</time>
+                  {post.readMinutes ? (
+                    <>
+                      <span aria-hidden className="size-[3px] shrink-0 bg-cream-200/55" />
+                      <span>{t("readTime", { minutes: post.readMinutes })}</span>
+                    </>
+                  ) : null}
+                </p>
+              </div>
+
+              {post.imageUrl ? (
+                <div className="relative min-h-[22rem] overflow-hidden border-t border-cream-50/15 lg:min-h-full lg:border-s lg:border-t-0">
+                  <Image
+                    src={post.imageUrl}
+                    alt=""
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 58vw"
+                    priority
+                    className="object-cover"
+                  />
+                  <span aria-hidden className="absolute inset-y-0 start-0 w-1 bg-gold-500" />
+                  <p className="absolute bottom-0 start-0 bg-cream-50 px-5 py-3 font-display text-coord uppercase text-navy-950">
+                    {t(`kind.${post.kind}`)} · {date}
+                  </p>
+                </div>
+              ) : null}
             </div>
           </div>
         </header>
 
-        {post.imageUrl ? (
-          <div className="relative h-[clamp(18rem,58vw,44rem)] w-full overflow-hidden bg-navy-950">
-            <Image
-              src={post.imageUrl}
-              alt=""
-              fill
-              sizes="100vw"
-              priority
-              className="object-cover"
-            />
-          </div>
-        ) : null}
-
         <section className="bg-white text-navy-900">
-          <div className="page-shell py-[clamp(3.5rem,6vw,6rem)]">
+          <div className="page-shell py-[clamp(4.5rem,7vw,7rem)]">
             <div
               className={
                 person
-                  ? "grid items-start gap-12 lg:grid-cols-[15rem_minmax(0,48rem)] lg:justify-center lg:gap-16 xl:grid-cols-[16rem_minmax(0,48rem)] xl:gap-20"
-                  : "mx-auto max-w-[48rem]"
+                  ? "grid items-start gap-12 lg:grid-cols-[17rem_minmax(0,60rem)] lg:justify-center lg:gap-16 xl:grid-cols-[18rem_minmax(0,62rem)] xl:gap-20"
+                  : "mx-auto max-w-[52rem]"
               }
             >
               {person ? (
                 <aside
                   aria-labelledby="interviewee-title"
-                  className="border-t-2 border-blue-700 pt-5 lg:sticky lg:top-[calc(var(--chrome-h)+2rem)]"
+                  className="bg-navy-950 p-7 text-cream-50 lg:sticky lg:top-[calc(var(--chrome-h)+2rem)] lg:p-8"
                 >
+                  <span aria-hidden className="mb-7 block h-1 w-16 bg-gold-500" />
                   <h2
                     id="interviewee-title"
-                    className="font-display text-coord uppercase text-navy-600"
+                    className="font-display text-coord uppercase text-gold-500"
                   >
                     {t("interviewWith")}
                   </h2>
-                  <div className="mt-6 flex items-start gap-5 lg:flex-col">
+                  <div className="mt-7 flex items-start gap-5 lg:flex-col lg:gap-7">
                     <DrawnPortrait
                       seed={person.portraitSeed}
                       title={person.name[locale]}
-                      className="size-20 shrink-0 lg:size-24"
+                      className="size-24 shrink-0 bg-cream-50 lg:size-32"
                     />
                     <div className="min-w-0">
-                      <p className="text-h3 leading-tight">{person.name[locale]}</p>
-                      <p className="mt-2 font-display text-coord uppercase text-blue-700">
+                      <p className="text-h2 leading-tight">{person.name[locale]}</p>
+                      <p className="mt-3 font-display text-coord uppercase text-cream-200/75">
                         {person.role[locale]}
                       </p>
                     </div>
@@ -179,14 +200,14 @@ export default async function PostPage({
               <div className="min-w-0">
                 {person ? (
                   <section aria-labelledby="film-title">
-                    <div className="mb-5 flex items-center gap-4">
+                    <div className="mb-5 flex items-center gap-5">
                       <h2
                         id="film-title"
-                        className="font-display text-coord uppercase text-navy-600"
+                        className="font-display text-coord uppercase text-blue-700"
                       >
                         {t("watchTitle")}
                       </h2>
-                      <span aria-hidden className="h-px flex-1 bg-navy-900/15" />
+                      <span aria-hidden className="h-px flex-1 bg-navy-900/25" />
                     </div>
                     <InterviewPlayer
                       src={person.videoUrl}
@@ -196,11 +217,14 @@ export default async function PostPage({
                   </section>
                 ) : null}
 
-                <div className={person ? "mt-14" : undefined}>
+                <div className={person ? "mt-16 max-w-[52rem]" : undefined}>
                   {(post.body ?? []).map((section, i) => (
-                    <section key={i} className={i > 0 ? "mt-14" : undefined}>
+                    <section
+                      key={i}
+                      className={i > 0 ? "mt-16 border-t border-navy-900/15 pt-10" : undefined}
+                    >
                       {section.heading ? (
-                        <h2 className="text-h2 leading-tight text-balance">
+                        <h2 className="text-[clamp(2rem,3vw,3.25rem)] font-black leading-[1.02] tracking-[-0.025em] text-balance">
                           {section.heading[locale]}
                         </h2>
                       ) : null}
@@ -209,8 +233,8 @@ export default async function PostPage({
                           key={j}
                           className={
                             i === 0 && j === 0 && !section.heading
-                              ? "text-[clamp(1.125rem,1.5vw,1.375rem)] leading-[1.7] text-navy-900"
-                              : "mt-5 text-body-md leading-[1.8] text-navy-600"
+                              ? "border-s-4 border-gold-500 bg-cream-100 px-7 py-8 text-[clamp(1.25rem,2vw,1.75rem)] font-semibold leading-[1.55] text-navy-900 sm:px-9 sm:py-10"
+                              : "mt-6 text-body-md leading-[1.85] text-navy-600"
                           }
                         >
                           {p[locale]}
@@ -220,62 +244,66 @@ export default async function PostPage({
                   ))}
                 </div>
 
-                {person ? (
-                  <section aria-labelledby="transcript-title" className="mt-20 border-t-2 border-navy-950 pt-9">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                      <h2 id="transcript-title" className="text-h2 leading-tight">
-                        {t("transcript")}
-                      </h2>
-                      <p className="max-w-[34rem] font-display text-coord uppercase text-navy-600 sm:text-end">
-                        {t("transcriptNote")}
-                      </p>
-                    </div>
-                    <ol className="mt-9 border-b border-navy-900/15">
-                      {person.transcript.map((section, i) => (
-                        <li
-                          key={i}
-                          className="grid gap-4 border-t border-navy-900/15 bg-mist/60 px-5 py-7 sm:grid-cols-[3.5rem_minmax(0,1fr)] sm:gap-6 sm:px-7 sm:py-8"
-                        >
-                          <span
-                            aria-hidden
-                            className="font-data text-data-sm text-blue-700"
-                          >
-                            {String(i + 1).padStart(2, "0")}
-                          </span>
-                          <div>
-                            {section.heading ? (
-                              <h3 className="font-display text-coord uppercase text-blue-700">
-                                {section.heading[locale]}
-                              </h3>
-                            ) : null}
-                            {section.paragraphs.map((p, j) => (
-                              <p
-                                key={j}
-                                className="mt-4 text-body-md leading-[1.8] text-navy-600"
-                              >
-                                {p[locale]}
-                              </p>
-                            ))}
-                          </div>
-                        </li>
-                      ))}
-                    </ol>
-                  </section>
-                ) : null}
               </div>
             </div>
           </div>
         </section>
+
+        {person ? (
+          <section aria-labelledby="transcript-title" className="bg-navy-950 text-cream-50">
+            <div className="page-shell py-[clamp(4.5rem,7vw,7rem)]">
+              <div className="grid gap-12 lg:grid-cols-[17rem_minmax(0,60rem)] lg:justify-center lg:gap-16 xl:grid-cols-[18rem_minmax(0,62rem)] xl:gap-20">
+                <header>
+                  <span aria-hidden className="mb-7 block h-1 w-16 bg-gold-500" />
+                  <h2 id="transcript-title" className="text-display-md leading-[1.02]">
+                    {t("transcript")}
+                  </h2>
+                  <p className="mt-6 font-display text-coord uppercase leading-relaxed text-cream-200/70">
+                    {t("transcriptNote")}
+                  </p>
+                </header>
+
+                <ol className="border-b border-cream-50/20">
+                  {person.transcript.map((section, i) => (
+                    <li
+                      key={i}
+                      className="grid gap-5 border-t border-cream-50/20 py-9 sm:grid-cols-[4.5rem_minmax(0,1fr)] sm:gap-8 sm:py-11"
+                    >
+                      <span aria-hidden className="font-data text-h3 text-gold-500">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div>
+                        {section.heading ? (
+                          <h3 className="text-h2 leading-tight text-cream-50">
+                            {section.heading[locale]}
+                          </h3>
+                        ) : null}
+                        {section.paragraphs.map((p, j) => (
+                          <p
+                            key={j}
+                            className="mt-5 text-body-md leading-[1.85] text-cream-100/75"
+                          >
+                            {p[locale]}
+                          </p>
+                        ))}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          </section>
+        ) : null}
       </article>
 
       {related.length ? (
-        <section aria-labelledby="related-title" className="bg-white text-navy-900">
+        <section aria-labelledby="related-title" className="bg-cream-50 text-navy-900">
           <div className="page-shell py-[clamp(3.5rem,5vw,5rem)]">
             <h2
               id="related-title"
-              className="flex items-center gap-4 font-display text-coord uppercase text-navy-600"
+              className="flex items-end gap-5 text-display-md leading-none"
             >
-              <span aria-hidden className="h-px w-10 shrink-0 bg-blue-700" />
+              <span aria-hidden className="mb-1.5 h-3 w-3 shrink-0 bg-gold-500" />
               {t("related")}
             </h2>
             <ul className="mt-9 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
