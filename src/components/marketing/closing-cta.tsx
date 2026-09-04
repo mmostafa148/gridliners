@@ -81,10 +81,8 @@ export async function ClosingCta({
    * a fixed value because the other two are not: the finalists year closes
    * after `ArchiveYears` on mist, and its empty state after a white section.
    *
-   * **About is the remaining case and is deliberately not passing one.** It
-   * follows `FaqAccordion` on mist and so draws a navy seam against a mist
-   * ground - the same defect, on an approved screen, logged in build-state
-   * rather than fixed inside a finalists task.
+   * About follows `FaqAccordion` on mist and passes that ground explicitly,
+   * keeping the gaps in the pixel seam continuous with the section above.
    */
   groundAbove?: string;
   /**

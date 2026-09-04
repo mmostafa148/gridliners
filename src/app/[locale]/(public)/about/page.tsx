@@ -98,6 +98,7 @@ export default async function AboutPage({
         body={tClosing("body")}
         countdown={false}
         culmination
+        groundAbove="bg-mist"
         secondary={{ href: "/contact", label: tClosing("contact") }}
       />
     </>
