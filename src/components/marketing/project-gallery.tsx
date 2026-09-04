@@ -111,7 +111,7 @@ export function ProjectGallery({
             const caption =
               img.kind === "file"
                 ? `${String(img.order + 1).padStart(2, "0")} — ${img.shows.toUpperCase()}`
-                : "PROJECT PREVIEW";
+                : null;
             return (
               <li key={key}>
                 <button
@@ -147,9 +147,11 @@ export function ProjectGallery({
                 {/* The caption as text, at one size for every frame. Drawn into
                     the SVG it was 22px on a 1600px canvas, which is a different
                     size in every cell and unreadable in most of them. */}
-                <p className="mt-3 font-display text-coord uppercase text-navy-600">
-                  {caption}
-                </p>
+                {caption ? (
+                  <p className="mt-3 font-display text-coord uppercase text-navy-600">
+                    {caption}
+                  </p>
+                ) : null}
               </li>
             );
           })}
