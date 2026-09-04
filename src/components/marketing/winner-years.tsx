@@ -45,6 +45,7 @@ export async function WinnerYears({
   ceremonies,
   current,
   title,
+  footer,
 }: {
   /** Newest first, and only years that have published winners. */
   years: { cycle: Cycle; medalCount: number }[];
@@ -60,6 +61,12 @@ export async function WinnerYears({
    * there it is the Sitemap's "Previous awards" instead.
    */
   title?: string;
+  /**
+   * Optional context for the archive as a whole. Kept inside this section so
+   * a hub can close the archive with one useful next step without adding a
+   * second navigation band beneath it.
+   */
+  footer?: { body: string; href: string; label: string };
 }) {
   const [locale, t] = await Promise.all([
     getLocale() as Promise<Locale>,
@@ -140,6 +147,24 @@ export async function WinnerYears({
             );
           })}
         </ul>
+
+        {footer ? (
+          <div className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between lg:mt-10">
+            <p className="max-w-[58ch] text-body-sm text-navy-600">
+              {footer.body}
+            </p>
+            <Link
+              href={footer.href}
+              className="group inline-flex w-fit shrink-0 items-center gap-2 font-display text-coord uppercase text-blue-700 transition-colors hover:text-navy-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            >
+              {footer.label}
+              <ArrowRight
+                aria-hidden
+                className="size-4 shrink-0 transition-transform group-hover:translate-x-1 motion-reduce:transition-none rtl:-scale-x-100 rtl:group-hover:-translate-x-1"
+              />
+            </Link>
+          </div>
+        ) : null}
       </div>
     </section>
   );

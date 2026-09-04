@@ -1,4 +1,4 @@
-import { ArrowRight, Layers, LayoutGrid, Medal, Users } from "lucide-react";
+import { Layers, LayoutGrid, Medal, Users } from "lucide-react";
 import type { Metadata } from "next";
 import {
   getFormatter,
@@ -16,7 +16,6 @@ import { EntryCost } from "@/components/marketing/entry-cost";
 import { PageHeader } from "@/components/marketing/page-header";
 import { SubmissionGuidelines } from "@/components/marketing/submission-guidelines";
 import { WinnerYears } from "@/components/marketing/winner-years";
-import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { api } from "@/lib/api";
 import { TIERS } from "@/lib/api/types";
@@ -101,15 +100,6 @@ export default async function AwardsHubPage({
     },
   ];
 
-  /** Each branch, and the screen that owns it. */
-  const branches = [
-    { href: "/about", label: t("overview.link") },
-    { href: "/categories", label: t("categories.link") },
-    { href: "/how-to-enter#fees", label: t("fees.link") },
-    { href: "/how-to-enter", label: t("enter.link") },
-    { href: "/winners", label: t("recordLink") },
-  ];
-
   return (
     <>
       <PageHeader eyebrow={t("eyebrow")} title={t("title")} lead={t("lead")} />
@@ -178,38 +168,18 @@ export default async function AwardsHubPage({
         ceremonies={ceremonies}
         current={0}
         title={t("previous")}
+        footer={{
+          body: t("record"),
+          href: "/winners",
+          label: t("recordLink"),
+        }}
       />
-
-      {/* Every branch, pointing at the screen that owns it. */}
-      <section className="bg-white text-navy-900">
-        <div className="page-shell section-y">
-          <p className="max-w-[58ch] text-body-md text-navy-600">
-            {t("record")}
-          </p>
-          <ul className="mt-8 flex flex-wrap gap-x-10 gap-y-4">
-            {branches.map((b) => (
-              <li key={b.href}>
-                <Link
-                  href={b.href}
-                  className="group inline-flex items-center gap-2 font-display text-coord uppercase text-blue-700 transition-colors hover:text-navy-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
-                >
-                  {b.label}
-                  <ArrowRight
-                    aria-hidden
-                    className="size-4 shrink-0 transition-transform group-hover:translate-x-1 motion-reduce:transition-none rtl:-scale-x-100 rtl:group-hover:-translate-x-1"
-                  />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
 
       <ClosingCta
         cycle={cycle}
         title={tClosing("title")}
         body={tClosing("body")}
-        groundAbove="bg-white"
+        groundAbove={years.length ? "bg-mist" : "bg-navy-950"}
         selfHref="/awards"
       />
     </>
