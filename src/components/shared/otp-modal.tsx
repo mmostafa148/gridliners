@@ -186,10 +186,9 @@ export function OtpModal({
   const codeValue = codeForm.watch("code") ?? "";
 
   const primaryButton = cn(
-    "relative h-13 w-full overflow-hidden rounded-none bg-navy-950 px-6",
-    "font-display text-data-sm uppercase tracking-[0.08em] text-cream-50",
-    "shadow-[0_10px_24px_rgba(8,24,55,0.16)] transition-colors",
-    "after:absolute after:end-0 after:top-0 after:size-2 after:bg-gold",
+    "relative h-12 w-full overflow-hidden rounded-none bg-navy-950 px-6",
+    "font-display text-body-sm font-semibold text-cream-50",
+    "transition-colors after:absolute after:end-0 after:top-0 after:size-1.5 after:bg-gold",
     "hover:bg-blue-700 focus-visible:border-transparent focus-visible:ring-0",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700",
   );
@@ -198,37 +197,25 @@ export function OtpModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton={false}
-        className="gap-0 overflow-hidden rounded-none bg-cream-50 p-0 text-navy-950 shadow-[0_28px_80px_rgba(0,10,35,0.28)] ring-1 ring-navy-950/12 sm:max-w-[36rem]"
+        onOpenAutoFocus={(event) => {
+          event.preventDefault();
+          window.requestAnimationFrame(() => emailForm.setFocus("email"));
+        }}
+        className="max-h-[calc(100dvh-2rem)] gap-0 overflow-x-hidden overflow-y-auto rounded-none border border-navy-950/15 bg-white p-0 text-navy-950 shadow-[0_24px_64px_rgba(0,10,35,0.24)] sm:max-w-[30rem]"
       >
-        <span aria-hidden className="absolute inset-x-0 top-0 z-10 flex h-1">
-          <span className="w-24 bg-blue-700" />
-          <span className="w-9 bg-gold" />
-        </span>
-
         <DialogClose asChild>
           <button
             type="button"
             aria-label={tCommon("close")}
-            className="absolute end-4 top-4 z-20 flex size-11 items-center justify-center text-navy-950 transition-colors hover:bg-navy-950/6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 sm:end-5 sm:top-5"
+            className="absolute end-3 top-3 z-20 flex size-11 items-center justify-center text-navy-950 transition-colors hover:bg-mist focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
           >
             <X aria-hidden className="size-5" />
           </button>
         </DialogClose>
 
-        <DialogHeader className="gap-0 border-b border-navy-950/10 bg-white px-6 pb-6 pe-17 pt-8 text-start sm:px-8 sm:pb-7 sm:pe-20 sm:pt-9">
-          <div className="mb-3 flex items-center gap-3 font-display text-overline uppercase tracking-[0.18em] text-blue-700">
-            <span>{t("eyebrow")}</span>
-            {step !== "done" ? (
-              <>
-                <span aria-hidden className="h-px w-8 bg-blue-700/35" />
-                <span className="font-data text-data-xs text-navy-600">
-                  {step === "email" ? "01 / 02" : "02 / 02"}
-                </span>
-              </>
-            ) : null}
-          </div>
-          <DialogTitle className="max-w-[28rem] font-display text-[clamp(1.65rem,5vw,2.25rem)] font-semibold leading-[1.05] tracking-[-0.02em] text-navy-950">
-            {step === "done" ? t("success") : t("title")}
+        <DialogHeader className="gap-0 border-b border-navy-950/10 px-6 pb-5 pe-16 pt-7 text-start sm:px-7 sm:pe-16">
+          <DialogTitle className="max-w-[24rem] font-display text-[clamp(1.45rem,5vw,1.875rem)] font-semibold leading-tight tracking-[-0.015em] text-navy-950">
+            {step === "done" ? t("success") : step === "code" ? t("codeTitle") : t("title")}
           </DialogTitle>
           {/* The description IS the live region rather than a second one beside
               it. A title swap inside an already-open dialog is announced by
@@ -236,7 +223,7 @@ export function OtpModal({
               the one element does both jobs. */}
           <DialogDescription
             aria-live="polite"
-            className="mt-3 max-w-[30rem] text-body-md leading-relaxed text-navy-600"
+            className="mt-2 max-w-[25rem] break-words text-body-sm leading-relaxed text-navy-600"
           >
             {step === "done"
               ? t("successDescription", { project: projectTitle })
@@ -244,21 +231,29 @@ export function OtpModal({
                 ? t("description")
                 : t("codeHint", { email })}
           </DialogDescription>
+          {step === "code" ? (
+            <button
+              type="button"
+              onClick={changeEmail}
+              className="mt-2 w-fit font-display text-body-sm text-blue-700 underline underline-offset-4 hover:text-navy-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+            >
+              {t("changeEmail")}
+            </button>
+          ) : null}
+          <div className="mt-4 flex min-w-0 items-center gap-2 border-t border-navy-950/10 pt-4">
+            <span aria-hidden className="size-1.5 shrink-0 bg-gold" />
+            <span className="shrink-0 font-display text-data-xs uppercase tracking-[0.08em] text-navy-500">
+              {t("projectLabel")}
+            </span>
+            <bdi className="min-w-0 truncate font-display text-body-sm font-semibold text-navy-950">
+              {projectTitle}
+            </bdi>
+          </div>
         </DialogHeader>
 
-        <div className="flex items-center gap-3 border-b border-navy-950/10 bg-mist/70 px-6 py-3.5 sm:px-8">
-          <span className="shrink-0 font-display text-overline uppercase tracking-[0.14em] text-navy-500">
-            {t("projectLabel")}
-          </span>
-          <span aria-hidden className="h-px min-w-4 flex-1 bg-navy-950/12" />
-          <bdi className="min-w-0 truncate font-display text-body-sm font-semibold text-navy-950">
-            {projectTitle}
-          </bdi>
-        </div>
-
         {step === "email" ? (
-          <form onSubmit={emailForm.handleSubmit(requestCode)} className="space-y-5 p-6 sm:p-8">
-            <div className="space-y-2.5">
+          <form onSubmit={emailForm.handleSubmit(requestCode)} className="space-y-4 px-6 pb-7 pt-5 sm:px-7">
+            <div className="space-y-2">
               <Label htmlFor="otp-email" className="font-display text-body-sm font-semibold text-navy-950">
                 {t("emailLabel")}
               </Label>
@@ -269,7 +264,7 @@ export function OtpModal({
                 autoComplete="email"
                 placeholder={t("emailPlaceholder")}
                 dir="ltr"
-                className="h-13 rounded-none border-navy-950/22 bg-white px-4 text-body-md text-navy-950 shadow-none focus-visible:border-blue-700 focus-visible:ring-0 aria-invalid:border-destructive aria-invalid:ring-0"
+                className="h-12 rounded-none border-navy-950/22 bg-white px-4 text-body-md text-navy-950 shadow-none focus-visible:border-blue-700 focus-visible:ring-0 aria-invalid:border-destructive aria-invalid:ring-0"
                 {...emailForm.register("email")}
                 aria-invalid={Boolean(emailError)}
                 aria-describedby={emailError ? "otp-email-error" : undefined}
@@ -294,27 +289,18 @@ export function OtpModal({
         ) : null}
 
         {step === "code" ? (
-          <form onSubmit={codeForm.handleSubmit(verifyCode)} className="space-y-5 p-6 sm:p-8">
-            <div className="flex items-center justify-between gap-4">
-              <Label htmlFor="otp-code" className="font-display text-body-sm font-semibold text-navy-950">
-                {t("codeLabel")}
-              </Label>
-              <button
-                type="button"
-                onClick={changeEmail}
-                className="font-display text-body-sm text-blue-700 underline underline-offset-4 hover:text-navy-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
-              >
-                {t("changeEmail")}
-              </button>
-            </div>
+          <form onSubmit={codeForm.handleSubmit(verifyCode)} className="space-y-4 px-6 pb-7 pt-5 sm:px-7">
+            <Label htmlFor="otp-code" className="sr-only">
+              {t("codeLabel")}
+            </Label>
 
             <div className="group relative" dir="ltr">
-              <div aria-hidden className="grid grid-cols-6 gap-2 sm:gap-2.5">
+              <div aria-hidden className="grid grid-cols-6 gap-2">
                 {Array.from({ length: 6 }, (_, index) => (
                   <span
                     key={index}
                     className={cn(
-                      "flex h-13 items-center justify-center border bg-white font-data text-h3 text-navy-950 transition-colors sm:h-14",
+                      "flex h-12 items-center justify-center border bg-white font-data text-h3 text-navy-950 transition-colors sm:h-13",
                       codeError
                         ? "border-destructive"
                         : "border-navy-950/22 group-focus-within:border-blue-700/45",
@@ -352,13 +338,7 @@ export function OtpModal({
                 {codeError}
               </p>
             ) : null}
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Button type="submit" className={cn(primaryButton, "sm:flex-1")} disabled={codeForm.formState.isSubmitting}>
-                {codeForm.formState.isSubmitting ? (
-                  <LoaderCircle aria-hidden className="size-4 animate-spin motion-reduce:animate-none" />
-                ) : null}
-                {codeForm.formState.isSubmitting ? t("verifying") : t("verify")}
-              </Button>
+            <div className="flex justify-center">
               {/* `aria-live="off"`, deliberately: the label changes every
                   second while the cooldown runs, and a per-second announcement
                   is worse than silence. The button's own disabled state and its
@@ -369,20 +349,26 @@ export function OtpModal({
                 aria-live="off"
                 disabled={resendIn > 0}
                 onClick={() => emailForm.handleSubmit(requestCode)()}
-                className="h-11 rounded-none px-4 font-display text-body-sm text-blue-700 hover:bg-blue-700/6 hover:text-navy-950 focus-visible:ring-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 sm:min-w-36"
+                className="h-9 rounded-none px-3 font-display text-body-sm text-blue-700 hover:bg-blue-700/6 hover:text-navy-950 focus-visible:ring-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
               >
                 {resendIn > 0 ? t("resendIn", { seconds: resendIn }) : t("resend")}
               </Button>
             </div>
+            <Button type="submit" className={primaryButton} disabled={codeForm.formState.isSubmitting}>
+              {codeForm.formState.isSubmitting ? (
+                <LoaderCircle aria-hidden className="size-4 animate-spin motion-reduce:animate-none" />
+              ) : null}
+              {codeForm.formState.isSubmitting ? t("verifying") : t("verify")}
+            </Button>
           </form>
         ) : null}
 
         {step === "done" ? (
-          <div className={cn("flex flex-col items-center gap-5 p-8 text-center sm:p-10")}>
-            <span className="flex size-18 items-center justify-center bg-blue-700/8 text-blue-700">
-              <CircleCheck className="size-9" aria-hidden />
+          <div className="flex flex-col items-center gap-4 px-6 pb-7 pt-5 text-center sm:px-7">
+            <span className="flex size-13 items-center justify-center border border-blue-700/20 bg-blue-700/6 text-blue-700">
+              <CircleCheck className="size-7" aria-hidden />
             </span>
-            <Button ref={doneRef} onClick={() => onOpenChange(false)} className={cn(primaryButton, "max-w-64")}>
+            <Button ref={doneRef} onClick={() => onOpenChange(false)} className={primaryButton}>
               {tCommon("close")}
             </Button>
           </div>

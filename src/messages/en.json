@@ -200,7 +200,8 @@
   "otp": {
     "eyebrow": "Public voting",
     "title": "Verify your email to vote",
-    "description": "We'll send a 6-digit code to confirm this vote. No account is created.",
+    "codeTitle": "Enter verification code",
+    "description": "We'll email you a 6-digit code. No account will be created.",
     "projectLabel": "Voting for",
     "emailLabel": "Email address",
     "emailPlaceholder": "you@example.com",
@@ -208,7 +209,7 @@
     "sendCode": "Send code",
     "sending": "Sending code…",
     "codeLabel": "Verification code",
-    "codeHint": "Enter the 6-digit code sent to {email}.",
+    "codeHint": "Code sent to {email}.",
     "codeInvalidFormat": "Enter all 6 digits.",
     "changeEmail": "Change email",
     "verify": "Confirm vote",
