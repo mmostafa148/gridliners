@@ -6,17 +6,10 @@
  * address that does not resolve (build-state §25). A hero backdrop is a
  * different thing: a short, silent, seamless loop served from this origin.
  *
- * `qamar-identity` carries the client's own `hero-cover.mp4`. It replaced a
- * loop generated here from image 01, which is deleted rather than left beside
- * it - two hero films in one folder is an invitation to wire up the wrong one.
- *
- * Every other project shows its cover with a slow drift, which reads the same
- * way and needs no asset. Each becomes a real film the moment one is added
- * here; nothing else changes.
+ * The demo projects are fictional, so none currently claim a film as their
+ * work. Each can opt into a real film here when entrant media is supplied.
  */
-export const HERO_FILM: Record<string, string> = {
-  "qamar-identity": "/media/projects/qamar-identity/hero-cover.mp4",
-};
+export const HERO_FILM: Record<string, string> = {};
 
 export function heroFilmFor(slug: string): string | null {
   return HERO_FILM[slug] ?? null;

@@ -2,8 +2,8 @@ import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 
-import { ProjectArt } from "@/components/marketing/project-art";
 import { HeroVoteAction, HeroVoteCount } from "@/components/marketing/project-vote";
+import { ProjectPlaceholder } from "@/components/shared/project-placeholder";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import type { AwardLevel, ContentLanguage, SubCategory, Tier } from "@/lib/api/types";
@@ -115,11 +115,10 @@ export async function ProjectHero({
           /* Drawn at the shape it is shown in, and stripped of its lettering:
              the artwork's own wordmark would be a second headline beside the
              page's. */
-          <ProjectArt
-            spec={cover.spec}
-            ratio={2.2}
-            caption={false}
-            plain
+          <ProjectPlaceholder
+            slug={slug}
+            title={title}
+            parentId={subCategories[0]?.parentId ?? cover.spec.parentId}
             className="size-full motion-safe:animate-[hero-drift_26s_ease-in-out_infinite_alternate] [&_text]:opacity-25"
           />
         ) : null}

@@ -8,7 +8,6 @@ import type {
   Tier,
 } from "@/lib/api/types";
 import { TIERS } from "@/lib/api/types";
-import { projectCovers } from "@/lib/media";
 
 /**
  * One year's winners, resolved once on the server.
@@ -62,11 +61,8 @@ export interface WinnerView {
   /**
    * The project's frame, or null.
    *
-   * `EntryMedia.coverUrl` points into `/placeholders`, a directory that does not
-   * exist, so a real cover is one that does not. Until the client supplies
-   * entrant photography a frame comes from `projectCovers` - the CC0 pool
-   * grouped by parent category - chosen by the entry's own slug so a project
-   * keeps the same frame on every render.
+   * Fixture URLs point into `/placeholders`, which are treated as absent. The
+   * component renders the shared branded preview until real media is supplied.
    */
   cover: string | null;
   maker: string | null;
@@ -258,25 +254,13 @@ function isMedal(row: GroupResult): boolean {
 }
 
 /**
- * A real cover, or a pooled placeholder for the entry's parent category.
- *
- * The same resolution the shortlist uses, for the same reason: rendering the
- * fixtures' `/placeholders` path would fire a request at a file that is not
- * there. The pool is keyed by parent, so a photography winner gets a
- * photography frame.
+ * A real cover only. Fixture placeholder paths are resolved to null so the
+ * shared preview component can render without requesting a missing file.
  */
-function coverFor(entry: Entry, parentId: string): string | null {
+function coverFor(entry: Entry): string | null {
   const url = entry.media.coverUrl;
   if (url && !url.startsWith("/placeholders/")) return url;
-
-  const pool = projectCovers[parentId];
-  if (!pool?.length) return null;
-  let h = 2166136261;
-  for (let i = 0; i < entry.slug.length; i++) {
-    h ^= entry.slug.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return pool[(h >>> 0) % pool.length].src;
+  return null;
 }
 
 function toWinner(
@@ -295,7 +279,7 @@ function toWinner(
     title: entry.title,
     contentLanguage: entry.contentLanguage,
     countryCode: entry.country,
-    cover: coverFor(entry, subCategory.parentId),
+    cover: coverFor(entry),
     subCategory,
     maker: makerById.get(entry.participantId) ?? null,
     description: entry.description,

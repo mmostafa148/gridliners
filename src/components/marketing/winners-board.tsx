@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { TierMark } from "@/components/brand/tier-mark";
 import { WinnerPortrait } from "@/components/marketing/winner-portrait";
+import { ProjectPlaceholder } from "@/components/shared/project-placeholder";
 import { EmptyState } from "@/components/shared/status-patterns";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -424,8 +425,8 @@ async function Place({
                 project that won. Square, because it sits beside the record
                 rather than under it now, and a square holds its own against a
                 column of type where a 4:3 letterbox read as a caption. */}
-            {place.cover ? (
-              <span className="relative block size-40 shrink-0 overflow-hidden bg-navy-900/10 @2xl:size-64">
+            <span className="relative block size-40 shrink-0 overflow-hidden bg-navy-950 @2xl:size-64">
+              {place.cover ? (
                 <Image
                   src={place.cover}
                   alt=""
@@ -433,8 +434,15 @@ async function Place({
                   sizes="256px"
                   className="object-cover transition-transform duration-700 group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                 />
-              </span>
-            ) : null}
+              ) : (
+                <ProjectPlaceholder
+                  slug={place.slug}
+                  title={place.title}
+                  parentId={place.subCategory.parentId}
+                  className="transition-transform duration-700 group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                />
+              )}
+            </span>
           </div>
 
           {/* The vote line is what sits at the foot, not the thumbnail. With

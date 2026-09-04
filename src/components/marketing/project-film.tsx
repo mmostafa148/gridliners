@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import { useState } from "react";
 
-import { ProjectArt } from "@/components/marketing/project-art";
+import { ProjectPlaceholder } from "@/components/shared/project-placeholder";
 import type { ProjectImage } from "@/lib/project-media";
 
 /**
@@ -58,11 +58,10 @@ export function ProjectFilm({
           className="object-cover transition-transform duration-700 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />
       ) : cover ? (
-        <ProjectArt
-          spec={cover.spec}
-          ratio={16 / 9}
-          caption={false}
-          plain
+        <ProjectPlaceholder
+          slug={`${cover.spec.seed}-${title}`}
+          title={title}
+          parentId={cover.spec.parentId}
           className="absolute inset-0 size-full transition-transform duration-700 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />
       ) : null}

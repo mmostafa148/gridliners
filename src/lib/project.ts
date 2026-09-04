@@ -84,11 +84,9 @@ export interface ProjectView {
   /**
    * The cover, and the gallery beneath it.
    *
-   * **Never null and never empty for a public project.** A cover and a gallery
-   * are mapped content in all three governing sources, and the earlier
-   * direction - render nothing until the client's photography arrives - was
-   * rejected on review. A real `coverUrl` wins outright; otherwise a registered
-   * temporary frame stands in, and `temporary` says which is which.
+   * The cover is always present: real media wins, otherwise one branded preview
+   * stands in. The gallery contains real submitted media only, so the demo does
+   * not invent a body of work for fictional projects.
    */
   cover: ProjectImage | null;
   gallery: ProjectImage[];
@@ -108,13 +106,9 @@ export interface ProjectView {
  * A project's frames: real media when it exists, registered stand-ins when it
  * does not.
  *
- * **A public project always has a cover and a gallery.** Where the entrant's
- * own photography exists it is used and nothing else is consulted. Where it does
- * not - which is every fixture today, since all 401 point into `/placeholders` -
- * `lib/project-media.ts` supplies frames that are hand-curated for the five
- * review projects and drawn from a deterministic category pool for the rest.
- * Every one of them is registered in `media-manifest.json` as temporary and
- * listed in `docs/temporary-media.md` for replacement.
+ * Real media is used whenever it exists. Every fixture currently points into
+ * `/placeholders`, so `lib/project-media.ts` supplies one branded cover preview
+ * and leaves the gallery empty until actual project media is provided.
  */
 function resolveFrames(
   entry: Entry,

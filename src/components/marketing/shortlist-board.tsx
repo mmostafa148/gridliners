@@ -6,8 +6,8 @@ import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 import { ParentMark } from "@/components/brand/parent-mark";
-import { PixelGrid } from "@/components/brand/pixel-grid";
 import { TierMark } from "@/components/brand/tier-mark";
+import { ProjectPlaceholder } from "@/components/shared/project-placeholder";
 import { EmptyState } from "@/components/shared/status-patterns";
 import { Link } from "@/i18n/navigation";
 import type { Tier } from "@/lib/api/types";
@@ -29,29 +29,6 @@ import { cn } from "@/lib/utils";
  * findable with the browser's own search.
  */
 const VISIBLE = 6;
-
-/**
- * The four ways the tile motif can dissolve, so neighbouring rows do not all
- * break the same way.
- */
-const TILE_DIRECTIONS = ["start", "end", "up", "down"] as const;
-
-/**
- * A stable seed from a slug.
- *
- * Deterministic and pure, which is the requirement: this component is rendered
- * on the server and hydrated on the client, and a tile that composed itself
- * differently in the two would be a hydration mismatch. `Math.random` is out
- * for the same reason `PixelGrid` refuses it.
- */
-function seedFrom(slug: string): number {
-  let h = 2166136261;
-  for (let i = 0; i < slug.length; i++) {
-    h ^= slug.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return (h >>> 0) % 9973;
-}
 
 /**
  * The shortlist itself: three tiers, each grouped parent category then
@@ -728,8 +705,6 @@ function FinalistRow({ finalist }: { finalist: FinalistView }) {
   const format = useFormatter();
 
   const contentDir = finalist.contentLanguage === "ar" ? "rtl" : "ltr";
-  const tileSeed = seedFrom(finalist.slug);
-
   return (
     <Link
       href={`/projects/${finalist.slug}`}
@@ -874,15 +849,10 @@ function FinalistRow({ finalist }: { finalist: FinalistView }) {
                 className="object-cover"
               />
             ) : (
-              <PixelGrid
-                variant="corner"
-                direction={TILE_DIRECTIONS[tileSeed % TILE_DIRECTIONS.length]}
-                seed={tileSeed}
-                cols={8}
-                rows={5}
-                density={0.45}
-                cellClassName="bg-blue-700"
-                className="absolute inset-0"
+              <ProjectPlaceholder
+                slug={finalist.slug}
+                title={finalist.title}
+                parentId={finalist.parentId}
               />
             )}
           </div>

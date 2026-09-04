@@ -43,13 +43,8 @@ interface AwardBase {
   entry: Entry | null;
   cover: ProjectImage | null;
   /**
-   * Every frame of the work, the cover first.
-   *
-   * The same set the project page publishes, resolved the same way: the
-   * entrant's own media where it exists, and registered temporary frames where
-   * it does not. The award page shows the whole set rather than one plate,
-   * because a single cover made the work look like an illustration of the
-   * award instead of the thing that won it.
+   * Real submitted gallery frames. Temporary project previews stay in `cover`
+   * and are not duplicated here as an invented gallery.
    */
   gallery: ProjectImage[];
   parentId: string;
@@ -73,10 +68,8 @@ export interface HonoraryAward extends AwardBase {
 export type AwardView = MedalAward | HonoraryAward;
 
 /**
- * The work's frames: the entrant's own where they exist, registered stand-ins
- * where they do not. Mirrors `resolveFrames` in `lib/project.ts` - the same
- * `/placeholders` rule and the same `temporaryFrames` pool, so an award and its
- * project never disagree about what the work looks like.
+ * The work's media. Real files are preserved; fixture placeholder paths resolve
+ * to one shared preview cover and no gallery.
  */
 function framesFor(
   entry: Entry | null,
@@ -107,7 +100,7 @@ function framesFor(
   }
 
   const frames = temporaryFrames(entry.slug, parentId, entry.title);
-  return { cover: frames[0] ?? null, gallery: frames };
+  return { cover: frames[0] ?? null, gallery: frames.slice(1) };
 }
 
 /**

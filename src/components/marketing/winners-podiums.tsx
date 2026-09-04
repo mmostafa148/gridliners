@@ -1,6 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import Image from "next/image";
 
+import { ProjectPlaceholder } from "@/components/shared/project-placeholder";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import type { AwardLevel, Entry, GroupResult, SubCategory, Tier } from "@/lib/api/types";
@@ -38,49 +39,6 @@ const PANEL: Record<AwardLevel & ("gold" | "silver" | "bronze"), string> = {
   silver: "bg-silver text-navy-900",
   bronze: "bg-bronze text-white",
 };
-
-const TILE: Record<"gold" | "silver" | "bronze", string[]> = {
-  gold: ["bg-gold/25", "bg-gold/45", "bg-gold/70", "bg-gold"],
-  silver: ["bg-silver/25", "bg-silver/45", "bg-silver/70", "bg-silver"],
-  bronze: ["bg-bronze/30", "bg-bronze/50", "bg-bronze/75", "bg-bronze"],
-};
-
-/**
- * The tonal mosaic the certificates and report covers are built from: the
- * pixel at four strengths of one metal over navy. Decoration, exactly as it is
- * in the deck, and keyed off the entry id so a given winner always draws the
- * same one.
- */
-function Mosaic({ tone, seed }: { tone: "gold" | "silver" | "bronze"; seed: string }) {
-  const COLS = 6;
-  const ROWS = 5;
-  let h = 2166136261;
-  for (const ch of seed) h = ((h ^ ch.charCodeAt(0)) * 16777619) >>> 0;
-
-  return (
-    <div
-      aria-hidden
-      className="grid size-full gap-px"
-      style={{ gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))` }}
-    >
-      {Array.from({ length: COLS * ROWS }, (_, i) => {
-        const col = i % COLS;
-        const row = Math.floor(i / COLS);
-        // Distance from the corner the cluster hangs off, 0 at the corner and 1
-        // at the far side. The deck's mosaics are not an even scatter: they
-        // gather at one corner and thin out across the sheet, and the ground is
-        // most of what you see.
-        const away = ((COLS - 1 - col) / (COLS - 1) + row / (ROWS - 1)) / 2;
-        h = (h * 1664525 + 1013904223) >>> 0;
-        const roll = ((h >>> 16) % 1000) / 1000;
-        if (roll > 0.92 - away) return <span key={i} className="aspect-square" />;
-        // Nearer the corner sits at full strength, further out is a tint.
-        const step = Math.min(3, Math.max(0, Math.round((1 - away) * 3.4)));
-        return <span key={i} className={cn("aspect-square", TILE[tone][step])} />;
-      })}
-    </div>
-  );
-}
 
 /** Real photography, as opposed to the fixtures' /placeholders path. */
 function hasCover(entry: Entry): boolean {
@@ -150,7 +108,11 @@ export async function WinnersPodiums({
                           className="object-cover"
                         />
                       ) : (
-                        <Mosaic tone={level} seed={entry.id} />
+                        <ProjectPlaceholder
+                          slug={entry.slug}
+                          title={entry.title}
+                          parentId={sub?.parentId ?? ""}
+                        />
                       )}
                     </div>
 

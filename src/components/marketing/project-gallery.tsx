@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import { useCallback, useEffect, useState } from "react";
 
-import { ProjectArt, artefactLabel } from "@/components/marketing/project-art";
+import { ProjectPlaceholder } from "@/components/shared/project-placeholder";
 import type { ProjectImage } from "@/lib/project-media";
 import { cn } from "@/lib/utils";
 
@@ -113,7 +113,7 @@ export function ProjectGallery({
             const caption =
               img.kind === "file"
                 ? `${String(img.order + 1).padStart(2, "0")} — ${img.shows.toUpperCase()}`
-                : artefactLabel(img.spec);
+                : "PROJECT PREVIEW";
             return (
               <li key={key}>
                 <button
@@ -138,10 +138,10 @@ export function ProjectGallery({
                       className="object-contain transition-transform duration-700 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                     />
                   ) : (
-                    <ProjectArt
-                      spec={img.spec}
-                      ratio={4 / 3}
-                      caption={false}
+                    <ProjectPlaceholder
+                      slug={`${img.spec.seed}-${title}`}
+                      title={title}
+                      parentId={img.spec.parentId}
                       className="absolute inset-0 size-full transition-transform duration-700 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                     />
                   )}
@@ -203,9 +203,11 @@ export function ProjectGallery({
                 /* Drawn frames scale in the viewer rather than being upscaled:
                    the artefact is vector, so the lightbox is where it is
                    actually worth opening. */
-                <ProjectArt
+                <ProjectPlaceholder
                   key={`art-${current.spec.index}`}
-                  spec={current.spec}
+                  slug={`${current.spec.seed}-${title}`}
+                  title={title}
+                  parentId={current.spec.parentId}
                   className="absolute inset-0 size-full [&>*]:h-full"
                 />
               )}

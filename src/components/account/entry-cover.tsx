@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { ProjectArt } from "@/components/marketing/project-art";
+import { ProjectPlaceholder } from "@/components/shared/project-placeholder";
 import type { Entry } from "@/lib/api/types";
 import { temporaryFrames } from "@/lib/project-media";
 import { cn } from "@/lib/utils";
@@ -53,7 +53,11 @@ export function EntryCover({
           className="object-cover"
         />
       ) : frame ? (
-        <ProjectArt spec={frame.spec} className="size-full" />
+        <ProjectPlaceholder
+          slug={entry.slug}
+          title={entry.title}
+          parentId={parentId}
+        />
       ) : null}
     </span>
   );

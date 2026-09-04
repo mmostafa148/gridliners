@@ -1,7 +1,7 @@
 import type { Locale } from "@/i18n/routing";
 import type { ContentLanguage, Tier } from "@/lib/api/types";
 import { countryName } from "@/lib/display-names";
-import { categoryImage, projectCovers } from "@/lib/media";
+import { categoryImage } from "@/lib/media";
 import type { YearShortlist } from "@/lib/finalists";
 
 /**
@@ -28,31 +28,15 @@ import type { YearShortlist } from "@/lib/finalists";
  */
 
 /**
- * Real project photography, as opposed to the fixtures' `/placeholders` path.
- *
- * The twin of `hasCover` in `marketing/winners-podiums.tsx`, which asks the
- * same question for the same reason - logged as a `[dupe]` rather than lifted,
- * because that component belongs to an approved screen.
+ * Real project media only. Fixture placeholder paths resolve to null so the
+ * board uses the shared branded preview without requesting a missing file.
  */
 function coverOf(
-  entry: { slug: string; media: { coverUrl: string } },
-  parentId: string,
+  entry: { media: { coverUrl: string } },
 ): string | null {
   const url = entry.media.coverUrl;
   if (url && !url.startsWith("/placeholders/")) return url;
-
-  // No real cover, so a placeholder from the parent's pool - chosen by the
-  // entry's own slug, so a project keeps the same frame on every render and
-  // neighbouring rows do not repeat. `projectCovers` records where the pool
-  // came from and what it is not.
-  const pool = projectCovers[parentId];
-  if (!pool?.length) return null;
-  let h = 2166136261;
-  for (let i = 0; i < entry.slug.length; i++) {
-    h ^= entry.slug.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return pool[(h >>> 0) % pool.length].src;
+  return null;
 }
 
 export interface FinalistView {
@@ -64,6 +48,7 @@ export interface FinalistView {
    *  and is now on the line itself. */
   subId: string;
   subName: string;
+  parentId: string;
   /** Named in full. The record holds ISO 3166-1 alpha-2; a reader gets a
    *  country (§1.3 `[map-update]`, 2026-08-25). */
   country: string;
@@ -171,11 +156,12 @@ export function toShortlistView(
           contentLanguage: entry.contentLanguage,
           subId: slate.subCategory.id,
           subName: slate.subCategory.name[locale],
+          parentId: group.parent.id,
           country: countryName(entry.country, locale),
           votes: shortlist.votesByEntry.get(entry.id) ?? 0,
           maker: shortlist.makerByEntry.get(entry.id) ?? null,
           description: entry.description,
-          cover: coverOf(entry, group.parent.id),
+          cover: coverOf(entry),
         })),
       ),
       slates: group.slates.map((slate) => ({
@@ -188,11 +174,12 @@ export function toShortlistView(
           contentLanguage: entry.contentLanguage,
           subId: slate.subCategory.id,
           subName: slate.subCategory.name[locale],
+          parentId: group.parent.id,
           country: countryName(entry.country, locale),
           votes: shortlist.votesByEntry.get(entry.id) ?? 0,
           maker: shortlist.makerByEntry.get(entry.id) ?? null,
           description: entry.description,
-          cover: coverOf(entry, group.parent.id),
+          cover: coverOf(entry),
         })),
       })),
     })),
