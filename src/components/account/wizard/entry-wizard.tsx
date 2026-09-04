@@ -196,11 +196,7 @@ export function EntryWizard({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="relative flex flex-col gap-4 overflow-hidden border border-navy-900/10 bg-white p-4 pt-5 sm:p-5 sm:pt-6">
-        <span aria-hidden className="absolute inset-x-0 top-0 flex h-1">
-          <span className="w-28 bg-blue-700" />
-          <span className="w-10 bg-gold" />
-        </span>
+      <div className="flex flex-col gap-4">
         <div className="flex flex-wrap items-baseline justify-between gap-3">
           <Meta className="font-medium text-navy-800">{t("stepOf", { step, total: 6 })}</Meta>
           <span aria-live="polite" className="text-caption text-navy-600">
