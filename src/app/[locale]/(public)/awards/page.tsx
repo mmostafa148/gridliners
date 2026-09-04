@@ -209,6 +209,7 @@ export default async function AwardsHubPage({
         cycle={cycle}
         title={tClosing("title")}
         body={tClosing("body")}
+        groundAbove="bg-white"
         selfHref="/awards"
       />
     </>

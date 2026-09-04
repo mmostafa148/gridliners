@@ -103,6 +103,7 @@ export default async function JuryPanelPage({
         title={tClosing("title")}
         body={tClosing("body")}
         countdown={false}
+        groundAbove="bg-navy-950"
         selfHref="/jury-panel"
       />
     </>

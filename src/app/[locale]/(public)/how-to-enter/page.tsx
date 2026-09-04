@@ -95,6 +95,7 @@ export default async function HowToEnterPage({
         cycle={cycle}
         title={tClosing("title")}
         body={tClosing("body")}
+        groundAbove="bg-navy-950"
         selfHref="/how-to-enter"
       />
     </>

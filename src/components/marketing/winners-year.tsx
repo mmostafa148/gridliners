@@ -47,6 +47,24 @@ export async function WinnersYear({ winners }: { winners: YearWinners }) {
 
   const edition = ceremonies.find((row) => row.year === year) ?? null;
   const hasResults = winners.medalCount > 0 || winners.honorary.length > 0;
+  const hasOtherYears = years.some(({ cycle }) => cycle.year !== year);
+  const ceremonyIsHeld = ceremonyHeld(winners.cycle);
+  const lastTier = winners.tiers.at(-1);
+  const winnersGround =
+    lastTier && lastTier.medalCount % 2 === 1 ? "bg-mist" : "bg-white";
+  const honoraryGround =
+    winners.honorary.length % 2 === 1 ? "bg-mist" : "bg-white";
+  const closingGround = hasOtherYears
+    ? "bg-mist"
+    : edition
+      ? ceremonyIsHeld
+        ? "bg-white"
+        : "bg-navy-950"
+      : winners.honorary.length
+        ? honoraryGround
+        : hasResults
+          ? winnersGround
+          : "bg-white";
 
   return (
     <>
@@ -92,7 +110,7 @@ export async function WinnersYear({ winners }: { winners: YearWinners }) {
       {/* Reused from 1.6 unchanged. A year with published results has had its
           ceremony, so `held` is true through the same phase check that screen
           uses; a year without one omits the section itself. */}
-      <EventOverview edition={edition} held={ceremonyHeld(winners.cycle)} />
+      <EventOverview edition={edition} held={ceremonyIsHeld} />
 
       {/* The archive at the foot, the way 1.6 ends. A reader who has finished
           this year's winners is exactly the reader who might want another one,
@@ -109,7 +127,7 @@ export async function WinnersYear({ winners }: { winners: YearWinners }) {
         title={tClosing("title")}
         body={tClosing("body")}
         countdown={false}
-        groundAbove={years.length > 1 ? "bg-mist" : "bg-white"}
+        groundAbove={closingGround}
         selfHref={`/winners/${year}`}
         selfPrimaryFallback
       />

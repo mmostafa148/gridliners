@@ -363,7 +363,13 @@ export default async function AwardPage({
         title={tClosing("title")}
         body={tClosing("body")}
         countdown={false}
-        groundAbove="bg-mist"
+        groundAbove={
+          award.entry
+            ? award.gallery.length
+              ? "bg-mist"
+              : "bg-white"
+            : "bg-navy-950"
+        }
       />
       <ProjectShareDock url={shareUrl} title={`${name}, ${award.holder}`} />
       <span className="sr-only">{tWinners("votesUnit")}</span>

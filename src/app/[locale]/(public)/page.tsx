@@ -232,6 +232,7 @@ export default async function HomePage({
         title={tClosing("title")}
         body={tClosing("body")}
         countdown={false}
+        groundAbove={testimonials.length ? "bg-navy-950" : "bg-mist"}
       />
     </>
   );

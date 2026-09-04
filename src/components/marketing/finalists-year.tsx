@@ -41,6 +41,18 @@ export async function FinalistsYear({ shortlist }: { shortlist: YearShortlist })
   ]);
 
   const edition = ceremonies.find((row) => row.year === year) ?? null;
+  const votingOpen = votingIsOpen(activeCycle, year);
+  const ceremonyIsHeld = ceremonyHeld(shortlist.cycle);
+  const hasOtherYears = years.some(({ cycle }) => cycle.year !== year);
+  const closingGround = hasOtherYears
+    ? "bg-mist"
+    : edition
+      ? ceremonyIsHeld
+        ? "bg-white"
+        : "bg-navy-950"
+      : votingOpen
+        ? "bg-navy-950"
+        : "bg-white";
 
   return (
     <>
@@ -76,14 +88,14 @@ export async function FinalistsYear({ shortlist }: { shortlist: YearShortlist })
           voting is open, above the fold on every page, so what is left here is
           the explanation - who decided what, and how a vote is cast - and that
           belongs with the work it is about. */}
-      {votingIsOpen(activeCycle, year) ? <VotingBanner /> : null}
+      {votingOpen ? <VotingBanner /> : null}
 
       {/* Photography only on a year whose ceremony has happened. On the open
           year this publishes the city and the venue and nothing else: a stage
           frame under a heading naming a year still in `voting` reads as a
           record of a night that has not taken place, which is the one thing
           this page cannot say. */}
-      <EventOverview edition={edition} held={ceremonyHeld(shortlist.cycle)} />
+      <EventOverview edition={edition} held={ceremonyIsHeld} />
 
       <ArchiveYears
         years={years}
@@ -104,7 +116,7 @@ export async function FinalistsYear({ shortlist }: { shortlist: YearShortlist })
         title={tClosing("title")}
         body={tClosing("body")}
         countdown={false}
-        groundAbove="bg-mist"
+        groundAbove={closingGround}
         selfHref={`/finalists/${activeCycle.year}`}
         selfPrimaryFallback
       />

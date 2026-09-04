@@ -38,7 +38,7 @@ export async function ClosingCta({
   countdown: showCountdown = true,
   culmination = false,
   secondary: secondaryOverride,
-  groundAbove = "bg-navy-950",
+  groundAbove,
   selfHref,
   selfPrimaryFallback = false,
 }: {
@@ -74,17 +74,12 @@ export async function ClosingCta({
    * voting banner repeats it: "a seam whose cells are not the ground above it
    * reads as a cut."
    *
-   * Defaults to `bg-navy-950`, which is right on four of the six pages that
-   * close on this band: Home follows `Testimonials`, how-to-enter follows
-   * `SubmissionGuidelines`, jury-panel follows `SelectionProcess` and
-   * categories follows `HonoraryAwards`, all navy. It is a default rather than
-   * a fixed value because the other two are not: the finalists year closes
-   * after `ArchiveYears` on mist, and its empty state after a white section.
-   *
-   * About follows `FaqAccordion` on mist and passes that ground explicitly,
-   * keeping the gaps in the pixel seam continuous with the section above.
+   * Required rather than defaulted. Several preceding sections are conditional,
+   * and a hidden section can change the real neighbour from navy to mist or
+   * white. Making every caller name the ground keeps those states visible to
+   * TypeScript instead of silently painting a navy seam in the wrong place.
    */
-  groundAbove?: string;
+  groundAbove: "bg-navy-950" | "bg-mist" | "bg-white";
   /**
    * The route this section is rendered on. A secondary action pointing at it
    * is dropped: `phasePresentation` offers "How to enter" as the second action
@@ -195,11 +190,8 @@ export async function ClosingCta({
           foot, run the other way.
 
           The cells carry `groundAbove`, which is the previous section's own
-          colour. This used to be hard-coded to `bg-navy-950` on the reasoning
-          that the component closes several pages and could not know its
-          neighbour - true of the value, not of the caller, which always knows.
-          Navy is still the default and is still right on four of the six
-          pages; the two that follow a light section now say so. */}
+          colour. Every caller states it explicitly, including conditional
+          sections whose absence changes the colour at the join. */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 overflow-hidden"

@@ -73,8 +73,10 @@ const HONORARY_MARK: Record<string, LucideIcon> = {
  */
 export async function HonoraryAwards({
   options,
+  groundAbove,
 }: {
   options: HonoraryDesignationOption[];
+  groundAbove: "bg-mist" | "bg-white";
 }) {
   const [locale, t] = await Promise.all([
     getLocale() as Promise<Locale>,
@@ -100,7 +102,7 @@ export async function HonoraryAwards({
           rows={3}
           density={0.4}
           cellSize="clamp(0.875rem, 1.8vw, 1.75rem)"
-          cellClassName="bg-white"
+          cellClassName={groundAbove}
         />
       </div>
 

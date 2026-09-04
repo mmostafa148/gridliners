@@ -65,6 +65,13 @@ export default async function CategoriesPage({
     ]);
 
   const orderedParents = [...parents].sort((a, b) => a.order - b.order);
+  const categoryGroupCount = orderedParents.filter((parent) =>
+    subCategories.some((subCategory) => subCategory.parentId === parent.id),
+  ).length;
+  const categoryGroupsGround =
+    categoryGroupCount > 0 && categoryGroupCount % 2 === 0
+      ? "bg-mist"
+      : "bg-white";
 
   return (
     <>
@@ -80,7 +87,10 @@ export default async function CategoriesPage({
         subCategories={subCategories}
       />
 
-      <HonoraryAwards options={honoraryOptions} />
+      <HonoraryAwards
+        options={honoraryOptions}
+        groundAbove={categoryGroupsGround}
+      />
 
       {/* The map asks for How to Enter specifically, so the second action is
           set rather than left to the phase. `phasePresentation` offers it in
@@ -91,6 +101,9 @@ export default async function CategoriesPage({
         title={tClosing("title")}
         body={tClosing("body")}
         countdown={false}
+        groundAbove={
+          honoraryOptions.length ? "bg-navy-950" : categoryGroupsGround
+        }
         secondary={{ href: "/how-to-enter", label: tCta("howToEnter") }}
       />
     </>
