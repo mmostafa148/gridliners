@@ -364,9 +364,9 @@ export function OtpModal({
         ) : null}
 
         {step === "done" ? (
-          <div className="flex flex-col items-center gap-4 px-6 pb-7 pt-5 text-center sm:px-7">
-            <span className="flex size-13 items-center justify-center border border-blue-700/20 bg-blue-700/6 text-blue-700">
-              <CircleCheck className="size-7" aria-hidden />
+          <div className="flex flex-col items-center gap-5 px-6 pb-7 pt-5 text-center sm:px-7">
+            <span className="flex size-24 items-center justify-center border border-blue-700/20 bg-blue-700/6 text-blue-700">
+              <CircleCheck className="size-14" strokeWidth={1.75} aria-hidden />
             </span>
             <Button ref={doneRef} onClick={() => onOpenChange(false)} className={primaryButton}>
               {tCommon("close")}
