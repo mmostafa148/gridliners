@@ -84,9 +84,9 @@ export interface ProjectView {
   /**
    * The cover, and the gallery beneath it.
    *
-   * The cover is always present: real media wins, otherwise one branded preview
-   * stands in. The gallery contains real submitted media only, so the demo does
-   * not invent a body of work for fictional projects.
+   * The cover is always present: real media wins, otherwise a branded preview
+   * stands in. Gallery slots stay in their recorded order and use the same
+   * honest preview until real submitted media replaces each one.
    */
   cover: ProjectImage | null;
   gallery: ProjectImage[];
@@ -106,37 +106,35 @@ export interface ProjectView {
  * A project's frames: real media when it exists, registered stand-ins when it
  * does not.
  *
- * Real media is used whenever it exists. Every fixture currently points into
+ * Real media is used in place. Every fixture currently points into
  * `/placeholders`, so `lib/project-media.ts` supplies one branded cover preview
- * and leaves the gallery empty until actual project media is provided.
+ * and one preview for every existing gallery slot.
  */
 function resolveFrames(
   entry: Entry,
   parentId: string,
 ): { cover: ProjectImage | null; gallery: ProjectImage[]; mediaIsTemporary: boolean } {
+  const temporary = temporaryFrames(
+    entry.slug,
+    parentId,
+    entry.title,
+    entry.media.galleryUrls.length,
+  );
   const realCover = realMedia(entry.media.coverUrl);
-  const realGallery = entry.media.galleryUrls
-    .map(realMedia)
-    .filter((url): url is string => url !== null);
+  const cover: ProjectImage = realCover
+    ? { kind: "file", src: realCover, width: 0, height: 0, temporary: false, shows: "", origin: "photograph", order: 0 }
+    : temporary[0];
+  const gallery = entry.media.galleryUrls.map((url, index): ProjectImage => {
+    const real = realMedia(url);
+    return real
+      ? { kind: "file", src: real, width: 0, height: 0, temporary: false, shows: "", origin: "photograph", order: index + 1 }
+      : temporary[index + 1];
+  });
+  const frames = [cover, ...gallery];
 
-  if (realCover) {
-    return {
-      // Real media carries no intrinsic size here; the components measure it.
-      cover: { kind: "file", src: realCover, width: 0, height: 0, temporary: false, shows: "", origin: "photograph", order: 0 },
-      gallery: realGallery.map((src, i) => ({
-        kind: "file" as const, src, width: 0, height: 0, temporary: false, shows: "", origin: "photograph" as const, order: i + 1,
-      })),
-      mediaIsTemporary: false,
-    };
-  }
-
-  const frames = temporaryFrames(entry.slug, parentId, entry.title);
   return {
-    cover: frames[0] ?? null,
-    gallery: frames.slice(1),
-    // Whether any frame is actually a stand-in, not merely whether frames
-    // exist. Qamar's set is final client imagery, so its page is not carrying
-    // provisional media any more and must not be recorded as if it were.
+    cover,
+    gallery,
     mediaIsTemporary: frames.some((frame) => frame.temporary),
   };
 }

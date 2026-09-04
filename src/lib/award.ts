@@ -42,10 +42,7 @@ interface AwardBase {
   /** The work, when there is one. An honorary designation may have none. */
   entry: Entry | null;
   cover: ProjectImage | null;
-  /**
-   * Real submitted gallery frames. Temporary project previews stay in `cover`
-   * and are not duplicated here as an invented gallery.
-   */
+  /** Gallery slots in order; temporary previews remain until files replace them. */
   gallery: ProjectImage[];
   parentId: string;
 }
@@ -68,8 +65,8 @@ export interface HonoraryAward extends AwardBase {
 export type AwardView = MedalAward | HonoraryAward;
 
 /**
- * The work's media. Real files are preserved; fixture placeholder paths resolve
- * to one shared preview cover and no gallery.
+ * The work's media. Real files are preserved in place; fixture placeholder
+ * paths keep their cover/gallery slots and resolve to the shared preview.
  */
 function framesFor(
   entry: Entry | null,
@@ -91,16 +88,20 @@ function framesFor(
     order,
   });
 
-  if (isReal(entry.media.coverUrl)) {
-    const real = [
-      asFile(entry.media.coverUrl, 0),
-      ...entry.media.galleryUrls.filter(isReal).map((src, i) => asFile(src, i + 1)),
-    ];
-    return { cover: real[0], gallery: real };
-  }
+  const temporary = temporaryFrames(
+    entry.slug,
+    parentId,
+    entry.title,
+    entry.media.galleryUrls.length,
+  );
+  const cover = isReal(entry.media.coverUrl)
+    ? asFile(entry.media.coverUrl, 0)
+    : temporary[0];
+  const gallery = entry.media.galleryUrls.map((url, index) =>
+    isReal(url) ? asFile(url, index + 1) : temporary[index + 1],
+  );
 
-  const frames = temporaryFrames(entry.slug, parentId, entry.title);
-  return { cover: frames[0] ?? null, gallery: frames.slice(1) };
+  return { cover, gallery };
 }
 
 /**

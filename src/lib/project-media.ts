@@ -2,8 +2,9 @@
  * Temporary project media, resolved per project.
  *
  * The demo contains fictional projects and no entrant photography. Missing
- * media resolves to one branded preview placeholder, never to stock
- * photography or an invented gallery.
+ * media resolves to branded preview placeholders, never to stock photography.
+ * The fixture's media slots are preserved so a project's cover and gallery
+ * keep the same structure until entrant files replace them.
  *
  * When a real `coverUrl` or `galleryUrls` entry appears - anything that is not
  * a `/placeholders` path - it wins outright and none of this is consulted.
@@ -64,24 +65,26 @@ function seedFrom(slug: string): number {
 }
 
 /**
- * A project's temporary media: one preview frame and no invented gallery.
- * The shared renderer uses the title and category only to distinguish cards;
- * it never presents the placeholder as submitted work.
+ * A project's temporary media: one cover plus one frame for every gallery slot
+ * in the entry record. These are honest empty-media states, not invented work.
+ * The index gives adjacent frames a subtle deterministic variation while the
+ * renderer keeps the same visual system across the whole demo.
  */
 export function temporaryFrames(
   slug: string,
   parentId: string,
   title: string,
+  galleryCount = 0,
 ): ProjectImage[] {
   const seed = seedFrom(slug);
   const ratio = 16 / 9;
-  return [{
+  return Array.from({ length: galleryCount + 1 }, (_, index) => ({
     kind: "art" as const,
-    spec: { parentId, index: 0, seed, title },
+    spec: { parentId, index, seed: seed + index, title },
     width: 1600,
     height: Math.round(1600 / ratio),
     temporary: true as const,
-    shows: "Project preview",
+    shows: index === 0 ? "Project preview" : `Gallery preview ${index}`,
     origin: "generated" as const,
-  }];
+  }));
 }

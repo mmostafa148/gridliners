@@ -13,11 +13,9 @@ import { cn } from "@/lib/utils";
 /**
  * The gallery: four to seven frames of one project.
  *
- * The content map requires a cover **and** a gallery, and the earlier direction
- * - omit the gallery until the entrant's own photography exists - was rejected
- * on review. Every public project now has one: hand-picked for the five review
- * projects, drawn from a deterministic category pool for the rest, and every
- * frame registered as temporary in `docs/temporary-media.md`.
+ * The content map requires a cover **and** a gallery. The entry's gallery slots
+ * remain visible even before entrant photography exists; each unresolved slot
+ * uses the shared project placeholder and real media replaces it in place.
  *
  * **The composition follows the pictures, not a fixed grid.** A frame wider
  * than 3:2 takes the full measure; the rest pair up. So a set of landscapes
@@ -139,7 +137,7 @@ export function ProjectGallery({
                     />
                   ) : (
                     <ProjectPlaceholder
-                      slug={`${img.spec.seed}-${title}`}
+                      slug={`${img.spec.seed}-${img.spec.index}-${title}`}
                       title={title}
                       parentId={img.spec.parentId}
                       className="absolute inset-0 size-full transition-transform duration-700 group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
@@ -205,7 +203,7 @@ export function ProjectGallery({
                    actually worth opening. */
                 <ProjectPlaceholder
                   key={`art-${current.spec.index}`}
-                  slug={`${current.spec.seed}-${title}`}
+                  slug={`${current.spec.seed}-${current.spec.index}-${title}`}
                   title={title}
                   parentId={current.spec.parentId}
                   className="absolute inset-0 size-full [&>*]:h-full"
