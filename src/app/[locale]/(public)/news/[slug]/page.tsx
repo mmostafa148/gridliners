@@ -88,12 +88,12 @@ export default async function PostPage({
     <>
       <article>
         <header className="bg-navy-950 text-cream-50">
-          <div className="page-shell pt-[calc(var(--chrome-h)-var(--announce-h)+1.25rem)]">
+          <div className="page-shell pt-[calc(var(--chrome-h)-var(--announce-h))]">
             <div
               className={
                 post.imageUrl
-                  ? "grid border-y border-cream-50/15 lg:min-h-[clamp(36rem,68vh,46rem)] lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]"
-                  : "max-w-[64rem] border-y border-cream-50/15"
+                  ? "grid border-b border-cream-50/15 lg:min-h-[clamp(32rem,62vh,42rem)] lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]"
+                  : "max-w-[64rem] border-b border-cream-50/15"
               }
             >
               <div className="flex flex-col py-9 lg:min-h-full lg:pe-14 lg:py-14 xl:pe-20">
@@ -121,7 +121,7 @@ export default async function PostPage({
                       </>
                     ) : null}
                   </p>
-                  <h1 className="mt-6 max-w-[15ch] text-[clamp(2.75rem,4.5vw,4.75rem)] font-black leading-[0.96] tracking-[-0.035em] text-balance">
+                  <h1 className="mt-6 max-w-[22ch] text-[clamp(2.25rem,3.1vw,3.625rem)] font-black leading-[1] tracking-[-0.03em] text-balance">
                     {post.title[locale]}
                   </h1>
                   <p className="mt-8 max-w-[52ch] text-body-lg leading-[1.65] text-cream-100/85">
