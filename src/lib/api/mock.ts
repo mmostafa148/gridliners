@@ -17,6 +17,7 @@ import type {
   Cycle,
   Entry,
   GroupResult,
+  NewsItem,
   Page,
   Participant,
   Payment,
@@ -1330,7 +1331,29 @@ const content: GridlinersApi["content"] = {
       const rest = posts.filter(
         (p) => p.slug !== slug && p.categoryId !== post.categoryId,
       );
-      return [...sameCategory, ...rest].slice(0, limit);
+      const candidates = [...sameCategory, ...rest];
+      const selected: NewsItem[] = [];
+      const usedImages = new Set<string>();
+
+      // Repeating the same cover twice in one three-card row makes separate
+      // stories read like duplicates. Prefer a visually distinct set while
+      // keeping category relevance as the primary order; only reuse a cover
+      // when the archive does not contain enough unique images to fill the row.
+      for (const candidate of candidates) {
+        const image = candidate.imageUrl?.trim();
+        if (image && usedImages.has(image)) continue;
+        selected.push(candidate);
+        if (image) usedImages.add(image);
+        if (selected.length === limit) return selected;
+      }
+
+      for (const candidate of candidates) {
+        if (selected.includes(candidate)) continue;
+        selected.push(candidate);
+        if (selected.length === limit) break;
+      }
+
+      return selected;
     }),
   postCategories: () => withLatency(() => postCategories),
   news: (filter = {}) =>

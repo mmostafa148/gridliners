@@ -21,9 +21,9 @@ import { SITE_URL } from "@/lib/site";
  * and changes nothing else; a reader moving from a news item to an interview
  * should not feel they have moved to a different site.
  *
- * The reading column is `page-shell-prose`, which is narrower than the page
- * shell on purpose: a 1,600px measure is unreadable, and the covers and the
- * film are the only things that take the full width.
+ * The body, film and transcript share one editorial measure. Interviews add a
+ * compact, sticky contributor rail beside it on wide screens; on small screens
+ * that rail returns to the normal document flow.
  *
  * **The transcript sits above the related posts and is always present on an
  * interview.** A film with no transcript is content that only exists for people
@@ -88,7 +88,7 @@ export default async function PostPage({
     <>
       <article>
         <header className="bg-navy-950 text-cream-50">
-          <div className="page-shell flex flex-col gap-8 pb-14 pt-[calc(var(--chrome-h)-var(--announce-h)+1.5rem)] lg:pb-16 lg:pt-[calc(var(--chrome-h)-var(--announce-h)+3rem)]">
+          <div className="page-shell flex flex-col gap-7 pb-11 pt-[calc(var(--chrome-h)-var(--announce-h)+1.5rem)] lg:pb-14 lg:pt-[calc(var(--chrome-h)-var(--announce-h)+2.5rem)]">
             <p className="font-display text-coord uppercase">
               <Link
                 href="/news"
@@ -99,7 +99,7 @@ export default async function PostPage({
               </Link>
             </p>
 
-            <div className="max-w-[46rem]">
+            <div className="max-w-[54rem]">
               <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-display text-coord uppercase text-cream-200/85">
                 <span>{t(`kind.${post.kind}`)}</span>
                 {category ? (
@@ -120,13 +120,15 @@ export default async function PostPage({
               <h1 className="mt-5 text-display-md leading-[1.05] text-balance">
                 {post.title[locale]}
               </h1>
-              <p className="mt-6 text-body-lg text-cream-100/90">{post.excerpt[locale]}</p>
+              <p className="mt-6 max-w-[60ch] text-body-lg text-cream-100/90">
+                {post.excerpt[locale]}
+              </p>
             </div>
           </div>
         </header>
 
         {post.imageUrl ? (
-          <div className="relative aspect-[16/9] w-full overflow-hidden bg-navy-950">
+          <div className="relative h-[clamp(18rem,58vw,44rem)] w-full overflow-hidden bg-navy-950">
             <Image
               src={post.imageUrl}
               alt=""
@@ -138,22 +140,31 @@ export default async function PostPage({
           </div>
         ) : null}
 
-        {person ? (
-          <section aria-labelledby="interviewee-title" className="bg-white text-navy-900">
-            <div className="page-shell section-y">
-              <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
-                <div className="lg:col-span-4">
+        <section className="bg-white text-navy-900">
+          <div className="page-shell py-[clamp(3.5rem,6vw,6rem)]">
+            <div
+              className={
+                person
+                  ? "grid items-start gap-12 lg:grid-cols-[15rem_minmax(0,48rem)] lg:justify-center lg:gap-16 xl:grid-cols-[16rem_minmax(0,48rem)] xl:gap-20"
+                  : "mx-auto max-w-[48rem]"
+              }
+            >
+              {person ? (
+                <aside
+                  aria-labelledby="interviewee-title"
+                  className="border-t-2 border-blue-700 pt-5 lg:sticky lg:top-[calc(var(--chrome-h)+2rem)]"
+                >
                   <h2
                     id="interviewee-title"
                     className="font-display text-coord uppercase text-navy-600"
                   >
                     {t("interviewWith")}
                   </h2>
-                  <div className="mt-6 flex items-start gap-5">
+                  <div className="mt-6 flex items-start gap-5 lg:flex-col">
                     <DrawnPortrait
                       seed={person.portraitSeed}
                       title={person.name[locale]}
-                      className="size-24 shrink-0"
+                      className="size-20 shrink-0 lg:size-24"
                     />
                     <div className="min-w-0">
                       <p className="text-h3 leading-tight">{person.name[locale]}</p>
@@ -162,76 +173,104 @@ export default async function PostPage({
                       </p>
                     </div>
                   </div>
-                </div>
+                </aside>
+              ) : null}
 
-                <div className="lg:col-span-7 lg:col-start-6">
-                  <InterviewPlayer
-                    src={person.videoUrl}
-                    poster={person.posterUrl}
-                    title={post.title[locale]}
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-        ) : null}
-
-        <div className="bg-white text-navy-900">
-          <div className="page-shell-prose section-y">
-            {(post.body ?? []).map((section, i) => (
-              <section key={i} className={i > 0 ? "mt-12" : undefined}>
-                {section.heading ? (
-                  <h2 className="text-h2 leading-tight text-balance">{section.heading[locale]}</h2>
+              <div className="min-w-0">
+                {person ? (
+                  <section aria-labelledby="film-title">
+                    <div className="mb-5 flex items-center gap-4">
+                      <h2
+                        id="film-title"
+                        className="font-display text-coord uppercase text-navy-600"
+                      >
+                        {t("watchTitle")}
+                      </h2>
+                      <span aria-hidden className="h-px flex-1 bg-navy-900/15" />
+                    </div>
+                    <InterviewPlayer
+                      src={person.videoUrl}
+                      poster={person.posterUrl}
+                      title={post.title[locale]}
+                    />
+                  </section>
                 ) : null}
-                {section.paragraphs.map((p, j) => (
-                  <p
-                    key={j}
-                    className={
-                      // The opening paragraph is the standfirst and is set larger.
-                      i === 0 && j === 0 && !section.heading
-                        ? "text-body-lg leading-relaxed text-navy-900"
-                        : "mt-5 text-body-md leading-relaxed text-navy-600"
-                    }
-                  >
-                    {p[locale]}
-                  </p>
-                ))}
-              </section>
-            ))}
-          </div>
-        </div>
 
-        {person ? (
-          <section aria-labelledby="transcript-title" className="bg-mist text-navy-900">
-            <div className="page-shell-prose section-y">
-              <h2 id="transcript-title" className="text-h2 leading-tight">
-                {t("transcript")}
-              </h2>
-              <p className="mt-3 font-display text-coord uppercase text-navy-600">
-                {t("transcriptNote")}
-              </p>
-              {person.transcript.map((section, i) => (
-                <div key={i} className="mt-10 border-t border-navy-900/15 pt-8">
-                  {section.heading ? (
-                    <h3 className="font-display text-coord uppercase text-blue-700">
-                      {section.heading[locale]}
-                    </h3>
-                  ) : null}
-                  {section.paragraphs.map((p, j) => (
-                    <p key={j} className="mt-4 text-body-md leading-relaxed text-navy-600">
-                      {p[locale]}
-                    </p>
+                <div className={person ? "mt-14" : undefined}>
+                  {(post.body ?? []).map((section, i) => (
+                    <section key={i} className={i > 0 ? "mt-14" : undefined}>
+                      {section.heading ? (
+                        <h2 className="text-h2 leading-tight text-balance">
+                          {section.heading[locale]}
+                        </h2>
+                      ) : null}
+                      {section.paragraphs.map((p, j) => (
+                        <p
+                          key={j}
+                          className={
+                            i === 0 && j === 0 && !section.heading
+                              ? "text-[clamp(1.125rem,1.5vw,1.375rem)] leading-[1.7] text-navy-900"
+                              : "mt-5 text-body-md leading-[1.8] text-navy-600"
+                          }
+                        >
+                          {p[locale]}
+                        </p>
+                      ))}
+                    </section>
                   ))}
                 </div>
-              ))}
+
+                {person ? (
+                  <section aria-labelledby="transcript-title" className="mt-20 border-t-2 border-navy-950 pt-9">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                      <h2 id="transcript-title" className="text-h2 leading-tight">
+                        {t("transcript")}
+                      </h2>
+                      <p className="max-w-[34rem] font-display text-coord uppercase text-navy-600 sm:text-end">
+                        {t("transcriptNote")}
+                      </p>
+                    </div>
+                    <ol className="mt-9 border-b border-navy-900/15">
+                      {person.transcript.map((section, i) => (
+                        <li
+                          key={i}
+                          className="grid gap-4 border-t border-navy-900/15 bg-mist/60 px-5 py-7 sm:grid-cols-[3.5rem_minmax(0,1fr)] sm:gap-6 sm:px-7 sm:py-8"
+                        >
+                          <span
+                            aria-hidden
+                            className="font-data text-data-sm text-blue-700"
+                          >
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <div>
+                            {section.heading ? (
+                              <h3 className="font-display text-coord uppercase text-blue-700">
+                                {section.heading[locale]}
+                              </h3>
+                            ) : null}
+                            {section.paragraphs.map((p, j) => (
+                              <p
+                                key={j}
+                                className="mt-4 text-body-md leading-[1.8] text-navy-600"
+                              >
+                                {p[locale]}
+                              </p>
+                            ))}
+                          </div>
+                        </li>
+                      ))}
+                    </ol>
+                  </section>
+                ) : null}
+              </div>
             </div>
-          </section>
-        ) : null}
+          </div>
+        </section>
       </article>
 
       {related.length ? (
         <section aria-labelledby="related-title" className="bg-white text-navy-900">
-          <div className="page-shell section-y">
+          <div className="page-shell py-[clamp(3.5rem,5vw,5rem)]">
             <h2
               id="related-title"
               className="flex items-center gap-4 font-display text-coord uppercase text-navy-600"
@@ -239,7 +278,7 @@ export default async function PostPage({
               <span aria-hidden className="h-px w-10 shrink-0 bg-blue-700" />
               {t("related")}
             </h2>
-            <ul className="mt-10 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="mt-9 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((r) => (
                 <li key={r.slug} className="h-full">
                   <PostCard post={r} categories={categories} locale={locale} />
