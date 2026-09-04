@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CircleCheck } from "lucide-react";
+import { CircleCheck, LoaderCircle, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -10,6 +10,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -95,6 +96,7 @@ export function OtpModal({
     setStep("email");
     setError(null);
     setChallengeId(null);
+    setResendIn(0);
     emailForm.reset();
     codeForm.reset();
   }, [open, emailForm, codeForm]);
@@ -113,9 +115,11 @@ export function OtpModal({
    * `code` takes the field it has to fill; `done` takes the only control left.
    */
   useEffect(() => {
+    if (!open) return;
+    if (step === "email") emailForm.setFocus("email");
     if (step === "code") codeInputRef.current?.focus();
     if (step === "done") doneRef.current?.focus();
-  }, [step]);
+  }, [open, step, emailForm]);
 
   async function requestCode(values: z.infer<typeof emailSchema>) {
     setError(null);
@@ -128,6 +132,7 @@ export function OtpModal({
       const challenge = await api.otp.request(entryId, values.email);
       setEmail(values.email);
       setChallengeId(challenge.challengeId);
+      codeForm.reset();
       setStep("code");
       setResendIn(30);
     } catch {
@@ -161,28 +166,102 @@ export function OtpModal({
     }
   }
 
+  function changeEmail() {
+    setStep("email");
+    setError(null);
+    setChallengeId(null);
+    codeForm.reset();
+  }
+
+  const emailError = emailForm.formState.errors.email
+    ? t("emailInvalid")
+    : step === "email"
+      ? error
+      : null;
+  const codeError = codeForm.formState.errors.code
+    ? t("codeInvalidFormat")
+    : step === "code"
+      ? error
+      : null;
+  const codeValue = codeForm.watch("code") ?? "";
+
+  const primaryButton = cn(
+    "relative h-13 w-full overflow-hidden rounded-none bg-navy-950 px-6",
+    "font-display text-data-sm uppercase tracking-[0.08em] text-cream-50",
+    "shadow-[0_10px_24px_rgba(8,24,55,0.16)] transition-colors",
+    "after:absolute after:end-0 after:top-0 after:size-2 after:bg-gold",
+    "hover:bg-blue-700 focus-visible:border-transparent focus-visible:ring-0",
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700",
+  );
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>{step === "done" ? t("success") : t("title")}</DialogTitle>
+      <DialogContent
+        showCloseButton={false}
+        className="gap-0 overflow-hidden rounded-none bg-cream-50 p-0 text-navy-950 shadow-[0_28px_80px_rgba(0,10,35,0.28)] ring-1 ring-navy-950/12 sm:max-w-[36rem]"
+      >
+        <span aria-hidden className="absolute inset-x-0 top-0 z-10 flex h-1">
+          <span className="w-24 bg-blue-700" />
+          <span className="w-9 bg-gold" />
+        </span>
+
+        <DialogClose asChild>
+          <button
+            type="button"
+            aria-label={tCommon("close")}
+            className="absolute end-4 top-4 z-20 flex size-11 items-center justify-center text-navy-950 transition-colors hover:bg-navy-950/6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 sm:end-5 sm:top-5"
+          >
+            <X aria-hidden className="size-5" />
+          </button>
+        </DialogClose>
+
+        <DialogHeader className="gap-0 border-b border-navy-950/10 bg-white px-6 pb-6 pe-17 pt-8 text-start sm:px-8 sm:pb-7 sm:pe-20 sm:pt-9">
+          <div className="mb-3 flex items-center gap-3 font-display text-overline uppercase tracking-[0.18em] text-blue-700">
+            <span>{t("eyebrow")}</span>
+            {step !== "done" ? (
+              <>
+                <span aria-hidden className="h-px w-8 bg-blue-700/35" />
+                <span className="font-data text-data-xs text-navy-600">
+                  {step === "email" ? "01 / 02" : "02 / 02"}
+                </span>
+              </>
+            ) : null}
+          </div>
+          <DialogTitle className="max-w-[28rem] font-display text-[clamp(1.65rem,5vw,2.25rem)] font-semibold leading-[1.05] tracking-[-0.02em] text-navy-950">
+            {step === "done" ? t("success") : t("title")}
+          </DialogTitle>
           {/* The description IS the live region rather than a second one beside
               it. A title swap inside an already-open dialog is announced by
               nothing, and Radix wants a description present on every step, so
               the one element does both jobs. */}
-          <DialogDescription aria-live="polite">
+          <DialogDescription
+            aria-live="polite"
+            className="mt-3 max-w-[30rem] text-body-md leading-relaxed text-navy-600"
+          >
             {step === "done"
               ? t("successDescription", { project: projectTitle })
               : step === "email"
-                ? t("description", { project: projectTitle })
+                ? t("description")
                 : t("codeHint", { email })}
           </DialogDescription>
         </DialogHeader>
 
+        <div className="flex items-center gap-3 border-b border-navy-950/10 bg-mist/70 px-6 py-3.5 sm:px-8">
+          <span className="shrink-0 font-display text-overline uppercase tracking-[0.14em] text-navy-500">
+            {t("projectLabel")}
+          </span>
+          <span aria-hidden className="h-px min-w-4 flex-1 bg-navy-950/12" />
+          <bdi className="min-w-0 truncate font-display text-body-sm font-semibold text-navy-950">
+            {projectTitle}
+          </bdi>
+        </div>
+
         {step === "email" ? (
-          <form onSubmit={emailForm.handleSubmit(requestCode)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="otp-email">{t("emailLabel")}</Label>
+          <form onSubmit={emailForm.handleSubmit(requestCode)} className="space-y-5 p-6 sm:p-8">
+            <div className="space-y-2.5">
+              <Label htmlFor="otp-email" className="font-display text-body-sm font-semibold text-navy-950">
+                {t("emailLabel")}
+              </Label>
               <Input
                 id="otp-email"
                 type="email"
@@ -190,57 +269,95 @@ export function OtpModal({
                 autoComplete="email"
                 placeholder={t("emailPlaceholder")}
                 dir="ltr"
+                className="h-13 rounded-none border-navy-950/22 bg-white px-4 text-body-md text-navy-950 shadow-none focus-visible:border-blue-700 focus-visible:ring-0 aria-invalid:border-destructive aria-invalid:ring-0"
                 {...emailForm.register("email")}
-                aria-invalid={Boolean(emailForm.formState.errors.email) || Boolean(error)}
-                aria-describedby={error ? "otp-email-error" : undefined}
+                aria-invalid={Boolean(emailError)}
+                aria-describedby={emailError ? "otp-email-error" : undefined}
               />
             </div>
             {/* `role="alert"` rather than a bare paragraph: the message appears
                 after a submit, so nothing announces it unless it is a live
                 region, and `aria-describedby` above ties it to the field that
                 caused it. */}
-            {error ? (
-              <p id="otp-email-error" role="alert" className="text-body-sm text-destructive">
-                {error}
+            {emailError ? (
+              <p id="otp-email-error" role="alert" className="border-s-2 border-destructive bg-destructive/6 px-3 py-2.5 text-body-sm text-destructive">
+                {emailError}
               </p>
             ) : null}
-            <Button type="submit" className="w-full" disabled={emailForm.formState.isSubmitting}>
-              {t("sendCode")}
+            <Button type="submit" className={primaryButton} disabled={emailForm.formState.isSubmitting}>
+              {emailForm.formState.isSubmitting ? (
+                <LoaderCircle aria-hidden className="size-4 animate-spin motion-reduce:animate-none" />
+              ) : null}
+              {emailForm.formState.isSubmitting ? t("sending") : t("sendCode")}
             </Button>
           </form>
         ) : null}
 
         {step === "code" ? (
-          <form onSubmit={codeForm.handleSubmit(verifyCode)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="otp-code">{t("codeLabel")}</Label>
-              <Input
+          <form onSubmit={codeForm.handleSubmit(verifyCode)} className="space-y-5 p-6 sm:p-8">
+            <div className="flex items-center justify-between gap-4">
+              <Label htmlFor="otp-code" className="font-display text-body-sm font-semibold text-navy-950">
+                {t("codeLabel")}
+              </Label>
+              <button
+                type="button"
+                onClick={changeEmail}
+                className="font-display text-body-sm text-blue-700 underline underline-offset-4 hover:text-navy-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700"
+              >
+                {t("changeEmail")}
+              </button>
+            </div>
+
+            <div className="group relative" dir="ltr">
+              <div aria-hidden className="grid grid-cols-6 gap-2 sm:gap-2.5">
+                {Array.from({ length: 6 }, (_, index) => (
+                  <span
+                    key={index}
+                    className={cn(
+                      "flex h-13 items-center justify-center border bg-white font-data text-h3 text-navy-950 transition-colors sm:h-14",
+                      codeError
+                        ? "border-destructive"
+                        : "border-navy-950/22 group-focus-within:border-blue-700/45",
+                      !codeError && codeValue.length === index && "border-blue-700 ring-1 ring-blue-700",
+                    )}
+                  >
+                    {codeValue[index] ?? ""}
+                  </span>
+                ))}
+              </div>
+              <input
                 id="otp-code"
                 inputMode="numeric"
                 autoComplete="one-time-code"
                 maxLength={6}
+                pattern="[0-9]*"
                 dir="ltr"
-                className="text-center font-mono text-h3 tracking-[0.5em]"
-                {...codeRegister}
-                // The spread carries react-hook-form's own ref, so it is called
-                // first and then the local one is set. Overriding `ref` without
-                // forwarding it would detach the field from the form.
-                ref={(el) => {
-                  codeRegister.ref(el);
-                  codeInputRef.current = el;
+                name={codeRegister.name}
+                onBlur={codeRegister.onBlur}
+                onChange={(event) => {
+                  event.target.value = event.target.value.replace(/\D/g, "").slice(0, 6);
+                  void codeRegister.onChange(event);
                 }}
-                aria-invalid={Boolean(codeForm.formState.errors.code) || Boolean(error)}
-                aria-describedby={error ? "otp-code-error" : undefined}
+                ref={(element) => {
+                  codeRegister.ref(element);
+                  codeInputRef.current = element;
+                }}
+                aria-invalid={Boolean(codeError)}
+                aria-describedby={codeError ? "otp-code-error" : undefined}
+                className="absolute inset-0 z-10 size-full cursor-text opacity-0"
               />
             </div>
-            {error ? (
-              <p id="otp-code-error" role="alert" className="text-body-sm text-destructive">
-                {error}
+            {codeError ? (
+              <p id="otp-code-error" role="alert" className="border-s-2 border-destructive bg-destructive/6 px-3 py-2.5 text-body-sm text-destructive">
+                {codeError}
               </p>
             ) : null}
-            <div className="flex items-center gap-2">
-              <Button type="submit" className="flex-1" disabled={codeForm.formState.isSubmitting}>
-                {t("verify")}
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <Button type="submit" className={cn(primaryButton, "sm:flex-1")} disabled={codeForm.formState.isSubmitting}>
+                {codeForm.formState.isSubmitting ? (
+                  <LoaderCircle aria-hidden className="size-4 animate-spin motion-reduce:animate-none" />
+                ) : null}
+                {codeForm.formState.isSubmitting ? t("verifying") : t("verify")}
               </Button>
               {/* `aria-live="off"`, deliberately: the label changes every
                   second while the cooldown runs, and a per-second announcement
@@ -252,6 +369,7 @@ export function OtpModal({
                 aria-live="off"
                 disabled={resendIn > 0}
                 onClick={() => emailForm.handleSubmit(requestCode)()}
+                className="h-11 rounded-none px-4 font-display text-body-sm text-blue-700 hover:bg-blue-700/6 hover:text-navy-950 focus-visible:ring-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 sm:min-w-36"
               >
                 {resendIn > 0 ? t("resendIn", { seconds: resendIn }) : t("resend")}
               </Button>
@@ -260,9 +378,11 @@ export function OtpModal({
         ) : null}
 
         {step === "done" ? (
-          <div className={cn("flex flex-col items-center gap-3 py-4")}>
-            <CircleCheck className="size-10 text-blue-700" aria-hidden />
-            <Button ref={doneRef} onClick={() => onOpenChange(false)}>
+          <div className={cn("flex flex-col items-center gap-5 p-8 text-center sm:p-10")}>
+            <span className="flex size-18 items-center justify-center bg-blue-700/8 text-blue-700">
+              <CircleCheck className="size-9" aria-hidden />
+            </span>
+            <Button ref={doneRef} onClick={() => onOpenChange(false)} className={cn(primaryButton, "max-w-64")}>
               {tCommon("close")}
             </Button>
           </div>
