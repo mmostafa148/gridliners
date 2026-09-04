@@ -213,7 +213,7 @@ export function OtpModal({
           </button>
         </DialogClose>
 
-        <DialogHeader className="gap-0 border-b border-navy-950/10 px-6 pb-5 pe-16 pt-7 text-start sm:px-7 sm:pe-16">
+        <DialogHeader className="min-w-0 gap-0 border-b border-navy-950/10 px-6 pb-5 pe-16 pt-7 text-start sm:px-7 sm:pe-16">
           <DialogTitle className="max-w-[24rem] font-display text-[clamp(1.45rem,5vw,1.875rem)] font-semibold leading-tight tracking-[-0.015em] text-navy-950">
             {step === "done" ? t("success") : step === "code" ? t("codeTitle") : t("title")}
           </DialogTitle>
@@ -252,7 +252,7 @@ export function OtpModal({
         </DialogHeader>
 
         {step === "email" ? (
-          <form onSubmit={emailForm.handleSubmit(requestCode)} className="space-y-4 px-6 pb-7 pt-5 sm:px-7">
+          <form onSubmit={emailForm.handleSubmit(requestCode)} className="min-w-0 space-y-4 px-6 pb-7 pt-5 sm:px-7">
             <div className="space-y-2">
               <Label htmlFor="otp-email" className="font-display text-body-sm font-semibold text-navy-950">
                 {t("emailLabel")}
@@ -289,7 +289,7 @@ export function OtpModal({
         ) : null}
 
         {step === "code" ? (
-          <form onSubmit={codeForm.handleSubmit(verifyCode)} className="space-y-4 px-6 pb-7 pt-5 sm:px-7">
+          <form onSubmit={codeForm.handleSubmit(verifyCode)} className="min-w-0 space-y-4 px-6 pb-7 pt-5 sm:px-7">
             <Label htmlFor="otp-code" className="sr-only">
               {t("codeLabel")}
             </Label>
