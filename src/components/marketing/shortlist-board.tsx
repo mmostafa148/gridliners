@@ -3,7 +3,7 @@
 import { ArrowRight, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import { useFormatter, useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { ParentMark } from "@/components/brand/parent-mark";
 import { TierMark } from "@/components/brand/tier-mark";
@@ -64,6 +64,8 @@ type Selection = { parentId: string; subId: string | null } | null;
 
 export function ShortlistBoard({ view }: { view: ShortlistView }) {
   const [selection, setSelection] = useState<Selection>(null);
+  const [openParentId, setOpenParentId] = useState<string | null>(null);
+  const filterBlockRef = useRef<HTMLDivElement>(null);
 
   const tFilter = useTranslations("finalists.filter");
   const tTier = useTranslations("tier");
@@ -96,6 +98,35 @@ export function ShortlistBoard({ view }: { view: ShortlistView }) {
     (view.tiers.find((t) => t.finalistCount > 0) ?? view.tiers[0])?.tier,
   );
   const activeTier = view.tiers.find((t) => t.tier === tierId) ?? view.tiers[0];
+  const openParent =
+    view.options.find((option) => option.id === openParentId) ?? null;
+
+  // One disclosure at a time, dismissed by the same two gestures readers
+  // expect from a menu: Escape, or a press anywhere outside the filter block.
+  // Keeping this state at board level is also what lets the phone panel live
+  // outside the horizontally scrolling row, where it cannot be clipped.
+  useEffect(() => {
+    if (!openParentId) return;
+
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpenParentId(null);
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      if (
+        event.target instanceof Node &&
+        !filterBlockRef.current?.contains(event.target)
+      ) {
+        setOpenParentId(null);
+      }
+    };
+
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [openParentId]);
 
   /**
    * The category counts are the chosen tier's, not the year's.
@@ -172,6 +203,7 @@ export function ShortlistBoard({ view }: { view: ShortlistView }) {
           and a filter that eats a third of every screen is worse than one you
           scroll back to. */}
       <div
+        ref={filterBlockRef}
         data-filterblock
         // A hairline at the foot, so the slab has an edge to sit on when it is
         // over the shortlist rather than above it. Harmless in flow, where the
@@ -205,7 +237,10 @@ export function ShortlistBoard({ view }: { view: ShortlistView }) {
                     <li key={t.tier} className="flex">
                       <button
                         type="button"
-                        onClick={() => setTierId(t.tier)}
+                        onClick={() => {
+                          setTierId(t.tier);
+                          setOpenParentId(null);
+                        }}
                         aria-pressed={active}
                         className={cn(
                           "flex shrink-0 items-center gap-2.5 whitespace-nowrap border-b-2 py-3.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700",
@@ -257,22 +292,27 @@ export function ShortlistBoard({ view }: { view: ShortlistView }) {
                 <li className="flex shrink-0">
                   <FilterCell
                     active={!selected}
-                    onSelect={() => setSelection(null)}
+                    onSelect={() => {
+                      setSelection(null);
+                      setOpenParentId(null);
+                    }}
                     parentId={null}
                     name={tFilter("all")}
                     count={activeTier?.finalistCount ?? 0}
                     subs={[]}
                     selectedSubId={null}
                     onSelectSub={() => setSelection(null)}
+                    open={false}
+                    onOpenChange={() => setOpenParentId(null)}
                   />
                 </li>
                 {view.options.map((option) => (
                   <li key={option.id} className="flex shrink-0">
                     <FilterCell
                       active={selected?.id === option.id}
-                      onSelect={() =>
+                      onSelect={() => {
                         setSelection({ parentId: option.id, subId: null })
-                      }
+                      }}
                       parentId={option.id}
                       name={option.name}
                       count={parentCount(option.id)}
@@ -285,13 +325,53 @@ export function ShortlistBoard({ view }: { view: ShortlistView }) {
                           ? selection.subId
                           : null
                       }
-                      onSelectSub={(subId) =>
-                        setSelection({ parentId: option.id, subId })
+                      onSelectSub={(subId) => {
+                        setSelection({ parentId: option.id, subId });
+                        setOpenParentId(null);
+                      }}
+                      open={openParentId === option.id}
+                      onOpenChange={(open) =>
+                        setOpenParentId(open ? option.id : null)
                       }
                     />
                   </li>
                 ))}
               </ul>
+
+              {/* On a phone the category row must scroll sideways, and CSS
+                  scroll containers clip absolutely positioned descendants on
+                  the other axis too. The old submenu was opening — its
+                  chevron even rotated — but it existed below the clipped edge.
+                  Render the active submenu as a sibling of the scroller on
+                  small screens; desktop keeps the compact anchored menu. */}
+              {openParent?.subs.length ? (
+                <div
+                  data-mobile-subpanel={openParent.id}
+                  className="-mx-4 border-t border-navy-900/12 bg-[#f3f3f9] px-4 py-2 sm:hidden"
+                >
+                  <SubcategoryChoices
+                    name={openParent.name}
+                    subs={openParent.subs.map((sub) => ({
+                      ...sub,
+                      count: subCount(openParent.id, sub.id),
+                    }))}
+                    selectedSubId={
+                      selection?.parentId === openParent.id
+                        ? selection.subId
+                        : null
+                    }
+                    onSelectSub={(subId) => {
+                      setSelection({ parentId: openParent.id, subId });
+                      setOpenParentId(null);
+                    }}
+                    onSelectParent={() => {
+                      setSelection({ parentId: openParent.id, subId: null });
+                      setOpenParentId(null);
+                    }}
+                    className="shadow-none"
+                  />
+                </div>
+              ) : null}
             </div>
           </section>
         ) : null}
@@ -329,17 +409,10 @@ export function ShortlistBoard({ view }: { view: ShortlistView }) {
  *
  * **It opens on hover and on focus, and that pairing is the accessibility of
  * it.** A panel that answers only to a pointer is unreachable by keyboard and
- * absent on touch; `focus-within` covers both, since a tap focuses the cell —
- * which means a tap filters to the parent *and* reveals its sub-categories,
- * one gesture doing the obvious two things. Escape dismisses it, and it stays
- * open while the pointer is inside it, which is what WCAG 1.4.13 asks of
- * content shown on hover.
- *
- * CSS drives the open state rather than React: `group-hover` and
- * `group-focus-within` need no listeners, cannot desynchronise from the real
- * pointer or focus, and leave nothing to clean up. The only state is the
- * dismissal, because Escape has to beat a pointer that is still resting on the
- * cell.
+ * absent on touch. A tap filters to the parent and reveals its sub-categories,
+ * one gesture doing the obvious two things. Escape and an outside press dismiss
+ * it, and it stays open while the pointer is inside it, which is what WCAG
+ * 1.4.13 asks of content shown on hover.
  */
 function FilterCell({
   active,
@@ -350,6 +423,8 @@ function FilterCell({
   subs,
   selectedSubId,
   onSelectSub,
+  open,
+  onOpenChange,
 }: {
   active: boolean;
   onSelect: () => void;
@@ -360,39 +435,52 @@ function FilterCell({
   subs: FilterSubOption[];
   selectedSubId: string | null;
   onSelectSub: (subId: string) => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
   const format = useFormatter();
-  const tFilter = useTranslations("finalists.filter");
-  const [open, setOpen] = useState(false);
-
-  // Escape has to reach the panel from wherever the reader actually is, and
-  // when a pointer opened it that is nowhere inside this cell - the key event
-  // goes to whatever holds focus, which is usually the body. A document
-  // listener is the only place it can be caught, and it is attached only while
-  // this cell is open so exactly one exists at a time.
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [open]);
 
   return (
     <div
       className="relative flex w-full"
-      onPointerEnter={() => setOpen(true)}
-      onPointerLeave={() => setOpen(false)}
-      onFocus={() => setOpen(true)}
+      onPointerEnter={(event) => {
+        if (
+          event.pointerType === "mouse" &&
+          window.matchMedia("(min-width: 640px)").matches &&
+          subs.length
+        ) {
+          onOpenChange(true);
+        }
+      }}
+      onPointerLeave={(event) => {
+        // A narrow layout always uses the persistent, full-width disclosure,
+        // including in desktop device emulators that still report a mouse.
+        // Treating that emulated pointer as desktop hover made the panel close
+        // as soon as the result list reflowed beneath it.
+        if (
+          event.pointerType === "mouse" &&
+          window.matchMedia("(min-width: 640px)").matches
+        ) {
+          onOpenChange(false);
+        }
+      }}
+      onFocus={() => {
+        if (subs.length) onOpenChange(true);
+      }}
       onBlur={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node))
-          setOpen(false);
+        // On mobile the visible submenu is a sibling of this cell, but it is
+        // still inside the shared filter block. Moving focus into that panel
+        // must not close it before the option's click can land.
+        const block = event.currentTarget.closest("[data-filterblock]");
+        if (!block?.contains(event.relatedTarget as Node)) onOpenChange(false);
       }}
     >
       <button
         type="button"
-        onClick={onSelect}
+        onClick={() => {
+          onSelect();
+          if (subs.length) onOpenChange(true);
+        }}
         aria-pressed={active}
         aria-expanded={subs.length ? open : undefined}
         className={cn(
@@ -406,7 +494,7 @@ function FilterCell({
           // So the cell is a line of type. Chosen is blue with a rule under it,
           // the way a chosen thing is marked in print; hover only warms the
           // text. Nothing is filled and nothing is boxed.
-          "flex shrink-0 items-center gap-2.5 whitespace-nowrap border-b-2 py-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700",
+          "flex min-h-11 shrink-0 touch-manipulation items-center gap-2.5 whitespace-nowrap border-b-2 py-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700",
           active
             ? "border-blue-700 text-blue-700"
             : "border-transparent text-navy-600 hover:text-navy-900",
@@ -450,54 +538,82 @@ function FilterCell({
         <div
           data-subpanel={parentId ?? undefined}
           hidden={!open}
-          className="absolute top-full z-20 min-w-full"
+          className="absolute top-full z-20 hidden min-w-full sm:block"
         >
-          <ul className="mt-px flex flex-col gap-px bg-navy-900/15 shadow-[0_10px_30px_-12px_rgba(1,9,38,0.45)]">
-            {subs.map((sub) => (
-              <li key={sub.id} className="flex">
-                <button
-                  type="button"
-                  onClick={() => onSelectSub(sub.id)}
-                  aria-pressed={selectedSubId === sub.id}
-                  className={cn(
-                    // Inter, and set as a menu item rather than as a label.
-                    // `font-display text-coord uppercase` is the coordinate
-                    // style, built for Presicav and for naming a group; the
-                    // panel is a list of choices, and a choice reads in the
-                    // body face at its own casing. The names are already title
-                    // case in the taxonomy, so dropping the CSS uppercase
-                    // spells them the way the data does.
-                    "flex w-full items-baseline justify-between gap-6 whitespace-nowrap px-4 py-2.5 text-start font-sans text-body-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-700 sm:px-5",
-                    selectedSubId === sub.id
-                      ? "bg-blue-700 text-cream-100"
-                      : "bg-white text-navy-900 hover:bg-cream-100",
-                  )}
-                >
-                  <span>{sub.name}</span>
-                  {/* `font-data` is Presicav too, so it follows the names into
-                      Inter; `tabular-nums` stays, because the counts are a
-                      column and have to line up. */}
-                  <span className="font-sans tabular-nums">
-                    {format.number(sub.count)}
-                  </span>
-                </button>
-              </li>
-            ))}
-            <li className="flex">
-              {/* A way back up a level without reaching for the parent cell,
-                  which the pointer has usually already left. */}
-              <button
-                type="button"
-                onClick={onSelect}
-                className="w-full bg-white px-4 py-2.5 text-start font-sans text-body-sm text-navy-600 transition-colors hover:bg-cream-100 hover:text-navy-900 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-700 sm:px-5"
-              >
-                {tFilter("allOf", { category: name })}
-              </button>
-            </li>
-          </ul>
+          <SubcategoryChoices
+            name={name}
+            subs={subs}
+            selectedSubId={selectedSubId}
+            onSelectSub={(subId) => {
+              onSelectSub(subId);
+              onOpenChange(false);
+            }}
+            onSelectParent={() => {
+              onSelect();
+              onOpenChange(false);
+            }}
+          />
         </div>
       ) : null}
     </div>
+  );
+}
+
+function SubcategoryChoices({
+  name,
+  subs,
+  selectedSubId,
+  onSelectSub,
+  onSelectParent,
+  className,
+}: {
+  name: string;
+  subs: FilterSubOption[];
+  selectedSubId: string | null;
+  onSelectSub: (subId: string) => void;
+  onSelectParent: () => void;
+  className?: string;
+}) {
+  const format = useFormatter();
+  const tFilter = useTranslations("finalists.filter");
+
+  return (
+    <ul
+      className={cn(
+        "mt-px flex flex-col gap-px bg-navy-900/15 shadow-[0_10px_30px_-12px_rgba(1,9,38,0.45)]",
+        className,
+      )}
+    >
+      {subs.map((sub) => (
+        <li key={sub.id} className="flex">
+          <button
+            type="button"
+            onClick={() => onSelectSub(sub.id)}
+            aria-pressed={selectedSubId === sub.id}
+            className={cn(
+              "flex min-h-11 w-full touch-manipulation items-baseline justify-between gap-6 whitespace-nowrap px-4 py-3 text-start font-sans text-body-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-700 sm:px-5",
+              selectedSubId === sub.id
+                ? "bg-blue-700 text-cream-100"
+                : "bg-white text-navy-900 hover:bg-cream-100",
+            )}
+          >
+            <span>{sub.name}</span>
+            <span className="font-sans tabular-nums">
+              {format.number(sub.count)}
+            </span>
+          </button>
+        </li>
+      ))}
+      <li className="flex">
+        <button
+          type="button"
+          onClick={onSelectParent}
+          className="min-h-11 w-full touch-manipulation bg-white px-4 py-3 text-start font-sans text-body-sm text-navy-600 transition-colors hover:bg-cream-100 hover:text-navy-900 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-blue-700 sm:px-5"
+        >
+          {tFilter("allOf", { category: name })}
+        </button>
+      </li>
+    </ul>
   );
 }
 
