@@ -1,7 +1,5 @@
 import { getTranslations } from "next-intl/server";
 
-import { PixelGrid } from "@/components/brand/pixel-grid";
-
 /**
  * How the panel is run.
  *
@@ -20,8 +18,7 @@ import { PixelGrid } from "@/components/brand/pixel-grid";
  *
  * On navy, because this is a different kind of statement from the framework
  * above it: that section is what an entrant is measured by, this one is how the
- * measuring is governed. The seam is the motif, as it is between the two systems
- * on Categories.
+ * measuring is governed.
  */
 export async function SelectionProcess() {
   const t = await getTranslations("jury.process");
@@ -30,27 +27,7 @@ export async function SelectionProcess() {
 
   return (
     <section className="relative overflow-hidden bg-navy-950 text-cream-100">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 overflow-hidden"
-      >
-        <PixelGrid
-          direction="down"
-          seed={23}
-          cols={64}
-          rows={3}
-          density={0.4}
-          cellSize="clamp(0.875rem, 1.8vw, 1.75rem)"
-          // `bg-mist`, not `bg-white`: the seam is the section ABOVE breaking
-          // into this one, so its cells have to be that section's ground. This
-          // was copied from the honorary seam on Categories, where the block
-          // above genuinely is white; here it is `TierSeparation` on mist, and
-          // white cells read as a third colour band cutting across the join.
-          cellClassName="bg-mist"
-        />
-      </div>
-
-      <div className="page-shell section-y relative pt-[calc(var(--section-y)+6rem)]">
+      <div className="page-shell section-y relative">
         <h2 className="text-h1 text-balance text-cream-50">{t("title")}</h2>
 
         <dl className="mt-12 grid gap-x-14 gap-y-10 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">
