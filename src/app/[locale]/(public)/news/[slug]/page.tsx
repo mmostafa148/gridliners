@@ -172,24 +172,33 @@ export default async function PostPage({
               {person ? (
                 <aside
                   aria-labelledby="interviewee-title"
-                  className="bg-navy-950 p-7 text-cream-50 lg:sticky lg:top-[calc(var(--chrome-h)+2rem)] lg:p-8"
+                  className="lg:sticky lg:top-[calc(var(--chrome-h)+2rem)]"
                 >
-                  <span aria-hidden className="mb-7 block h-1 w-16 bg-gold-500" />
-                  <h2
-                    id="interviewee-title"
-                    className="font-display text-coord uppercase text-gold-500"
-                  >
-                    {t("interviewWith")}
-                  </h2>
-                  <div className="mt-7 flex items-start gap-5 lg:flex-col lg:gap-7">
+                  {/* An editorial credit, not a promotional card. The old
+                      full navy rectangle made this small piece of metadata
+                      compete with the film and expanded into a tall block on
+                      phones. A short rule, a compact portrait and type on the
+                      page ground give it hierarchy without another container. */}
+                  <div className="flex items-center gap-3">
+                    <span aria-hidden className="h-0.5 w-8 shrink-0 bg-blue-700" />
+                    <h2
+                      id="interviewee-title"
+                      className="font-display text-coord uppercase text-blue-700"
+                    >
+                      {t("interviewWith")}
+                    </h2>
+                  </div>
+                  <div className="mt-5 grid grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-4 lg:mt-6 lg:grid-cols-1 lg:items-start lg:gap-5">
                     <DrawnPortrait
                       seed={person.portraitSeed}
                       title={person.name[locale]}
-                      className="size-24 shrink-0 bg-cream-50 lg:size-32"
+                      className="size-[4.5rem] shrink-0 bg-mist ring-1 ring-navy-900/10 lg:size-24"
                     />
                     <div className="min-w-0">
-                      <p className="text-h2 leading-tight">{person.name[locale]}</p>
-                      <p className="mt-3 font-display text-coord uppercase text-cream-200/75">
+                      <p className="text-h3 leading-tight text-navy-900">
+                        {person.name[locale]}
+                      </p>
+                      <p className="mt-1.5 font-display text-coord uppercase leading-relaxed text-navy-600">
                         {person.role[locale]}
                       </p>
                     </div>
