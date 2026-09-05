@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Scale } from "lucide-react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { EnquiryForm } from "@/components/marketing/enquiry-form";
@@ -14,9 +13,6 @@ import type { Locale } from "@/i18n/routing";
  * for it, so nobody has to scroll back to remember what they are enquiring
  * about.
  *
- * Independence is not presented as a fourth benefit. It closes the whole plate
- * as a trust condition, where a partner learns it before any contract and an
- * entrant who wanders onto the page sees the same promise.
  */
 
 const OPPORTUNITIES = [
@@ -67,7 +63,7 @@ export default async function PartnerPage({
                   {OPPORTUNITIES.map(({ key, number }) => (
                     <li
                       key={key}
-                      className="grid grid-cols-[2.5rem_1fr] gap-x-5 border-b border-navy-900/15 py-6"
+                      className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-x-4 border-b border-navy-900/15 py-6 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-x-5"
                     >
                       <span
                         aria-hidden
@@ -75,7 +71,7 @@ export default async function PartnerPage({
                       >
                         {number}
                       </span>
-                      <div>
+                      <div className="min-w-0">
                         <h3 className="text-h4 leading-snug">
                           {t(`benefits.${key}.title`)}
                         </h3>
@@ -104,24 +100,6 @@ export default async function PartnerPage({
               </div>
             </div>
 
-            {/* Independence is a condition of partnership, not another
-                benefit. Giving it the full foot of the plate makes that status
-                unmistakable without creating a fourth feature card. */}
-            <div className="flex gap-5 border-t border-navy-900/15 bg-navy-950 px-7 py-6 text-cream-100 sm:px-10 lg:px-12">
-              <Scale
-                aria-hidden
-                className="mt-0.5 size-5 shrink-0 text-gold"
-                strokeWidth={1.75}
-              />
-              <div className="max-w-4xl">
-                <h3 className="text-h4 text-cream-50">
-                  {t("benefits.independence.title")}
-                </h3>
-                <p className="mt-2 text-body-sm text-cream-200/75">
-                  {t("benefits.independence.body")}
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
