@@ -999,6 +999,9 @@
     "eyebrow": "Partnership",
     "lead": "Tell us what you would like to support and we will come back with what is available in the current cycle.",
     "benefitsTitle": "What a partnership includes",
+    "formEyebrow": "Partnership enquiry",
+    "formTitle": "Start a conversation",
+    "formLead": "Tell us where you would like to contribute, and we will suggest what fits the current cycle.",
     "benefits": {
       "reach": {
         "title": "Reach the region's studios",
@@ -1023,9 +1026,11 @@
     "contactPersonPlaceholder": "Who we should reply to",
     "email": "Email",
     "phone": "Phone",
+    "phoneOptional": "Phone (optional)",
     "phonePlaceholder": "Including country code",
     "message": "What would you like to support?",
     "messagePlaceholder": "A category, a clinic, the ceremony, or something we have not thought of.",
+    "responseNote": "We reply within five working days. Nothing is committed by sending this.",
     "submit": "Send enquiry",
     "sending": "Sending",
     "successTitle": "Enquiry received",

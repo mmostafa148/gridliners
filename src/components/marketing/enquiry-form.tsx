@@ -50,7 +50,7 @@ const FIELDS: Record<Variant, FieldDef[]> = {
     { name: "organisation", labelKey: "organisation", placeholderKey: "organisationPlaceholder", autoComplete: "organization" },
     { name: "contactPerson", labelKey: "contactPerson", placeholderKey: "contactPersonPlaceholder", autoComplete: "name" },
     { name: "email", labelKey: "email", type: "email", autoComplete: "email" },
-    { name: "phone", labelKey: "phone", placeholderKey: "phonePlaceholder", type: "tel", autoComplete: "tel" },
+    { name: "phone", labelKey: "phoneOptional", placeholderKey: "phonePlaceholder", type: "tel", autoComplete: "tel" },
     { name: "message", labelKey: "message", placeholderKey: "messagePlaceholder", multiline: true },
   ],
 };
@@ -79,7 +79,7 @@ export function EnquiryForm({ variant }: { variant: Variant }) {
           organisation: required(),
           contactPerson: required(),
           email,
-          phone: required(6),
+          phone: z.string().trim(),
           message: required(10),
         });
 
@@ -149,58 +149,73 @@ export function EnquiryForm({ variant }: { variant: Variant }) {
         </div>
       ) : null}
 
-      {FIELDS[variant].map((field) => {
-        const error = (form.formState.errors as Record<string, { message?: string } | undefined>)[field.name];
-        const id = `${variant}-${field.name}`;
-        return (
-          <div key={field.name} className="flex flex-col gap-2">
-            <label htmlFor={id} className="font-display text-coord uppercase text-navy-600">
-              {t(field.labelKey)}
-            </label>
-            {field.multiline ? (
-              <textarea
-                id={id}
-                rows={5}
-                disabled={busy}
-                placeholder={field.placeholderKey ? t(field.placeholderKey) : undefined}
-                aria-invalid={error ? true : undefined}
-                aria-describedby={error ? `${id}-error` : undefined}
-                {...form.register(field.name as never)}
-                className={cn(
-                  "border bg-white px-4 py-3 text-body-md text-navy-900 outline-none transition-colors placeholder:text-navy-900/40 focus-visible:border-blue-700 disabled:opacity-60",
-                  error ? "border-destructive" : "border-navy-900/25",
-                )}
-              />
-            ) : (
-              <input
-                id={id}
-                type={field.type ?? "text"}
-                disabled={busy}
-                autoComplete={field.autoComplete}
-                placeholder={field.placeholderKey ? t(field.placeholderKey) : undefined}
-                aria-invalid={error ? true : undefined}
-                aria-describedby={error ? `${id}-error` : undefined}
-                {...form.register(field.name as never)}
-                className={cn(
-                  "h-12 border bg-white px-4 text-body-md text-navy-900 outline-none transition-colors placeholder:text-navy-900/40 focus-visible:border-blue-700 disabled:opacity-60",
-                  error ? "border-destructive" : "border-navy-900/25",
-                )}
-              />
-            )}
-            {error?.message ? (
-              <p id={`${id}-error`} role="alert" className="text-body-sm text-destructive">
-                {error.message}
-              </p>
-            ) : null}
-          </div>
-        );
-      })}
+      <div className={cn("grid gap-6", variant === "partner" && "sm:grid-cols-2")}>
+        {FIELDS[variant].map((field) => {
+          const error = (form.formState.errors as Record<string, { message?: string } | undefined>)[field.name];
+          const id = `${variant}-${field.name}`;
+          return (
+            <div
+              key={field.name}
+              className={cn(
+                "flex flex-col gap-2",
+                variant === "partner" && field.multiline && "sm:col-span-2",
+              )}
+            >
+              <label htmlFor={id} className="font-display text-coord uppercase text-navy-600">
+                {t(field.labelKey)}
+              </label>
+              {field.multiline ? (
+                <textarea
+                  id={id}
+                  rows={5}
+                  disabled={busy}
+                  placeholder={field.placeholderKey ? t(field.placeholderKey) : undefined}
+                  aria-invalid={error ? true : undefined}
+                  aria-describedby={error ? `${id}-error` : undefined}
+                  {...form.register(field.name as never)}
+                  className={cn(
+                    "border bg-white px-4 py-3 text-body-md text-navy-900 outline-none transition-colors placeholder:text-navy-900/40 focus-visible:border-blue-700 disabled:opacity-60",
+                    error ? "border-destructive" : "border-navy-900/25",
+                  )}
+                />
+              ) : (
+                <input
+                  id={id}
+                  type={field.type ?? "text"}
+                  disabled={busy}
+                  autoComplete={field.autoComplete}
+                  placeholder={field.placeholderKey ? t(field.placeholderKey) : undefined}
+                  aria-invalid={error ? true : undefined}
+                  aria-describedby={error ? `${id}-error` : undefined}
+                  {...form.register(field.name as never)}
+                  className={cn(
+                    "h-12 border bg-white px-4 text-body-md text-navy-900 outline-none transition-colors placeholder:text-navy-900/40 focus-visible:border-blue-700 disabled:opacity-60",
+                    error ? "border-destructive" : "border-navy-900/25",
+                  )}
+                />
+              )}
+              {error?.message ? (
+                <p id={`${id}-error`} role="alert" className="text-body-sm text-destructive">
+                  {error.message}
+                </p>
+              ) : null}
+            </div>
+          );
+        })}
+      </div>
+
+      {variant === "partner" ? (
+        <p className="text-body-sm text-navy-600">{t("responseNote")}</p>
+      ) : null}
 
       <div>
         <button
           type="submit"
           disabled={busy}
-          className="inline-flex h-12 items-center gap-3 bg-navy-900 px-7 font-display text-data-sm uppercase tracking-[0.1em] text-cream-50 transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 disabled:opacity-70"
+          className={cn(
+            "inline-flex h-12 items-center justify-center gap-3 bg-navy-900 px-7 font-display text-data-sm uppercase tracking-[0.1em] text-cream-50 transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700 disabled:opacity-70",
+            variant === "partner" && "w-full",
+          )}
         >
           {busy ? <Loader2 aria-hidden className="size-4 animate-spin motion-reduce:animate-none" /> : null}
           {busy ? t("sending") : t("submit")}
