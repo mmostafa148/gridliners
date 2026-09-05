@@ -87,10 +87,7 @@ export default async function CategoriesPage({
         subCategories={subCategories}
       />
 
-      <HonoraryAwards
-        options={honoraryOptions}
-        groundAbove={categoryGroupsGround}
-      />
+      <HonoraryAwards options={honoraryOptions} />
 
       {/* The map asks for How to Enter specifically, so the second action is
           set rather than left to the phase. `phasePresentation` offers it in

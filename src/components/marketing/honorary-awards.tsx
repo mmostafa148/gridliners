@@ -10,7 +10,6 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 
-import { PixelGrid } from "@/components/brand/pixel-grid";
 import type { Locale } from "@/i18n/routing";
 import type { HonoraryDesignationOption } from "@/lib/api/types";
 
@@ -73,10 +72,8 @@ const HONORARY_MARK: Record<string, LucideIcon> = {
  */
 export async function HonoraryAwards({
   options,
-  groundAbove,
 }: {
   options: HonoraryDesignationOption[];
-  groundAbove: "bg-mist" | "bg-white";
 }) {
   const [locale, t] = await Promise.all([
     getLocale() as Promise<Locale>,
@@ -89,28 +86,7 @@ export async function HonoraryAwards({
 
   return (
     <section className="relative overflow-hidden bg-navy-950 text-cream-100">
-      {/* The seam between the two systems, drawn in the motif: the enterable
-          taxonomy above dissolves into the ground the honorary awards sit on. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 overflow-hidden"
-      >
-        <PixelGrid
-          direction="down"
-          seed={17}
-          cols={64}
-          rows={3}
-          density={0.4}
-          cellSize="clamp(0.875rem, 1.8vw, 1.75rem)"
-          cellClassName={groundAbove}
-        />
-      </div>
-
-      {/* The seam is 3 cells deep, so the copy has to clear it and then some. At
-          +3rem it cleared by 60px, which is less than one `--section-y` and read
-          as the heading crowding the motif; +6rem puts a full rhythm unit of air
-          between them. */}
-      <div className="page-shell section-y relative pt-[calc(var(--section-y)+6rem)]">
+      <div className="page-shell section-y relative">
         <div className="grid gap-x-16 gap-y-10 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <h2 className="text-h1 text-balance text-cream-50">
