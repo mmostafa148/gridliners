@@ -8,6 +8,15 @@ import type { Cycle } from "@/lib/api/types";
 import { phasePresentation } from "@/lib/cycle-phase";
 import { cn } from "@/lib/utils";
 
+// Sixty-four cells must span at least one viewport. The original capped every
+// cell at 1.75rem, so the grid stopped short on wide displays. Keep that scale
+// everywhere it already fills the band, then let 1/64vw take over only when
+// the viewport grows beyond it. Three rows reserve exactly the matching depth.
+const SEAM_CELL_SIZE =
+  "max(clamp(0.875rem, 1.8vw, 1.75rem), 1.5625vw)";
+const SEAM_HEIGHT =
+  "max(clamp(2.625rem, 5.4vw, 5.25rem), 4.6875vw)";
+
 /**
  * The last thing on a page, and it is the cycle's ask rather than the page's.
  *
@@ -202,13 +211,16 @@ export async function ClosingCta({
           cols={64}
           rows={3}
           density={0.4}
-          cellSize="clamp(0.875rem, 1.8vw, 1.75rem)"
+          cellSize={SEAM_CELL_SIZE}
           cellClassName={groundAbove}
         />
       </div>
 
       {/* The dissolve's height is reserved, never overlapped. */}
-      <div className="page-shell section-y relative pt-[calc(var(--section-y)+clamp(0.875rem,1.8vw,1.75rem)*3)]">
+      <div
+        className="page-shell section-y relative"
+        style={{ paddingBlockStart: `calc(var(--section-y) + ${SEAM_HEIGHT})` }}
+      >
         <div className="flex flex-col gap-x-16 gap-y-10 lg:flex-row lg:items-end lg:justify-between">
           <div className={cn(culmination ? "max-w-3xl" : "max-w-xl")}>
             <h2
