@@ -24,14 +24,29 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "common" });
+  const title = t("siteName");
+  const description = t("tagline");
 
   return {
     metadataBase: new URL(SITE_URL),
     title: {
-      default: t("siteName"),
-      template: `%s · ${t("siteName")}`,
+      default: title,
+      template: `%s · ${title}`,
     },
-    description: t("tagline"),
+    description,
+    openGraph: {
+      type: "website",
+      url: `/${locale}`,
+      siteName: title,
+      title,
+      description,
+      locale: locale === "ar" ? "ar_AE" : "en_AE",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 

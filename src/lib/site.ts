@@ -9,6 +9,10 @@
  * The locale root layout uses the same value as `metadataBase`, so canonical
  * and Open Graph URLs resolve against the active deployment origin.
  */
+const vercelOrigin =
+  process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
+
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://gridliners.com"
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (vercelOrigin ? `https://${vercelOrigin}` : "https://gridliners.com")
 ).replace(/\/$/, "");
