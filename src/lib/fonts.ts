@@ -1,7 +1,7 @@
 import { Inter, Noto_Sans_Arabic } from "next/font/google";
 
 /**
- * Typography sources (CLAUDE.md):
+ * Typography sources:
  *  - Presicav — EN display, via the Adobe Fonts (Typekit) kit. Loaded as a
  *    stylesheet link in the locale layout; the family name is "presicav" and
  *    the kit publishes weights 100/200/300/400/700/900, normal style only.

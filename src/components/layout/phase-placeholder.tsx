@@ -1,7 +1,7 @@
 /**
  * Marker for routes whose real screen arrives in a later phase. Phase 0 ships
- * shells, not screens (see docs/gridliners-screen-map.md), so these keep the
- * four layouts reachable and RTL-verifiable in the browser.
+ * shells, not screens, so these keep the four layouts reachable and
+ * RTL-verifiable in the browser.
  */
 export function PhasePlaceholder({
   phase,

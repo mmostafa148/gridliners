@@ -45,7 +45,7 @@ export const jurors: Juror[] = [
     // photograph of this juror is still in public/media as jury-selwaye.jpg and
     // has to come back, together with j-002's, before anything is published:
     // these two are identifiable people, and a studio portrait under a real
-    // name depicts a stranger as them. See docs/build-state.md.
+    // name depicts a stranger as them.
     name: { en: "Karim Daoud", ar: "كريم داود" },
     title: { en: "Creative Director, Beirut", ar: "مدير إبداعي، بيروت" },
     company: { en: "Studio Meem", ar: "استوديو ميم" },

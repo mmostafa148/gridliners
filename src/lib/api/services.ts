@@ -46,7 +46,7 @@ import type {
  *
  * Phase 0 ships mock implementations; the real backend replaces them behind
  * these same signatures, so no screen changes. Payment, OTP and auth are
- * deliberately isolated here (CLAUDE.md) for exactly that reason.
+ * deliberately isolated here for exactly that reason.
  */
 
 export interface CyclesService {

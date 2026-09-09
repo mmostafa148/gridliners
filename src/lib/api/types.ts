@@ -1,8 +1,7 @@
 /**
  * Gridliners domain model.
  *
- * Mirrors the ratified data model in docs/gridliners-addendum-v1-1.md, which
- * outranks every other document. The load-bearing decisions encoded here:
+ * Models the agreed Gridliners domain. The load-bearing decisions encoded here:
  *
  *  - Results are GROUP-scoped, keyed Cycle × Sub-category × Tier × Entry
  *    (§3.1). One entry can hold different outcomes in each group it entered.

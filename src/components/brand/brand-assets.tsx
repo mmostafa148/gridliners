@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
  * Wrappers around the 15 production SVGs in `public/brand/` (copied verbatim
  * from `resources/brand/`).
  *
- * Rules encoded here, from CLAUDE.md:
+ * Asset handling rules:
  *  - Logo artwork keeps its exported #0932c6 / #1e1e1e fills. Never recolor.
  *  - doty-lockup.svg is white artwork, so it is always placed on blue.
  *  - Images are `unoptimized`: these are vector marks, and running them

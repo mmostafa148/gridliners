@@ -12,7 +12,7 @@ import type { Cycle } from "@/lib/api/types";
  * and voting dates are admin-configured and not yet fixed.
  *
  * Edition label is an open item — the brand is locked on "2026" while the
- * participation period runs Nov → Feb. See docs/build-state.md.
+ * participation period runs Nov → Feb.
  */
 
 export const cycles: Cycle[] = [

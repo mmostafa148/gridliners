@@ -89,7 +89,7 @@
   /* PLACEHOLDER — the deck labels this swatch #5a0038, which is dark maroon.
      Value below is sampled from the rendered swatch on p.15 of the deck
      (resources/assets/15_colors-secondary.svg). Awaiting the corrected hex
-     from the design team; see docs/build-state.md conflict log. */
+     from the design team. */
   --color-campaign-teal: #2fd3c5;
 
   /* --- Documentation token: never apply this to UI ------------------------
@@ -210,8 +210,7 @@
      carrying fifteen entries needs a title with more authority than an inner
      marketing page does, on the same canvas.
 
-     Measured against the approved site rather than guessed: see
-     `docs/participant-visual-plan.md` for the audit these are derived from.
+     Measured against the approved site rather than guessed.
      Sentence case, Presicav, tightened the way the rest of the scale is. */
   /* The account's own scale — a management area, not an editorial page.
      The public pages keep their display sizes; these are deliberately two

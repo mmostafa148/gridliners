@@ -13,7 +13,7 @@ import type {
  * additions that must share the same parent.
  *
  * NOTE: "Commercial Ad" appears under BOTH Photography and Film. IDs are
- * therefore namespaced by parent — see docs/build-state.md conflict log.
+ * therefore namespaced by parent.
  */
 
 /**

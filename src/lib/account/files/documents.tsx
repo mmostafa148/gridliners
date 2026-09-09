@@ -11,9 +11,9 @@ import { ImageResponse } from "next/og";
  * proved: Noto Sans Arabic cannot be shaped by satori, and IBM Plex Sans Arabic
  * is the nearest humanist sans that can.
  *
- * **The known certificate errata are not reproduced.** `docs/temporary-media.md`
- * records that the brand deck's certificate artwork carries a stale name, a
- * wrong year and a missing tier line; the brief says not to reuse it. So this
+ * **The known certificate errata are not reproduced.** The brand deck's
+ * certificate artwork carries a stale name, a wrong year and a missing tier
+ * line, so this
  * is drawn from the record instead, and the tier is on it.
  */
 

@@ -3,9 +3,8 @@ import { cn } from "@/lib/utils";
 /**
  * The participant module's visual system.
  *
- * **Derived from the approved website, measured, not from dashboard
- * references** — `docs/participant-visual-plan.md` carries the audit. The first
- * pass set every label, control and action in the 11px tracked-uppercase
+ * **Derived from measurements of the approved website, not generic dashboard
+ * references.** The first pass set every label, control and action in the 11px tracked-uppercase
  * coordinate voice and put every object inside a bordered white rectangle;
  * build-state §49 records why that was rejected.
  *

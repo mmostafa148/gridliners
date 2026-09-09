@@ -20,9 +20,8 @@ import type { ArtSpec } from "@/lib/project-media";
  * in one category share a design language and nothing else, which is exactly the
  * relationship real work in one discipline has.
  *
- * Everything here is provisional and is recorded as such in the manifest and in
- * `docs/temporary-media.md`. It is replaced the day the entrant's own
- * documentation arrives.
+ * Everything here is provisional and is recorded as such in the manifest. It
+ * is replaced the day the entrant's own documentation arrives.
  */
 
 const DISPLAY = "var(--font-display), 'Helvetica Neue', Helvetica, Arial, sans-serif";

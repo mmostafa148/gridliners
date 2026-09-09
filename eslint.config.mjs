@@ -10,9 +10,8 @@ const compat = new FlatCompat({
 });
 
 /**
- * Logical-properties enforcement (CLAUDE.md: "logical properties only — never
- * left/right utilities"). Every screen mirrors in Arabic, so a physical
- * utility is a latent RTL bug.
+ * Logical-properties enforcement. Every screen mirrors in Arabic, so a
+ * physical left/right utility is a latent RTL bug.
  *
  * Tailwind v4's `space-x-*` and `divide-x-*` already compile to
  * margin-inline / border-inline, so they stay allowed.

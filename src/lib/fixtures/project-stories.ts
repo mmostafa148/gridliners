@@ -19,7 +19,7 @@ import type { Locale } from "@/i18n/routing";
  * keeps its own `lang` and `dir` wherever it appears, whatever locale the page
  * is in; these blocks are the page's own editorial voice and follow the reader.
  *
- * `docs/temporary-media.md` records what the client still owes, this included.
+ * These stories remain provisional until the client's final records arrive.
  */
 
 export interface ProjectStory {

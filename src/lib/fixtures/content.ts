@@ -18,8 +18,8 @@ import { media } from "@/lib/media";
  * screen that touches it, and it is the last thing that should be reachable
  * through `api.__dev.reset()`.
  *
- * Photography is the mockup set in public/images, which CLAUDE.md classifies as
- * placeholder: real event coverage and real partner marks come from the client.
+ * Photography in public/images is placeholder material: real event coverage
+ * and real partner marks come from the client.
  */
 
 export const announcements: Announcement[] = [
@@ -315,8 +315,8 @@ export const partners: Partner[] = [
     logoScale: 1.05,
   },
   // Provisional regional partners. Their marks are drawn by `PartnerMark`
-  // rather than supplied as files - see docs/temporary-media.md - and every
-  // name, link and category here awaits the client's real partner list.
+  // rather than supplied as files, and every name, link and category here
+  // awaits the client's real partner list.
   { id: "p-tashkeel", name: "Tashkeel", categoryId: "districts", tier: "partner", url: "https://example.com/tashkeel" },
   { id: "p-hayy", name: "Hayy Jameel", categoryId: "districts", tier: "partner", url: "https://example.com/hayy-jameel" },
   { id: "p-alserkal", name: "Alserkal Avenue", categoryId: "districts", tier: "partner", url: "https://example.com/alserkal" },

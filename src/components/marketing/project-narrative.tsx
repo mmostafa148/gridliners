@@ -13,8 +13,8 @@ import type { ContentLanguage } from "@/lib/api/types";
  * reader of design work actually has: what was asked, what the idea was, how it
  * was made, and what happened.
  *
- * **All of this copy is provisional and is labelled as such**, on the page and
- * in `docs/temporary-media.md`. It is written per project - each brief has its
+ * **All of this copy is provisional and is labelled as such.** It is written
+ * per project - each brief has its
  * own constraint and each outcome its own measure - because one story with the
  * names changed is worse than no story.
  *

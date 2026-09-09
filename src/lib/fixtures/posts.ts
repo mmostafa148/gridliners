@@ -15,7 +15,7 @@ import { NEWS_COVERS } from "@/lib/news-media";
  * from `content.ts` - Home reads them - and are filed under Programme News so
  * they answer a category filter like everything else.
  *
- * **Every record here is provisional**, and `docs/temporary-media.md` says so.
+ * **Every record here is provisional.**
  * The titles, standfirsts and openings are written for this build; the
  * movements beneath them come from `post-content.ts` per category.
  */

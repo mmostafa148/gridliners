@@ -16,8 +16,8 @@ import { projectBySlug } from "@/lib/project";
  * on the reasoning that no photograph on this build is the entrant's own; that
  * direction was rejected with the rest of the no-photography approach
  * (build-state §16). The card now composites the same frame the page opens on,
- * so a shared link previews the work rather than a pattern - and the frame is
- * registered as temporary in `docs/temporary-media.md` exactly as the page's is.
+ * so a shared link previews the work rather than a pattern. The frame remains
+ * temporary, exactly like the one on the page.
  *
  * The cover sits under a scrim rather than beside the type: a 1200x630 card has
  * room for one image and three lines, and a split would give neither enough.

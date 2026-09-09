@@ -3,8 +3,7 @@ import type { LocalizedText, PostSection } from "@/lib/api/types";
 /**
  * The written substance of the media centre.
  *
- * **All of it is provisional and is recorded as such** in
- * `docs/temporary-media.md`: it is written for this build so the pages can be
+ * **All of it is provisional:** it is written for this build so the pages can be
  * reviewed populated, and it is replaced by the client's own editorial before
  * launch. It is not lorem ipsum - every line is about this programme, its
  * jury, its tiers and its region - but no sentence here has been approved by

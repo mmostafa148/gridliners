@@ -60,8 +60,8 @@ const nextId = (prefix: string) => `${prefix}-${++idCounter}`;
  * grown by `register`.
  *
  * **This is not authentication.** Passwords are compared as plain strings.
- * There is no hash, no salt, no lockout and no rotation. `CLAUDE.md` requires
- * auth to be mocked behind a service interface so the real one plugs in later;
+ * There is no hash, no salt, no lockout and no rotation. Authentication is
+ * mocked behind a service interface so a real provider can replace it later;
  * this is the inside of that mock and none of it survives that swap.
  */
 const accounts = structuredClone(mockAccounts);

@@ -120,8 +120,8 @@ export const sessionUsers: Record<string, SessionUser> = {
  * **Nothing here is authentication.** There is no hashing, no salt, no rate
  * limit and no token store worth the name: this exists so 2.1's forms have
  * something true to succeed and fail against, and it is replaced wholesale
- * when a real provider lands. `CLAUDE.md` says auth is mocked behind a service
- * interface for exactly this reason, and `AuthService` is that interface.
+ * when a real provider lands. Authentication is mocked behind the
+ * `AuthService` interface for exactly this reason.
  *
  * The passwords are deliberately obvious. A demo account whose password has to
  * be looked up is a demo account nobody opens.

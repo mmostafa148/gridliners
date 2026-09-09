@@ -277,10 +277,9 @@ export const media = {
  * attribution owed, no share-alike - and grouped to the parent category whose
  * work each frame most plausibly illustrates.
  *
- * **None of these is the work of the entrant it appears beside**, and the
- * decision to publish them anyway is recorded in `docs/build-state.md`. Every
- * file's source and licence is listed in `docs/cover-sources.md`. They are
- * replaced wholesale the day real covers arrive.
+ * **None of these is the work of the entrant it appears beside.** Every file's
+ * source and licence is retained in the media manifest. They are replaced
+ * wholesale the day real covers arrive.
  *
  * Resized to 560x350 and re-encoded at q72 - a row renders them at 112px wide,
  * so this is already generous for a 2x display.

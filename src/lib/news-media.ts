@@ -3,8 +3,8 @@
  *
  * **Every frame here is CC0 or Public Domain**, sourced through the Wikimedia
  * Commons API and downloaded into `public/media/news/` - never hot-linked. Each
- * was re-cut to 1400x875 and re-encoded at q74. `docs/temporary-media.md` is
- * the readable record; this is the one the code reads.
+ * was re-cut to 1400x875 and re-encoded at q74. The source metadata below is
+ * the record the code reads.
  *
  * **All of it is temporary.** These frames illustrate the subject a post is
  * about; none of them is a photograph of this programme, its jury or its
@@ -50,9 +50,9 @@ export const NEWS_COVERS: NewsCover[] = [
   { file: "/media/news/education-4.jpg", width: 1400, height: 875, category: "education", licence: "Public domain", source: "https://commons.wikimedia.org/wiki/File%3AStudio%20of%20the%20Minneapolis%20Art%20School%20-%20DPLA%20-%20446acd077b134ba7911ffaa5e042fc95.jpg", creator: "unknown", query: "art school studio", temporary: true },
   { file: "/media/news/programme-2.jpg", width: 1400, height: 875, category: "programme", licence: "CC0", source: "https://commons.wikimedia.org/wiki/File%3AClay%20target%20shooting%20competition%20Ukraine%20winner%20with%20trophy%202025.jpg", creator: "23IVAN", query: "trophy award", temporary: true },
   { file: "/media/news/region-4.jpg", width: 1400, height: 875, category: "region", licence: "Public domain", source: "https://commons.wikimedia.org/wiki/File%3AL'Architecture%20d'Aujourd'hui%20December%201954.jpg", creator: "L'Architecture d'Aujourd'hui", query: "Casablanca architecture", temporary: true },
-  { file: "/media/news/programme-3.jpg", width: 1400, height: 875, category: "programme", licence: "CC0 / Public domain (as sourced for 1.1-1.7)", source: "repo:/media/ceremony-stage.jpg", creator: "see docs/cover-sources.md", query: "reused from the approved screens", temporary: true },
-  { file: "/media/news/programme-4.jpg", width: 1400, height: 875, category: "programme", licence: "CC0 / Public domain (as sourced for 1.1-1.7)", source: "repo:/media/audience-hall.jpg", creator: "see docs/cover-sources.md", query: "reused from the approved screens", temporary: true },
-  { file: "/media/news/programme-5.jpg", width: 1400, height: 875, category: "programme", licence: "CC0 / Public domain (as sourced for 1.1-1.7)", source: "repo:/media/award-moment.jpg", creator: "see docs/cover-sources.md", query: "reused from the approved screens", temporary: true },
-  { file: "/media/news/programme-6.jpg", width: 1400, height: 875, category: "programme", licence: "CC0 / Public domain (as sourced for 1.1-1.7)", source: "repo:/media/community-panel.jpg", creator: "see docs/cover-sources.md", query: "reused from the approved screens", temporary: true },
-  { file: "/media/news/region-5.jpg", width: 1400, height: 875, category: "region", licence: "CC0 / Public domain (as sourced for 1.1-1.7)", source: "repo:/media/city-dubai.jpg", creator: "see docs/cover-sources.md", query: "reused from the approved screens", temporary: true },
+  { file: "/media/news/programme-3.jpg", width: 1400, height: 875, category: "programme", licence: "CC0 / Public domain (as sourced for 1.1-1.7)", source: "repo:/media/ceremony-stage.jpg", creator: "Gridliners media library", query: "reused from the approved screens", temporary: true },
+  { file: "/media/news/programme-4.jpg", width: 1400, height: 875, category: "programme", licence: "CC0 / Public domain (as sourced for 1.1-1.7)", source: "repo:/media/audience-hall.jpg", creator: "Gridliners media library", query: "reused from the approved screens", temporary: true },
+  { file: "/media/news/programme-5.jpg", width: 1400, height: 875, category: "programme", licence: "CC0 / Public domain (as sourced for 1.1-1.7)", source: "repo:/media/award-moment.jpg", creator: "Gridliners media library", query: "reused from the approved screens", temporary: true },
+  { file: "/media/news/programme-6.jpg", width: 1400, height: 875, category: "programme", licence: "CC0 / Public domain (as sourced for 1.1-1.7)", source: "repo:/media/community-panel.jpg", creator: "Gridliners media library", query: "reused from the approved screens", temporary: true },
+  { file: "/media/news/region-5.jpg", width: 1400, height: 875, category: "region", licence: "CC0 / Public domain (as sourced for 1.1-1.7)", source: "repo:/media/city-dubai.jpg", creator: "Gridliners media library", query: "reused from the approved screens", temporary: true },
 ];

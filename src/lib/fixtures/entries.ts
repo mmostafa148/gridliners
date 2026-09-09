@@ -17,7 +17,7 @@ import type {
  * pages read; cycle 2024 gives the year archive a second entry point.
  *
  * Media URLs point at local placeholders — real photography comes from the
- * client (CLAUDE.md).
+ * client.
  */
 
 interface EntryInput {
@@ -1853,8 +1853,7 @@ const legacyEntries: Entry[] = [
  * held a client at all.
  *
  * These names are **stand-ins, exactly like the drawn galleries and the four
- * narrative movements**, and they are registered as provisional in
- * `docs/temporary-media.md` for replacement by the client's real records. They
+ * narrative movements**, for replacement by the client's real records. They
  * are derived rather than random so a project's client is the same name on
  * every render, in every locale, in the share card and on the page.
  *
@@ -1977,8 +1976,7 @@ if (process.env.NODE_ENV !== "production") {
  * literally: **two** of the 390 carried a link and **one** carried a film, so
  * the two rows were invisible on effectively every page and the client could
  * not review them. They are now on all 390, stand-ins like the galleries, the
- * narratives and the client names, and registered with them in
- * `docs/temporary-media.md`.
+ * narratives and the client names.
  *
  * **`example.com` is deliberate, and it is reserved for exactly this by
  * RFC 2606.** These addresses do not resolve and are not meant to: pointing a

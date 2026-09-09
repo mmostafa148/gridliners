@@ -25,8 +25,8 @@ import { cn } from "@/lib/utils";
  * The one thing not taken from the deck is the Winner Frame artwork (p.25).
  * It carries "Gold 2026" inside the counter as part of the artwork, and these
  * are the 2025 winners, so using it would print the wrong year on a result.
- * That belongs with the certificate year and tier problems already logged as
- * brand-file errata in CLAUDE.md, and is not something to quietly correct here.
+ * This is treated as source-artwork errata and is not something to quietly
+ * correct in the component.
  *
  * Ink per metal follows MedalBadge, which is where these pairings are already
  * settled: navy on gold and silver, white on bronze. It is not decoration that
